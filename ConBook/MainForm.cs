@@ -9,14 +9,13 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace ConBook
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         public BindingList<Contact> contacts = new BindingList<Contact>();
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
-            refreshDataGridView();
         }
 
         private void refreshDataGridView()
@@ -31,6 +30,20 @@ namespace ConBook
             dataGridViewContacts.Columns["Name"].HeaderText = "Imię";
             dataGridViewContacts.Columns["Phone"].HeaderText = "Telefon";
         }
+
+        private int validateTextBoxes()
+        {
+            string patternPhone = @"[^0-9\s-+]";
+
+            if (string.IsNullOrEmpty(nameTextBox.Text)) { return 1; }
+            if (string.IsNullOrEmpty(surnameTextBox.Text)) { return 1; }
+            if (string.IsNullOrEmpty(phoneTextBox.Text)) { return 1; }
+            if (Regex.IsMatch(phoneTextBox.Text, patternPhone)) { return 2; };
+
+            return 0;
+        }
+
+
 
         private void submitButton_Click(object sender, EventArgs e)
         {
@@ -57,18 +70,6 @@ namespace ConBook
                 MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
-        }
-
-        private int validateTextBoxes()
-        {
-            string patternPhone = @"[^0-9\s-+]";
-
-            if (string.IsNullOrEmpty(nameTextBox.Text)) { return 1; }
-            if (string.IsNullOrEmpty(surnameTextBox.Text)) { return 1; }
-            if (string.IsNullOrEmpty(phoneTextBox.Text)) { return 1; }
-            if (Regex.IsMatch(phoneTextBox.Text, patternPhone)) { return 2; };
-
-            return 0;
         }
 
         private void sortujToolStripMenuItem_Click(object sender, EventArgs e)
@@ -107,26 +108,58 @@ namespace ConBook
             }
             catch (Exception ex)
             {
-                // MessageBox.Show("Podczas zapisywania wystąpił błąd: " + ex.Message, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // Check if InnerException exists
                 if (ex.InnerException != null)
                 {
-                    // Get the InnerException
                     Exception innerException = ex.InnerException;
 
-                    // Display InnerException details in a message box
-                    string message = "InnerException Message: " + innerException.Message + "\n"
+                    string message = "Błąd: " + innerException.Message + "\n"
                         + "InnerException StackTrace: " + innerException.StackTrace;
-                    MessageBox.Show(message, "Serialization Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(message, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
-                    // No InnerException available, display the exception details in a message box
-                    string message = "Exception Message: " + ex.Message + "\n"
-                        + "Exception StackTrace: " + ex.StackTrace;
-                    MessageBox.Show(message, "Serialization Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string message = "Błąd: " + ex.Message + "\n"
+                        + "StackTrace: " + ex.StackTrace;
+                    MessageBox.Show(message, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void otwórzToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Dokument XML (*.xml)|*.xml";
+                openFileDialog.Title = "Otwórz...";
+
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string fileName = openFileDialog.FileName;
+
+                    XmlSerializer serializer = new XmlSerializer(typeof(BindingList<Contact>));
+
+                    using (FileStream fileStream = new FileStream(fileName, FileMode.Open))
+                    {
+                        BindingList<Contact> loadedContacts = (BindingList<Contact>)serializer.Deserialize(fileStream);
+
+                        contacts.Clear();
+                        contacts = new BindingList<Contact>(loadedContacts);
+                    }
+                    refreshDataGridView();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Podczas wczytywania wystąpił błąd: " + ex.Message, "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            refreshDataGridView();
         }
     }
 }

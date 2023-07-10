@@ -1,6 +1,6 @@
 ﻿namespace ConBook
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -128,26 +128,27 @@
             // nowyToolStripMenuItem
             // 
             nowyToolStripMenuItem.Name = "nowyToolStripMenuItem";
-            nowyToolStripMenuItem.Size = new Size(180, 22);
+            nowyToolStripMenuItem.Size = new Size(141, 22);
             nowyToolStripMenuItem.Text = "Nowy";
             // 
             // otwórzToolStripMenuItem
             // 
             otwórzToolStripMenuItem.Name = "otwórzToolStripMenuItem";
-            otwórzToolStripMenuItem.Size = new Size(180, 22);
+            otwórzToolStripMenuItem.Size = new Size(141, 22);
             otwórzToolStripMenuItem.Text = "Otwórz...";
+            otwórzToolStripMenuItem.Click += otwórzToolStripMenuItem_Click;
             // 
             // zapiszToolStripMenuItem
             // 
             zapiszToolStripMenuItem.Name = "zapiszToolStripMenuItem";
-            zapiszToolStripMenuItem.Size = new Size(180, 22);
+            zapiszToolStripMenuItem.Size = new Size(141, 22);
             zapiszToolStripMenuItem.Text = "Zapisz";
             zapiszToolStripMenuItem.Click += zapiszToolStripMenuItem_Click;
             // 
             // zapiszJakoToolStripMenuItem
             // 
             zapiszJakoToolStripMenuItem.Name = "zapiszJakoToolStripMenuItem";
-            zapiszJakoToolStripMenuItem.Size = new Size(180, 22);
+            zapiszJakoToolStripMenuItem.Size = new Size(141, 22);
             zapiszJakoToolStripMenuItem.Text = "Zapisz jako...";
             zapiszJakoToolStripMenuItem.Click += zapiszJakoToolStripMenuItem_Click;
             // 
@@ -194,7 +195,7 @@
             dataGridViewContacts.Size = new Size(574, 406);
             dataGridViewContacts.TabIndex = 9;
             // 
-            // Form1
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -206,8 +207,9 @@
             MainMenuStrip = menuStrip1;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "Form1";
+            Name = "MainForm";
             Text = "ConBook";
+            Load += Form1_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             groupBox1.ResumeLayout(false);
