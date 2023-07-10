@@ -41,8 +41,11 @@
             otwórzToolStripMenuItem = new ToolStripMenuItem();
             zapiszToolStripMenuItem = new ToolStripMenuItem();
             zapiszJakoToolStripMenuItem = new ToolStripMenuItem();
+            listaToolStripMenuItem = new ToolStripMenuItem();
+            sortujToolStripMenuItem = new ToolStripMenuItem();
             groupBox1 = new GroupBox();
             dataGridViewContacts = new DataGridView();
+            colorDialog1 = new ColorDialog();
             menuStrip1.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewContacts).BeginInit();
@@ -108,7 +111,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { pikToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { pikToolStripMenuItem, listaToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(604, 24);
@@ -125,26 +128,42 @@
             // nowyToolStripMenuItem
             // 
             nowyToolStripMenuItem.Name = "nowyToolStripMenuItem";
-            nowyToolStripMenuItem.Size = new Size(141, 22);
+            nowyToolStripMenuItem.Size = new Size(180, 22);
             nowyToolStripMenuItem.Text = "Nowy";
             // 
             // otwórzToolStripMenuItem
             // 
             otwórzToolStripMenuItem.Name = "otwórzToolStripMenuItem";
-            otwórzToolStripMenuItem.Size = new Size(141, 22);
+            otwórzToolStripMenuItem.Size = new Size(180, 22);
             otwórzToolStripMenuItem.Text = "Otwórz...";
             // 
             // zapiszToolStripMenuItem
             // 
             zapiszToolStripMenuItem.Name = "zapiszToolStripMenuItem";
-            zapiszToolStripMenuItem.Size = new Size(141, 22);
+            zapiszToolStripMenuItem.Size = new Size(180, 22);
             zapiszToolStripMenuItem.Text = "Zapisz";
+            zapiszToolStripMenuItem.Click += zapiszToolStripMenuItem_Click;
             // 
             // zapiszJakoToolStripMenuItem
             // 
             zapiszJakoToolStripMenuItem.Name = "zapiszJakoToolStripMenuItem";
-            zapiszJakoToolStripMenuItem.Size = new Size(141, 22);
+            zapiszJakoToolStripMenuItem.Size = new Size(180, 22);
             zapiszJakoToolStripMenuItem.Text = "Zapisz jako...";
+            zapiszJakoToolStripMenuItem.Click += zapiszJakoToolStripMenuItem_Click;
+            // 
+            // listaToolStripMenuItem
+            // 
+            listaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { sortujToolStripMenuItem });
+            listaToolStripMenuItem.Name = "listaToolStripMenuItem";
+            listaToolStripMenuItem.Size = new Size(43, 20);
+            listaToolStripMenuItem.Text = "Lista";
+            // 
+            // sortujToolStripMenuItem
+            // 
+            sortujToolStripMenuItem.Name = "sortujToolStripMenuItem";
+            sortujToolStripMenuItem.Size = new Size(105, 22);
+            sortujToolStripMenuItem.Text = "Sortuj";
+            sortujToolStripMenuItem.Click += sortujToolStripMenuItem_Click;
             // 
             // groupBox1
             // 
@@ -166,6 +185,7 @@
             // 
             dataGridViewContacts.AllowUserToAddRows = false;
             dataGridViewContacts.AllowUserToDeleteRows = false;
+            dataGridViewContacts.BackgroundColor = SystemColors.AppWorkspace;
             dataGridViewContacts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewContacts.Location = new Point(12, 36);
             dataGridViewContacts.Name = "dataGridViewContacts";
@@ -214,5 +234,8 @@
         private ToolStripMenuItem zapiszJakoToolStripMenuItem;
         private GroupBox groupBox1;
         private DataGridView dataGridViewContacts;
+        private ToolStripMenuItem listaToolStripMenuItem;
+        private ToolStripMenuItem sortujToolStripMenuItem;
+        private ColorDialog colorDialog1;
     }
 }
