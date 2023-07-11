@@ -1,56 +1,80 @@
-﻿using System.Data;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Forms;
+﻿using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
+
 
 namespace ConBook
 {
     public partial class MainForm : Form
     {
-        public BindingList<Contact> contacts = new BindingList<Contact>();
+        public BindingList<Contact> contacts = new();
 
         public MainForm()
         {
             InitializeComponent();
         }
 
-        private void refreshDataGridView()
+        private void RefreshDataGridView()
         {
-            dataGridViewContacts.DataSource = null;
-            dataGridViewContacts.DataSource = contacts;
-            dataGridViewContacts.Refresh();
-            dataGridViewContacts.Columns["Surname"].DisplayIndex = 0;
-            dataGridViewContacts.Columns["Name"].DisplayIndex = 1;
-            dataGridViewContacts.Columns["Phone"].DisplayIndex = 2;
-            dataGridViewContacts.Columns["Surname"].HeaderText = "Nazwisko";
-            dataGridViewContacts.Columns["Name"].HeaderText = "Imię";
-            dataGridViewContacts.Columns["Phone"].HeaderText = "Telefon";
+            dgvContacts.DataSource = null;
+            dgvContacts.DataSource = contacts;
+
+            dgvContacts.Columns["Surname"].DisplayIndex = 0;
+            dgvContacts.Columns["Name"].DisplayIndex = 1;
+            dgvContacts.Columns["Phone"].DisplayIndex = 2;
+
+            DataGridViewColumn dgvColumnSurname = dgvContacts.Columns[0];
+            DataGridViewColumn dgvColumnName = dgvContacts.Columns[1];
+            DataGridViewColumn dgvColumnPhone = dgvContacts.Columns[2];
+
+            dgvColumnSurname.HeaderText = "Nazwisko";
+            dgvColumnName.HeaderText = "Imię";
+            dgvColumnPhone.HeaderText = "Telefon";
+            dgvColumnSurname.Width = 215;
+            dgvColumnName.Width = 215;
+            dgvColumnPhone.Width = 147;
+
+            //foreach (DataGridViewRow row in dgvContacts.Rows)
+            //{
+            //    row.HeaderCell.Value = (row.Index + 1).ToString();
+            //}
+
+            dgvContacts.Refresh();
         }
 
-        private int validateTextBoxes()
+        private int ValidateTextBoxes()
         {
             string patternPhone = @"[^0-9\s-+]";
+            string patternDigit = @"\d";
 
             if (string.IsNullOrEmpty(nameTextBox.Text)) { return 1; }
             if (string.IsNullOrEmpty(surnameTextBox.Text)) { return 1; }
             if (string.IsNullOrEmpty(phoneTextBox.Text)) { return 1; }
             if (Regex.IsMatch(phoneTextBox.Text, patternPhone)) { return 2; };
+            if (Regex.IsMatch(nameTextBox.Text, patternDigit)) { return 3; };
+            if (Regex.IsMatch(surnameTextBox.Text, patternDigit)) { return 3; };
+
 
             return 0;
         }
 
+        private void LoadFile(string fileName)
+        {
+            XmlSerializer serializer = new(typeof(BindingList<Contact>));
 
+            using FileStream fileStream = new(fileName, FileMode.Open);
+            BindingList<Contact> loadedContacts = (BindingList<Contact>)serializer.Deserialize(fileStream);
+
+            contacts.Clear();
+            contacts = new BindingList<Contact>(loadedContacts);
+        }
 
         private void submitButton_Click(object sender, EventArgs e)
         {
-            int validation = validateTextBoxes();
+            int validation = ValidateTextBoxes();
             if (validation == 0)
             {
-                Contact newContact = new Contact(nameTextBox.Text, surnameTextBox.Text, phoneTextBox.Text);
+                Contact newContact = new(nameTextBox.Text, surnameTextBox.Text, phoneTextBox.Text);
                 contacts.Add(newContact);
 
                 nameTextBox.Text = string.Empty;
@@ -65,6 +89,7 @@ namespace ConBook
                 {
                     case 1: { message += "Wszystkie pola są wymagane."; break; }
                     case 2: { message += "Niedozwolone znaki w polu Telefon."; break; }
+                    case 3: { message += "Pola Imię i Nazwisko nie mogą zawierać cyfr."; break; }
                 }
 
                 MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -74,10 +99,10 @@ namespace ConBook
 
         private void sortujToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<Contact> tempContactList = new List<Contact>(contacts);
+            List<Contact> tempContactList = new(contacts);
             tempContactList.Sort();
             contacts = new BindingList<Contact>(tempContactList);
-            refreshDataGridView();
+            RefreshDataGridView();
         }
 
         private void zapiszToolStripMenuItem_Click(object sender, EventArgs e)
@@ -89,20 +114,20 @@ namespace ConBook
         {
             try
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Dokument XML (*.xml)|*.xml";
-                saveFileDialog.Title = "Zapisz jako...";
+                SaveFileDialog saveFileDialog = new()
+                {
+                    Filter = "Dokument XML (*.xml)|*.xml",
+                    Title = "Zapisz jako..."
+                };
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string fileName = saveFileDialog.FileName;
 
-                    XmlSerializer serializer = new XmlSerializer(typeof(BindingList<Contact>));
+                    XmlSerializer serializer = new(typeof(BindingList<Contact>));
 
-                    using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
-                    {
-                        serializer.Serialize(fileStream, contacts);
-                    }
+                    using FileStream fileStream = new(fileName, FileMode.Create);
+                    serializer.Serialize(fileStream, contacts);
 
                 }
             }
@@ -112,14 +137,14 @@ namespace ConBook
                 {
                     Exception innerException = ex.InnerException;
 
-                    string message = "Błąd: " + innerException.Message + "\n"
-                        + "InnerException StackTrace: " + innerException.StackTrace;
+                    string message = "Błąd: \n" + innerException.Message + "\n"
+                        + "InnerException StackTrace: \n" + innerException.StackTrace;
                     MessageBox.Show(message, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
-                    string message = "Błąd: " + ex.Message + "\n"
-                        + "StackTrace: " + ex.StackTrace;
+                    string message = "Błąd: \n" + ex.Message + "\n"
+                        + "StackTrace: \n" + ex.StackTrace;
                     MessageBox.Show(message, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -129,37 +154,45 @@ namespace ConBook
         {
             try
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "Dokument XML (*.xml)|*.xml";
-                openFileDialog.Title = "Otwórz...";
+                OpenFileDialog openFileDialog = new()
+                {
+                    Filter = "Dokument XML (*.xml)|*.xml",
+                    Title = "Otwórz..."
+                };
 
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string fileName = openFileDialog.FileName;
 
-                    XmlSerializer serializer = new XmlSerializer(typeof(BindingList<Contact>));
-
-                    using (FileStream fileStream = new FileStream(fileName, FileMode.Open))
-                    {
-                        BindingList<Contact> loadedContacts = (BindingList<Contact>)serializer.Deserialize(fileStream);
-
-                        contacts.Clear();
-                        contacts = new BindingList<Contact>(loadedContacts);
-                    }
-                    refreshDataGridView();
+                    LoadFile(fileName);
+                    RefreshDataGridView();
                 }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Podczas wczytywania wystąpił błąd: " + ex.Message, "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Podczas wczytywania wystąpił błąd: \n" + ex.Message, "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            refreshDataGridView();
+            string path = Directory.GetCurrentDirectory();
+            var file = Directory.EnumerateFiles(path, "*.xml").FirstOrDefault();
+            if (file != null) 
+            {
+                try
+                {
+                    LoadFile(file);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Podczas wczytywania wystąpił błąd: \n" + ex.Message + "\n\nWczytywany plik: " + file, "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            RefreshDataGridView();
         }
     }
 }

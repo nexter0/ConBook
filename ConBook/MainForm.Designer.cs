@@ -44,11 +44,11 @@
             listaToolStripMenuItem = new ToolStripMenuItem();
             sortujToolStripMenuItem = new ToolStripMenuItem();
             groupBox1 = new GroupBox();
-            dataGridViewContacts = new DataGridView();
+            dgvContacts = new DataGridView();
             colorDialog1 = new ColorDialog();
             menuStrip1.SuspendLayout();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridViewContacts).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvContacts).BeginInit();
             SuspendLayout();
             // 
             // nameTextBox
@@ -182,25 +182,29 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Dodaj / edytuj kontakt";
             // 
-            // dataGridViewContacts
+            // dgvContacts
             // 
-            dataGridViewContacts.AllowUserToAddRows = false;
-            dataGridViewContacts.AllowUserToDeleteRows = false;
-            dataGridViewContacts.BackgroundColor = SystemColors.AppWorkspace;
-            dataGridViewContacts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewContacts.Location = new Point(12, 36);
-            dataGridViewContacts.Name = "dataGridViewContacts";
-            dataGridViewContacts.ReadOnly = true;
-            dataGridViewContacts.RowTemplate.Height = 25;
-            dataGridViewContacts.Size = new Size(574, 406);
-            dataGridViewContacts.TabIndex = 9;
+            dgvContacts.AllowUserToAddRows = false;
+            dgvContacts.AllowUserToDeleteRows = false;
+            dgvContacts.BackgroundColor = SystemColors.ScrollBar;
+            dgvContacts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvContacts.Location = new Point(12, 27);
+            dgvContacts.Name = "dgvContacts";
+            dgvContacts.ReadOnly = true;
+            dgvContacts.RowHeadersVisible = false;
+            dgvContacts.RowTemplate.Height = 25;
+            dgvContacts.Size = new Size(580, 415);
+            dgvContacts.TabIndex = 9;
+            // dgvContacts.RowHeadersVisible = true;
+            dgvContacts.RowHeadersVisible = false;
+            dgvContacts.ColumnHeadersDefaultCellStyle.Font = new Font("Calibri", 9.75F, FontStyle.Bold);
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(604, 541);
-            Controls.Add(dataGridViewContacts);
+            Controls.Add(dgvContacts);
             Controls.Add(groupBox1);
             Controls.Add(menuStrip1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -214,7 +218,7 @@
             menuStrip1.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridViewContacts).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvContacts).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -235,7 +239,7 @@
         private ToolStripMenuItem zapiszToolStripMenuItem;
         private ToolStripMenuItem zapiszJakoToolStripMenuItem;
         private GroupBox groupBox1;
-        private DataGridView dataGridViewContacts;
+        private DataGridView dgvContacts;
         private ToolStripMenuItem listaToolStripMenuItem;
         private ToolStripMenuItem sortujToolStripMenuItem;
         private ColorDialog colorDialog1;
