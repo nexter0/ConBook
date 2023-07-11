@@ -45,6 +45,33 @@ namespace ConBook
             dgvContacts.Refresh();
         }
 
+        private void SumbitContact()
+        {
+            int validation = ValidateTextBoxes();
+            if (validation == 0)
+            {
+                Contact newContact = new Contact(nameTextBox.Text, surnameTextBox.Text, phoneTextBox.Text);
+                contacts.Add(newContact);
+
+                nameTextBox.Text = string.Empty;
+                surnameTextBox.Text = string.Empty;
+                phoneTextBox.Text = string.Empty;
+            }
+            else
+            {
+                string caption = "Błąd";
+                string message = "Nieprawdiłowe dane!\n\n";
+                switch (validation)
+                {
+                    case 1: { message += "Wszystkie pola są wymagane."; break; }
+                    case 2: { message += "Niedozwolone znaki w polu Telefon."; break; }
+                    case 3: { message += "Pola Imię i Nazwisko nie mogą zawierać cyfr."; break; }
+                }
+
+                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
         private int ValidateTextBoxes()
         {
             string patternPhone = @"[^0-9\s-+]";
@@ -118,30 +145,7 @@ namespace ConBook
 
         private void submitButton_Click(object sender, EventArgs e)
         {
-            int validation = ValidateTextBoxes();
-            if (validation == 0)
-            {
-                Contact newContact = new Contact(nameTextBox.Text, surnameTextBox.Text, phoneTextBox.Text);
-                contacts.Add(newContact);
-
-                nameTextBox.Text = string.Empty;
-                surnameTextBox.Text = string.Empty;
-                phoneTextBox.Text = string.Empty;
-            }
-            else
-            {
-                string caption = "Błąd";
-                string message = "Nieprawdiłowe dane!\n\n";
-                switch (validation)
-                {
-                    case 1: { message += "Wszystkie pola są wymagane."; break; }
-                    case 2: { message += "Niedozwolone znaki w polu Telefon."; break; }
-                    case 3: { message += "Pola Imię i Nazwisko nie mogą zawierać cyfr."; break; }
-                }
-
-                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-
+            SumbitContact();
         }
 
         private void sortujToolStripMenuItem_Click(object sender, EventArgs e)
@@ -197,12 +201,12 @@ namespace ConBook
                     MessageBox.Show(message, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            
+
         }
 
         private void zapiszJakoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (contacts.Count > 0) 
+            if (contacts.Count > 0)
             {
                 try
                 {
@@ -240,7 +244,7 @@ namespace ConBook
             {
                 MessageBox.Show("Nie można zapisać pustej listy.", "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            
+
         }
 
         private void otwórzToolStripMenuItem_Click(object sender, EventArgs e)
@@ -273,13 +277,12 @@ namespace ConBook
         {
             string path = Directory.GetCurrentDirectory();
             string? file = Directory.EnumerateFiles(path, "*.xml").FirstOrDefault();
-            if (file != null) 
+            if (file != null)
             {
                 try
                 {
                     LoadFile(file);
                     currentFile = file;
-                    MessageBox.Show(currentFile);
                 }
                 catch (Exception ex)
                 {
@@ -289,6 +292,33 @@ namespace ConBook
             }
 
             RefreshDataGridView();
+        }
+
+        private void nameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                SumbitContact();
+            }
+        }
+
+        private void surnameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                SumbitContact();
+            }
+        }
+
+        private void phoneTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                SumbitContact();
+            }
         }
     }
 }

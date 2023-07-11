@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             nameTextBox = new TextBox();
             label1 = new Label();
             label2 = new Label();
@@ -57,6 +58,7 @@
             nameTextBox.Name = "nameTextBox";
             nameTextBox.Size = new Size(125, 23);
             nameTextBox.TabIndex = 0;
+            nameTextBox.KeyDown += nameTextBox_KeyDown;
             // 
             // label1
             // 
@@ -82,6 +84,7 @@
             surnameTextBox.Name = "surnameTextBox";
             surnameTextBox.Size = new Size(125, 23);
             surnameTextBox.TabIndex = 2;
+            surnameTextBox.KeyDown += surnameTextBox_KeyDown;
             // 
             // label3
             // 
@@ -98,6 +101,7 @@
             phoneTextBox.Name = "phoneTextBox";
             phoneTextBox.Size = new Size(125, 23);
             phoneTextBox.TabIndex = 4;
+            phoneTextBox.KeyDown += phoneTextBox_KeyDown;
             // 
             // submitButton
             // 
@@ -186,7 +190,17 @@
             // 
             dgvContacts.AllowUserToAddRows = false;
             dgvContacts.AllowUserToDeleteRows = false;
-            dgvContacts.BackgroundColor = SystemColors.ScrollBar;
+            dgvContacts.AllowUserToResizeColumns = false;
+            dgvContacts.AllowUserToResizeRows = false;
+            dgvContacts.BackgroundColor = Color.WhiteSmoke;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvContacts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvContacts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvContacts.Location = new Point(12, 27);
             dgvContacts.Name = "dgvContacts";
@@ -195,9 +209,6 @@
             dgvContacts.RowTemplate.Height = 25;
             dgvContacts.Size = new Size(580, 415);
             dgvContacts.TabIndex = 9;
-            // dgvContacts.RowHeadersVisible = true;
-            dgvContacts.RowHeadersVisible = false;
-            dgvContacts.ColumnHeadersDefaultCellStyle.Font = new Font("Calibri", 9.75F, FontStyle.Bold);
             // 
             // MainForm
             // 
