@@ -32,7 +32,8 @@ namespace ConBook
             dgvContacts.Columns["Phone"].DisplayIndex = 2;
 
             DataGridViewColumn dgvColumnSurname = dgvContacts.Columns["Surname"];
-            DataGridViewColumn dgvColumnName = dgvContacts.Columns["Name"];
+            DataGridViewColumn dgvColumnName =
+                dgvContacts.Columns["Name"];
             DataGridViewColumn dgvColumnPhone = dgvContacts.Columns["Phone"];
 
             dgvColumnSurname.HeaderText = "Nazwisko";
@@ -50,17 +51,20 @@ namespace ConBook
             dgvContacts.Refresh();
         }
 
+        // ************************
+        // Contact CRUD
+
         private void SumbitContact()
         {
             int validation = ValidateTextBoxes();
             if (validation == 0)
             {
-                Contact newContact = new Contact(nameTextBox.Text, surnameTextBox.Text, phoneTextBox.Text);
+                Contact newContact = new Contact(NameTextBox.Text, SurnameTextBox.Text, PhoneTextBox.Text);
                 contacts.Add(newContact);
 
-                nameTextBox.Text = string.Empty;
-                surnameTextBox.Text = string.Empty;
-                phoneTextBox.Text = string.Empty;
+                NameTextBox.Text = string.Empty;
+                SurnameTextBox.Text = string.Empty;
+                PhoneTextBox.Text = string.Empty;
             }
             else
             {
@@ -77,20 +81,75 @@ namespace ConBook
             }
         }
 
+        private void EditContact()
+        {
+            Contact editedContact = new Contact(NameTextBox.Text, SurnameTextBox.Text, PhoneTextBox.Text);
+            contacts[currentMouseOverRow] = editedContact;
+            RefreshDataGridView();
+
+            StopEditMode();
+        }
+
+        private void StartEditMode()
+        {
+            isCurrentMouseOverRowLocked = true;
+
+            SubmitButton.Enabled = false;
+            SubmitButton.Visible = false;
+            EditButton.Enabled = true;
+            EditButton.Visible = true;
+            CancelEditButton.Enabled = true;
+            CancelEditButton.Visible = true;
+
+            NameTextBox.Text = contacts[currentMouseOverRow].Name;
+            SurnameTextBox.Text = contacts[currentMouseOverRow].Surname;
+            PhoneTextBox.Text = contacts[currentMouseOverRow].Phone;
+        }
+
+        private void StopEditMode()
+        {
+            isCurrentMouseOverRowLocked = false;
+
+            SubmitButton.Enabled = true;
+            SubmitButton.Visible = true;
+            EditButton.Enabled = false;
+            EditButton.Visible = false;
+            CancelEditButton.Enabled = false;
+            CancelEditButton.Visible = false;
+
+            NameTextBox.Text = string.Empty;
+            SurnameTextBox.Text = string.Empty;
+            PhoneTextBox.Text = string.Empty;
+        }
+
+        private void DeleteContact()
+        {
+            DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt {contacts[currentMouseOverRow].Name} {contacts[currentMouseOverRow].Surname} z listy?",
+                "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (deletionQueryResult == DialogResult.Yes)
+            {
+                contacts.RemoveAt(currentMouseOverRow);
+                RefreshDataGridView();
+            }
+        }
+
         private int ValidateTextBoxes()
         {
             string patternPhone = @"[^0-9\s-+]";
             string patternDigit = @"\d";
 
-            if (string.IsNullOrEmpty(nameTextBox.Text)) { return 1; }
-            if (string.IsNullOrEmpty(surnameTextBox.Text)) { return 1; }
-            if (string.IsNullOrEmpty(phoneTextBox.Text)) { return 1; }
-            if (Regex.IsMatch(phoneTextBox.Text, patternPhone)) { return 2; };
-            if (Regex.IsMatch(nameTextBox.Text, patternDigit)) { return 3; };
-            if (Regex.IsMatch(surnameTextBox.Text, patternDigit)) { return 3; };
+            if (string.IsNullOrEmpty(NameTextBox.Text)) { return 1; }
+            if (string.IsNullOrEmpty(SurnameTextBox.Text)) { return 1; }
+            if (string.IsNullOrEmpty(PhoneTextBox.Text)) { return 1; }
+            if (Regex.IsMatch(PhoneTextBox.Text, patternPhone)) { return 2; };
+            if (Regex.IsMatch(NameTextBox.Text, patternDigit)) { return 3; };
+            if (Regex.IsMatch(SurnameTextBox.Text, patternDigit)) { return 3; };
 
             return 0;
         }
+
+        // ************************
+        // Serialization 
 
         private void LoadFile(string fileName)
         {
@@ -148,12 +207,16 @@ namespace ConBook
         }
 
 
-        private void submitButton_Click(object sender, EventArgs e)
+        // *****************************
+        // *          Actions          *
+        // *****************************
+
+        private void SubmitButton_Click(object sender, EventArgs e)
         {
             SumbitContact();
         }
 
-        private void sortujToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SortTsmItem_Click(object sender, EventArgs e)
         {
             if (contacts.Count > 0)
             {
@@ -169,7 +232,7 @@ namespace ConBook
 
         }
 
-        private void zapiszToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveTsmItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -181,7 +244,7 @@ namespace ConBook
                     }
                     else
                     {
-                        otwórzToolStripMenuItem_Click(sender, e);
+                        OpenTsmItem_Click(sender, e);
                     }
                 }
                 else
@@ -209,7 +272,7 @@ namespace ConBook
 
         }
 
-        private void zapiszJakoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveAsTsmItem_Click(object sender, EventArgs e)
         {
             if (contacts.Count > 0)
             {
@@ -252,7 +315,7 @@ namespace ConBook
 
         }
 
-        private void otwórzToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenTsmItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -278,7 +341,7 @@ namespace ConBook
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             string path = Directory.GetCurrentDirectory();
             string? file = Directory.EnumerateFiles(path, "*.xml").FirstOrDefault();
@@ -299,30 +362,54 @@ namespace ConBook
             RefreshDataGridView();
         }
 
-        private void nameTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void NameTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                SumbitContact();
+                if (!isCurrentMouseOverRowLocked)
+                {
+                    SumbitContact();
+                }
+                else
+                {
+                    EditContact();
+                }
+
             }
         }
 
-        private void surnameTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void SurnameTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                SumbitContact();
+                if (!isCurrentMouseOverRowLocked)
+                {
+                    SumbitContact();
+                }
+                else
+                {
+                    EditContact();
+                }
+                    
             }
         }
 
-        private void phoneTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void PhoneTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                SumbitContact();
+                if (!isCurrentMouseOverRowLocked)
+                {
+                    SumbitContact();
+                }
+                else
+                {
+                    EditContact();
+                }
+
             }
         }
 
@@ -347,69 +434,30 @@ namespace ConBook
             }
         }
 
-        private void usuńToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DeleteCmItem_Click(object sender, EventArgs e)
         {
             isCurrentMouseOverRowLocked = true;
-            DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt {contacts[currentMouseOverRow].Name} {contacts[currentMouseOverRow].Surname} z listy?",
-                "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (deletionQueryResult == DialogResult.Yes)
-            {
-                contacts.RemoveAt(currentMouseOverRow);
-                RefreshDataGridView();
-            }
+            DeleteContact();
             isCurrentMouseOverRowLocked = false;
         }
 
-        private void editButton_Click(object sender, EventArgs e)
+        private void EditButton_Click(object sender, EventArgs e)
         {
-            Contact editedContact = new Contact(nameTextBox.Text, surnameTextBox.Text, phoneTextBox.Text);
+            Contact editedContact = new Contact(NameTextBox.Text, SurnameTextBox.Text, PhoneTextBox.Text);
             contacts[currentMouseOverRow] = editedContact;
             RefreshDataGridView();
 
-            isCurrentMouseOverRowLocked = false;
-
-            submitButton.Enabled = true;
-            submitButton.Visible = true;
-            editButton.Enabled = false;
-            editButton.Visible = false;
-            cancelEditButton.Enabled = false;
-            cancelEditButton.Visible = false;
-
-            nameTextBox.Text = string.Empty;
-            surnameTextBox.Text = string.Empty;
-            phoneTextBox.Text = string.Empty;
+            StopEditMode();
         }
 
-        private void edytujToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EditCmItem_Click(object sender, EventArgs e)
         {
-            isCurrentMouseOverRowLocked = true;
-
-            submitButton.Enabled = false;
-            submitButton.Visible = false;
-            editButton.Enabled = true;
-            editButton.Visible = true;
-            cancelEditButton.Enabled = true;
-            cancelEditButton.Visible = true;
-
-            nameTextBox.Text = contacts[currentMouseOverRow].Name;
-            surnameTextBox.Text = contacts[currentMouseOverRow].Surname;
-            phoneTextBox.Text = contacts[currentMouseOverRow].Phone;
+            StartEditMode();
         }
 
-        private void cancelEditButton_Click(object sender, EventArgs e)
+        private void CancelEditButton_Click(object sender, EventArgs e)
         {
-            isCurrentMouseOverRowLocked = false;
-
-            submitButton.Enabled = true;
-            submitButton.Visible = true;
-            editButton.Enabled = false;
-            editButton.Visible = false;
-            cancelEditButton.Enabled = false;
-            cancelEditButton.Visible = false;
-
-            nameTextBox.Text = string.Empty;
-            surnameTextBox.Text = string.Empty;
-            phoneTextBox.Text = string.Empty;
+            StopEditMode();
         }
     }
 }
