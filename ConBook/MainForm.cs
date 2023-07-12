@@ -32,8 +32,7 @@ namespace ConBook
             dgvContacts.Columns["Phone"].DisplayIndex = 2;
 
             DataGridViewColumn dgvColumnSurname = dgvContacts.Columns["Surname"];
-            DataGridViewColumn dgvColumnName =
-                dgvContacts.Columns["Name"];
+            DataGridViewColumn dgvColumnName = dgvContacts.Columns["Name"];
             DataGridViewColumn dgvColumnPhone = dgvContacts.Columns["Phone"];
 
             dgvColumnSurname.HeaderText = "Nazwisko";
@@ -392,7 +391,7 @@ namespace ConBook
                 {
                     EditContact();
                 }
-                    
+
             }
         }
 
@@ -458,6 +457,11 @@ namespace ConBook
         private void CancelEditButton_Click(object sender, EventArgs e)
         {
             StopEditMode();
+        }
+
+        private void NewTsmItem_Click(object sender, EventArgs e)
+        {
+            // to do
         }
     }
 }

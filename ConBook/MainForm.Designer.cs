@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             NameTextBox = new TextBox();
             NameLabel = new Label();
             SurnameLabel = new Label();
@@ -138,27 +138,28 @@
             // NewTsmItem
             // 
             NewTsmItem.Name = "NewTsmItem";
-            NewTsmItem.Size = new Size(141, 22);
+            NewTsmItem.Size = new Size(180, 22);
             NewTsmItem.Text = "Nowy";
+            NewTsmItem.Click += NewTsmItem_Click;
             // 
             // OpenTsmItem
             // 
             OpenTsmItem.Name = "OpenTsmItem";
-            OpenTsmItem.Size = new Size(141, 22);
+            OpenTsmItem.Size = new Size(180, 22);
             OpenTsmItem.Text = "Otwórz...";
             OpenTsmItem.Click += OpenTsmItem_Click;
             // 
             // SaveTsmItem
             // 
             SaveTsmItem.Name = "SaveTsmItem";
-            SaveTsmItem.Size = new Size(141, 22);
+            SaveTsmItem.Size = new Size(180, 22);
             SaveTsmItem.Text = "Zapisz";
             SaveTsmItem.Click += SaveTsmItem_Click;
             // 
             // SaveAsTsmItem
             // 
             SaveAsTsmItem.Name = "SaveAsTsmItem";
-            SaveAsTsmItem.Size = new Size(141, 22);
+            SaveAsTsmItem.Size = new Size(180, 22);
             SaveAsTsmItem.Text = "Zapisz jako...";
             SaveAsTsmItem.Click += SaveAsTsmItem_Click;
             // 
@@ -223,14 +224,14 @@
             dgvContacts.AllowUserToResizeColumns = false;
             dgvContacts.AllowUserToResizeRows = false;
             dgvContacts.BackgroundColor = Color.WhiteSmoke;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvContacts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvContacts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvContacts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvContacts.Location = new Point(12, 27);
             dgvContacts.Name = "dgvContacts";
@@ -246,19 +247,19 @@
             // 
             cmsRows.Items.AddRange(new ToolStripItem[] { EditCmItem, DeleteCmItem });
             cmsRows.Name = "cmsRows";
-            cmsRows.Size = new Size(181, 70);
+            cmsRows.Size = new Size(108, 48);
             // 
             // EditCmItem
             // 
             EditCmItem.Name = "EditCmItem";
-            EditCmItem.Size = new Size(180, 22);
+            EditCmItem.Size = new Size(107, 22);
             EditCmItem.Text = "Edytuj";
             EditCmItem.Click += EditCmItem_Click;
             // 
             // DeleteCmItem
             // 
             DeleteCmItem.Name = "DeleteCmItem";
-            DeleteCmItem.Size = new Size(180, 22);
+            DeleteCmItem.Size = new Size(107, 22);
             DeleteCmItem.Text = "Usuń";
             DeleteCmItem.Click += DeleteCmItem_Click;
             // 
