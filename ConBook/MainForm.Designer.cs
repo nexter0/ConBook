@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             nameTextBox = new TextBox();
             label1 = new Label();
@@ -36,7 +37,7 @@
             label3 = new Label();
             phoneTextBox = new TextBox();
             submitButton = new Button();
-            menuStrip1 = new MenuStrip();
+            MenuStrip = new MenuStrip();
             pikToolStripMenuItem = new ToolStripMenuItem();
             nowyToolStripMenuItem = new ToolStripMenuItem();
             otwórzToolStripMenuItem = new ToolStripMenuItem();
@@ -45,11 +46,16 @@
             listaToolStripMenuItem = new ToolStripMenuItem();
             sortujToolStripMenuItem = new ToolStripMenuItem();
             groupBox1 = new GroupBox();
+            cancelEditButton = new Button();
+            editButton = new Button();
             dgvContacts = new DataGridView();
-            colorDialog1 = new ColorDialog();
-            menuStrip1.SuspendLayout();
+            cmsRows = new ContextMenuStrip(components);
+            edytujToolStripMenuItem = new ToolStripMenuItem();
+            usuńToolStripMenuItem = new ToolStripMenuItem();
+            MenuStrip.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvContacts).BeginInit();
+            cmsRows.SuspendLayout();
             SuspendLayout();
             // 
             // nameTextBox
@@ -113,14 +119,14 @@
             submitButton.UseVisualStyleBackColor = true;
             submitButton.Click += submitButton_Click;
             // 
-            // menuStrip1
+            // MenuStrip
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { pikToolStripMenuItem, listaToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(604, 24);
-            menuStrip1.TabIndex = 7;
-            menuStrip1.Text = "menuStrip1";
+            MenuStrip.Items.AddRange(new ToolStripItem[] { pikToolStripMenuItem, listaToolStripMenuItem });
+            MenuStrip.Location = new Point(0, 0);
+            MenuStrip.Name = "MenuStrip";
+            MenuStrip.Size = new Size(604, 24);
+            MenuStrip.TabIndex = 7;
+            MenuStrip.Text = "menuStrip1";
             // 
             // pikToolStripMenuItem
             // 
@@ -172,6 +178,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(cancelEditButton);
+            groupBox1.Controls.Add(editButton);
             groupBox1.Controls.Add(nameTextBox);
             groupBox1.Controls.Add(submitButton);
             groupBox1.Controls.Add(surnameTextBox);
@@ -185,6 +193,28 @@
             groupBox1.TabIndex = 8;
             groupBox1.TabStop = false;
             groupBox1.Text = "Dodaj / edytuj kontakt";
+            // 
+            // cancelEditButton
+            // 
+            cancelEditButton.Location = new Point(481, 49);
+            cancelEditButton.Name = "cancelEditButton";
+            cancelEditButton.Size = new Size(93, 26);
+            cancelEditButton.TabIndex = 10;
+            cancelEditButton.Text = "Anuluj";
+            cancelEditButton.UseVisualStyleBackColor = true;
+            cancelEditButton.Visible = false;
+            cancelEditButton.Click += cancelEditButton_Click;
+            // 
+            // editButton
+            // 
+            editButton.Location = new Point(481, 17);
+            editButton.Name = "editButton";
+            editButton.Size = new Size(93, 26);
+            editButton.TabIndex = 10;
+            editButton.Text = "Edytuj";
+            editButton.UseVisualStyleBackColor = true;
+            editButton.Visible = false;
+            editButton.Click += editButton_Click;
             // 
             // dgvContacts
             // 
@@ -207,8 +237,30 @@
             dgvContacts.ReadOnly = true;
             dgvContacts.RowHeadersVisible = false;
             dgvContacts.RowTemplate.Height = 25;
+            dgvContacts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvContacts.Size = new Size(580, 415);
             dgvContacts.TabIndex = 9;
+            dgvContacts.MouseClick += dgvContacts_MouseClick;
+            // 
+            // cmsRows
+            // 
+            cmsRows.Items.AddRange(new ToolStripItem[] { edytujToolStripMenuItem, usuńToolStripMenuItem });
+            cmsRows.Name = "cmsRows";
+            cmsRows.Size = new Size(108, 48);
+            // 
+            // edytujToolStripMenuItem
+            // 
+            edytujToolStripMenuItem.Name = "edytujToolStripMenuItem";
+            edytujToolStripMenuItem.Size = new Size(107, 22);
+            edytujToolStripMenuItem.Text = "Edytuj";
+            edytujToolStripMenuItem.Click += edytujToolStripMenuItem_Click;
+            // 
+            // usuńToolStripMenuItem
+            // 
+            usuńToolStripMenuItem.Name = "usuńToolStripMenuItem";
+            usuńToolStripMenuItem.Size = new Size(107, 22);
+            usuńToolStripMenuItem.Text = "Usuń";
+            usuńToolStripMenuItem.Click += usuńToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -217,19 +269,20 @@
             ClientSize = new Size(604, 541);
             Controls.Add(dgvContacts);
             Controls.Add(groupBox1);
-            Controls.Add(menuStrip1);
+            Controls.Add(MenuStrip);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            MainMenuStrip = menuStrip1;
+            MainMenuStrip = MenuStrip;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "MainForm";
             Text = "ConBook";
             Load += Form1_Load;
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
+            MenuStrip.ResumeLayout(false);
+            MenuStrip.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvContacts).EndInit();
+            cmsRows.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -243,7 +296,7 @@
         private Label label3;
         private TextBox phoneTextBox;
         private Button submitButton;
-        private MenuStrip menuStrip1;
+        private MenuStrip MenuStrip;
         private ToolStripMenuItem pikToolStripMenuItem;
         private ToolStripMenuItem nowyToolStripMenuItem;
         private ToolStripMenuItem otwórzToolStripMenuItem;
@@ -253,6 +306,10 @@
         private DataGridView dgvContacts;
         private ToolStripMenuItem listaToolStripMenuItem;
         private ToolStripMenuItem sortujToolStripMenuItem;
-        private ColorDialog colorDialog1;
+        private ContextMenuStrip cmsRows;
+        private ToolStripMenuItem edytujToolStripMenuItem;
+        private ToolStripMenuItem usuńToolStripMenuItem;
+        private Button editButton;
+        private Button cancelEditButton;
     }
 }

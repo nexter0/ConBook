@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Media;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
@@ -10,7 +11,11 @@ namespace ConBook
         public BindingList<Contact> contacts = new BindingList<Contact>();
 
         private string? currentFile = null;
-        private bool currentFileEdited = false;
+        private bool isCurrentFileEdited = false;
+
+        int currentMouseOverRow = -1;
+        // this variable prevents the user from changing selected row during deleting or editing an entry
+        bool isCurrentMouseOverRowLocked = false;
 
         public MainForm()
         {
@@ -26,9 +31,9 @@ namespace ConBook
             dgvContacts.Columns["Name"].DisplayIndex = 1;
             dgvContacts.Columns["Phone"].DisplayIndex = 2;
 
-            DataGridViewColumn dgvColumnSurname = dgvContacts.Columns[0];
-            DataGridViewColumn dgvColumnName = dgvContacts.Columns[1];
-            DataGridViewColumn dgvColumnPhone = dgvContacts.Columns[2];
+            DataGridViewColumn dgvColumnSurname = dgvContacts.Columns["Surname"];
+            DataGridViewColumn dgvColumnName = dgvContacts.Columns["Name"];
+            DataGridViewColumn dgvColumnPhone = dgvContacts.Columns["Phone"];
 
             dgvColumnSurname.HeaderText = "Nazwisko";
             dgvColumnName.HeaderText = "Imię";
@@ -269,7 +274,7 @@ namespace ConBook
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Podczas wczytywania wystąpił błąd: \n" + ex.Message, "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Podczas wczytywania wystąpił błąd: \n {ex.Message}", "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -286,7 +291,7 @@ namespace ConBook
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Podczas wczytywania wystąpił błąd: \n" + ex.Message + "\n\nWczytywany plik: " + file, "Błąd wczytywania",
+                    MessageBox.Show($"Podczas wczytywania wystąpił błąd: \n {ex.Message} \n\nWczytywany plik:   {file}", "Błąd wczytywania",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -319,6 +324,92 @@ namespace ConBook
                 e.SuppressKeyPress = true;
                 SumbitContact();
             }
+        }
+
+        private void dgvContacts_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (!isCurrentMouseOverRowLocked)
+                {
+                    currentMouseOverRow = dgvContacts.HitTest(e.X, e.Y).RowIndex;
+
+                    if (currentMouseOverRow < 0)
+                    {
+                        return;
+                    }
+                    cmsRows.Show(dgvContacts, new Point(e.X, e.Y));
+                }
+                else
+                {
+                    SystemSounds.Beep.Play();
+                }
+            }
+        }
+
+        private void usuńToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            isCurrentMouseOverRowLocked = true;
+            DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt {contacts[currentMouseOverRow].Name} {contacts[currentMouseOverRow].Surname} z listy?",
+                "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (deletionQueryResult == DialogResult.Yes)
+            {
+                contacts.RemoveAt(currentMouseOverRow);
+                RefreshDataGridView();
+            }
+            isCurrentMouseOverRowLocked = false;
+        }
+
+        private void editButton_Click(object sender, EventArgs e)
+        {
+            Contact editedContact = new Contact(nameTextBox.Text, surnameTextBox.Text, phoneTextBox.Text);
+            contacts[currentMouseOverRow] = editedContact;
+            RefreshDataGridView();
+
+            isCurrentMouseOverRowLocked = false;
+
+            submitButton.Enabled = true;
+            submitButton.Visible = true;
+            editButton.Enabled = false;
+            editButton.Visible = false;
+            cancelEditButton.Enabled = false;
+            cancelEditButton.Visible = false;
+
+            nameTextBox.Text = string.Empty;
+            surnameTextBox.Text = string.Empty;
+            phoneTextBox.Text = string.Empty;
+        }
+
+        private void edytujToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            isCurrentMouseOverRowLocked = true;
+
+            submitButton.Enabled = false;
+            submitButton.Visible = false;
+            editButton.Enabled = true;
+            editButton.Visible = true;
+            cancelEditButton.Enabled = true;
+            cancelEditButton.Visible = true;
+
+            nameTextBox.Text = contacts[currentMouseOverRow].Name;
+            surnameTextBox.Text = contacts[currentMouseOverRow].Surname;
+            phoneTextBox.Text = contacts[currentMouseOverRow].Phone;
+        }
+
+        private void cancelEditButton_Click(object sender, EventArgs e)
+        {
+            isCurrentMouseOverRowLocked = false;
+
+            submitButton.Enabled = true;
+            submitButton.Visible = true;
+            editButton.Enabled = false;
+            editButton.Visible = false;
+            cancelEditButton.Enabled = false;
+            cancelEditButton.Visible = false;
+
+            nameTextBox.Text = string.Empty;
+            surnameTextBox.Text = string.Empty;
+            phoneTextBox.Text = string.Empty;
         }
     }
 }
