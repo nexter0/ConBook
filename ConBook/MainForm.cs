@@ -2,7 +2,11 @@
 using System.Media;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
+
+// to do:
+// * fix the error after moving a file saved in "recent" file
 
 namespace ConBook
 {
@@ -241,7 +245,7 @@ namespace ConBook
                     }
                     else
                     {
-                        OpenTsmItem_Click(sender, e);
+                        SaveAsTsmItem_Click(sender, e);
                     }
                 }
                 else
@@ -339,9 +343,35 @@ namespace ConBook
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+
             string path = Directory.GetCurrentDirectory();
             string? file = Directory.EnumerateFiles(path, "*.xml").FirstOrDefault();
-            if (file != null)
+            if (File.Exists("recent"))
+            {
+                using (StreamReader reader = new StreamReader("recent"))
+                {
+                    string fileTmp = reader.ReadToEnd();
+                    if (fileTmp != string.Empty && fileTmp != null)
+                    {
+                        file = fileTmp;
+                    }
+                    try
+                    {
+                        if (file != string.Empty && file != null)
+                        {
+                            LoadFile(file);
+                            currentFile = file;
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {file}", "Błąd wczytywania",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }    
+            else if (file != string.Empty && file != null)
             {
                 try
                 {
@@ -350,7 +380,7 @@ namespace ConBook
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Podczas wczytywania wystąpił błąd: \n {ex.Message} \n\nWczytywany plik:   {file}", "Błąd wczytywania",
+                    MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {file}", "Błąd wczytywania",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -492,6 +522,24 @@ namespace ConBook
                         e.Cancel = true;
                         break;
                     }
+            }
+        }
+
+        private void oProgramieToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("ConBook - Nikodem Przbyszewski 2023\n\n" +
+                "Oprogramowanie: Visual Studio 2022 (.NET Framework 64-bit)\n" +
+                "Ikona: Icongeek26 @ flaticon.com", "ConBook v1.0", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (currentFile != string.Empty && currentFile != null)
+            {
+                using (StreamWriter writer = new StreamWriter("recent"))
+                {
+                    writer.Write(currentFile);
+                }
             }
         }
     }

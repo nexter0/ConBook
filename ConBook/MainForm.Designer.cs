@@ -44,6 +44,8 @@
             OpenTsmItem = new ToolStripMenuItem();
             SaveTsmItem = new ToolStripMenuItem();
             SaveAsTsmItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            oProgramieToolStripMenuItem = new ToolStripMenuItem();
             listaToolStripMenuItem = new ToolStripMenuItem();
             SortTsmItem = new ToolStripMenuItem();
             InteractionGroupBox = new GroupBox();
@@ -131,7 +133,7 @@
             // 
             // pikToolStripMenuItem
             // 
-            pikToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { NewTsmItem, OpenTsmItem, SaveTsmItem, SaveAsTsmItem });
+            pikToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { NewTsmItem, OpenTsmItem, SaveTsmItem, SaveAsTsmItem, toolStripSeparator1, oProgramieToolStripMenuItem });
             pikToolStripMenuItem.Name = "pikToolStripMenuItem";
             pikToolStripMenuItem.Size = new Size(38, 20);
             pikToolStripMenuItem.Text = "Plik";
@@ -139,30 +141,42 @@
             // NewTsmItem
             // 
             NewTsmItem.Name = "NewTsmItem";
-            NewTsmItem.Size = new Size(141, 22);
+            NewTsmItem.Size = new Size(180, 22);
             NewTsmItem.Text = "Nowy";
             NewTsmItem.Click += NewTsmItem_Click;
             // 
             // OpenTsmItem
             // 
             OpenTsmItem.Name = "OpenTsmItem";
-            OpenTsmItem.Size = new Size(141, 22);
+            OpenTsmItem.Size = new Size(180, 22);
             OpenTsmItem.Text = "Otwórz...";
             OpenTsmItem.Click += OpenTsmItem_Click;
             // 
             // SaveTsmItem
             // 
             SaveTsmItem.Name = "SaveTsmItem";
-            SaveTsmItem.Size = new Size(141, 22);
+            SaveTsmItem.Size = new Size(180, 22);
             SaveTsmItem.Text = "Zapisz";
             SaveTsmItem.Click += SaveTsmItem_Click;
             // 
             // SaveAsTsmItem
             // 
             SaveAsTsmItem.Name = "SaveAsTsmItem";
-            SaveAsTsmItem.Size = new Size(141, 22);
+            SaveAsTsmItem.Size = new Size(180, 22);
             SaveAsTsmItem.Text = "Zapisz jako...";
             SaveAsTsmItem.Click += SaveAsTsmItem_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(177, 6);
+            // 
+            // oProgramieToolStripMenuItem
+            // 
+            oProgramieToolStripMenuItem.Name = "oProgramieToolStripMenuItem";
+            oProgramieToolStripMenuItem.Size = new Size(180, 22);
+            oProgramieToolStripMenuItem.Text = "O programie";
+            oProgramieToolStripMenuItem.Click += oProgramieToolStripMenuItem_Click;
             // 
             // listaToolStripMenuItem
             // 
@@ -174,7 +188,7 @@
             // SortTsmItem
             // 
             SortTsmItem.Name = "SortTsmItem";
-            SortTsmItem.Size = new Size(105, 22);
+            SortTsmItem.Size = new Size(180, 22);
             SortTsmItem.Text = "Sortuj";
             SortTsmItem.Click += SortTsmItem_Click;
             // 
@@ -280,6 +294,7 @@
             Name = "MainForm";
             Text = "ConBook";
             FormClosing += MainForm_FormClosing;
+            FormClosed += MainForm_FormClosed;
             Load += MainForm_Load;
             MenuStrip.ResumeLayout(false);
             MenuStrip.PerformLayout();
@@ -315,5 +330,7 @@
         private ToolStripMenuItem DeleteCmItem;
         private Button EditButton;
         private Button CancelEditButton;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem oProgramieToolStripMenuItem;
     }
 }
