@@ -11,7 +11,6 @@ namespace ConBook
         public BindingList<Contact> contacts = new BindingList<Contact>();
 
         private string? currentFile = null;
-        private bool isCurrentFileEdited = false;
 
         int currentMouseOverRow = -1;
         // this variable prevents the user from changing selected row during deleting or editing an entry
@@ -205,7 +204,6 @@ namespace ConBook
             }
         }
 
-
         // *****************************
         // *          Actions          *
         // *****************************
@@ -268,7 +266,6 @@ namespace ConBook
                     MessageBox.Show(message, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-
         }
 
         private void SaveAsTsmItem_Click(object sender, EventArgs e)
@@ -357,7 +354,6 @@ namespace ConBook
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-
             RefreshDataGridView();
         }
 
@@ -374,7 +370,6 @@ namespace ConBook
                 {
                     EditContact();
                 }
-
             }
         }
 
@@ -391,7 +386,6 @@ namespace ConBook
                 {
                     EditContact();
                 }
-
             }
         }
 
@@ -408,7 +402,6 @@ namespace ConBook
                 {
                     EditContact();
                 }
-
             }
         }
 
@@ -461,7 +454,45 @@ namespace ConBook
 
         private void NewTsmItem_Click(object sender, EventArgs e)
         {
-            // to do
+            DialogResult saveQueryResult = MessageBox.Show("Niezapisane zmiany zostaną utracone. \nCzy chcesz zapisać teraz?", "Zapisz zmiany", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            switch (saveQueryResult)
+            {
+                case DialogResult.Yes:
+                    {
+                        SaveTsmItem_Click(sender, e);
+                        contacts.Clear();
+                        RefreshDataGridView();
+                        break;
+                    }
+                case DialogResult.No:
+                    {
+                        contacts.Clear();
+                        RefreshDataGridView();
+                        break;
+                    }
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult saveQueryResult = MessageBox.Show("Niezapisane zmiany zostaną utracone. \nCzy chcesz zapisać teraz?", "Zapisz zmiany", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            switch (saveQueryResult)
+            {
+                case DialogResult.Yes:
+                    {
+                        SaveTsmItem_Click(sender, e);
+                        break;
+                    }
+                case DialogResult.No:
+                    {
+                        break;
+                    }
+                default:
+                    {
+                        e.Cancel = true;
+                        break;
+                    }
+            }
         }
     }
 }

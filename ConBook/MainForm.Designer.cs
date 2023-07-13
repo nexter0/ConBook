@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             NameTextBox = new TextBox();
             NameLabel = new Label();
             SurnameLabel = new Label();
@@ -138,28 +139,28 @@
             // NewTsmItem
             // 
             NewTsmItem.Name = "NewTsmItem";
-            NewTsmItem.Size = new Size(180, 22);
+            NewTsmItem.Size = new Size(141, 22);
             NewTsmItem.Text = "Nowy";
             NewTsmItem.Click += NewTsmItem_Click;
             // 
             // OpenTsmItem
             // 
             OpenTsmItem.Name = "OpenTsmItem";
-            OpenTsmItem.Size = new Size(180, 22);
+            OpenTsmItem.Size = new Size(141, 22);
             OpenTsmItem.Text = "Otwórz...";
             OpenTsmItem.Click += OpenTsmItem_Click;
             // 
             // SaveTsmItem
             // 
             SaveTsmItem.Name = "SaveTsmItem";
-            SaveTsmItem.Size = new Size(180, 22);
+            SaveTsmItem.Size = new Size(141, 22);
             SaveTsmItem.Text = "Zapisz";
             SaveTsmItem.Click += SaveTsmItem_Click;
             // 
             // SaveAsTsmItem
             // 
             SaveAsTsmItem.Name = "SaveAsTsmItem";
-            SaveAsTsmItem.Size = new Size(180, 22);
+            SaveAsTsmItem.Size = new Size(141, 22);
             SaveAsTsmItem.Text = "Zapisz jako...";
             SaveAsTsmItem.Click += SaveAsTsmItem_Click;
             // 
@@ -272,11 +273,13 @@
             Controls.Add(InteractionGroupBox);
             Controls.Add(MenuStrip);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = MenuStrip;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "MainForm";
             Text = "ConBook";
+            FormClosing += MainForm_FormClosing;
             Load += MainForm_Load;
             MenuStrip.ResumeLayout(false);
             MenuStrip.PerformLayout();
