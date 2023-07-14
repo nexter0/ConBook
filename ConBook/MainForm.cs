@@ -3,10 +3,6 @@ using System.Media;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
-
-// to do:
-// * fix the error after moving a file saved in "recent" file
-
 namespace ConBook
 {
     public partial class MainForm : Form
@@ -43,11 +39,6 @@ namespace ConBook
             dgvColumnSurname.Width = 215;
             dgvColumnName.Width = 215;
             dgvColumnPhone.Width = 147;
-
-            //foreach (DataGridViewRow row in dgvContacts.Rows)
-            //{
-            //    row.HeaderCell.Value = (row.Index + 1).ToString();
-            //}
 
             dgvContacts.Refresh();
         }

@@ -8,6 +8,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageIcon>contact-book.png</PackageIcon>
     <ApplicationIcon>contact-book.ico</ApplicationIcon>
+    <Authors>Nikodem Przybyszewski</Authors>
+    <StartupObject>ConBook.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
