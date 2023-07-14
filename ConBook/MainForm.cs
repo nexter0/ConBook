@@ -2,7 +2,6 @@
 using System.Media;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
-using static System.Net.Mime.MediaTypeNames;
 
 
 // to do:
@@ -241,10 +240,18 @@ namespace ConBook
                 {
                     if (currentFile != null)
                     {
+                        if (isCurrentMouseOverRowLocked)
+                        {
+                            StopEditMode();
+                        }
                         SaveToExistingFile(currentFile);
                     }
                     else
                     {
+                        if (isCurrentMouseOverRowLocked)
+                        {
+                            StopEditMode();
+                        }
                         SaveAsTsmItem_Click(sender, e);
                     }
                 }
@@ -286,6 +293,10 @@ namespace ConBook
 
                     if (saveFileDialog.ShowDialog() == DialogResult.OK)
                     {
+                        if (isCurrentMouseOverRowLocked)
+                        {
+                            StopEditMode();
+                        }
                         string fileName = saveFileDialog.FileName;
                         SaveToNewFile(fileName);
                     }
@@ -325,13 +336,16 @@ namespace ConBook
                     Title = "Otwórz..."
                 };
 
-
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string fileName = openFileDialog.FileName;
 
                     LoadFile(fileName);
                     currentFile = fileName;
+                    if (isCurrentMouseOverRowLocked)
+                    {
+                        StopEditMode();
+                    }
                     RefreshDataGridView();
                 }
             }
@@ -351,7 +365,7 @@ namespace ConBook
                 using (StreamReader reader = new StreamReader("recent"))
                 {
                     string fileTmp = reader.ReadToEnd();
-                    if (fileTmp != string.Empty && fileTmp != null)
+                    if (File.Exists(fileTmp) && fileTmp != string.Empty && fileTmp != null)
                     {
                         file = fileTmp;
                     }
@@ -370,7 +384,7 @@ namespace ConBook
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-            }    
+            }
             else if (file != string.Empty && file != null)
             {
                 try
@@ -484,7 +498,8 @@ namespace ConBook
 
         private void NewTsmItem_Click(object sender, EventArgs e)
         {
-            DialogResult saveQueryResult = MessageBox.Show("Niezapisane zmiany zostaną utracone. \nCzy chcesz zapisać teraz?", "Zapisz zmiany", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            DialogResult saveQueryResult = MessageBox.Show("Niezapisane zmiany zostaną utracone. \nCzy chcesz zapisać teraz?",
+                "Zapisz zmiany", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             switch (saveQueryResult)
             {
                 case DialogResult.Yes:
@@ -492,12 +507,22 @@ namespace ConBook
                         SaveTsmItem_Click(sender, e);
                         contacts.Clear();
                         RefreshDataGridView();
+                        currentFile = null;
+                        if (isCurrentMouseOverRowLocked)
+                        {
+                            StopEditMode();
+                        }
                         break;
                     }
                 case DialogResult.No:
                     {
                         contacts.Clear();
                         RefreshDataGridView();
+                        currentFile = null;
+                        if (isCurrentMouseOverRowLocked)
+                        {
+                            StopEditMode();
+                        }
                         break;
                     }
             }
@@ -505,7 +530,8 @@ namespace ConBook
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult saveQueryResult = MessageBox.Show("Niezapisane zmiany zostaną utracone. \nCzy chcesz zapisać teraz?", "Zapisz zmiany", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            DialogResult saveQueryResult = MessageBox.Show("Niezapisane zmiany zostaną utracone. \nCzy chcesz zapisać teraz?",
+                "Zapisz zmiany", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             switch (saveQueryResult)
             {
                 case DialogResult.Yes:
