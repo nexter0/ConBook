@@ -1,7 +1,5 @@
-﻿namespace ConBook
-{
-    partial class MainForm
-    {
+﻿namespace ConBook {
+    partial class MainForm {
         /// <summary>
         ///  Required designer variable.
         /// </summary>
@@ -11,10 +9,8 @@
         ///  Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
+        protected override void Dispose(bool disposing) {
+            if (disposing && (components != null)) {
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -26,48 +22,47 @@
         ///  Required method for Designer support - do not modify
         ///  the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
-        {
+        private void InitializeComponent() {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            NameTextBox = new TextBox();
+            txtName = new TextBox();
             NameLabel = new Label();
             SurnameLabel = new Label();
-            SurnameTextBox = new TextBox();
+            txtSurname = new TextBox();
             PhoneLabel = new Label();
-            PhoneTextBox = new TextBox();
-            SubmitButton = new Button();
+            txtPhone = new TextBox();
+            btnSubmit = new Button();
             MenuStrip = new MenuStrip();
-            pikToolStripMenuItem = new ToolStripMenuItem();
-            NewTsmItem = new ToolStripMenuItem();
-            OpenTsmItem = new ToolStripMenuItem();
-            SaveTsmItem = new ToolStripMenuItem();
-            SaveAsTsmItem = new ToolStripMenuItem();
+            tsmiPlik = new ToolStripMenuItem();
+            tsmiNew = new ToolStripMenuItem();
+            tsmiOpen = new ToolStripMenuItem();
+            tsmiSave = new ToolStripMenuItem();
+            tsmiSaveAs = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
-            oProgramieToolStripMenuItem = new ToolStripMenuItem();
-            listaToolStripMenuItem = new ToolStripMenuItem();
-            SortTsmItem = new ToolStripMenuItem();
-            InteractionGroupBox = new GroupBox();
-            CancelEditButton = new Button();
-            EditButton = new Button();
+            tsmiAbout = new ToolStripMenuItem();
+            tsmiList = new ToolStripMenuItem();
+            tsmiSort = new ToolStripMenuItem();
+            gbInteraction = new GroupBox();
+            btnCancelEdit = new Button();
+            btnEdit = new Button();
             dgvContacts = new DataGridView();
             cmsRows = new ContextMenuStrip(components);
-            EditCmItem = new ToolStripMenuItem();
-            DeleteCmItem = new ToolStripMenuItem();
+            cmiEdit = new ToolStripMenuItem();
+            cmiDelete = new ToolStripMenuItem();
             MenuStrip.SuspendLayout();
-            InteractionGroupBox.SuspendLayout();
+            gbInteraction.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvContacts).BeginInit();
             cmsRows.SuspendLayout();
             SuspendLayout();
             // 
-            // NameTextBox
+            // txtName
             // 
-            NameTextBox.Location = new Point(6, 37);
-            NameTextBox.Name = "NameTextBox";
-            NameTextBox.Size = new Size(125, 23);
-            NameTextBox.TabIndex = 0;
-            NameTextBox.KeyDown += NameTextBox_KeyDown;
+            txtName.Location = new Point(6, 37);
+            txtName.Name = "txtName";
+            txtName.Size = new Size(125, 23);
+            txtName.TabIndex = 0;
+            txtName.KeyDown += txtName_KeyDown;
             // 
             // NameLabel
             // 
@@ -87,13 +82,13 @@
             SurnameLabel.TabIndex = 3;
             SurnameLabel.Text = "Nazwisko";
             // 
-            // SurnameTextBox
+            // txtSurname
             // 
-            SurnameTextBox.Location = new Point(146, 37);
-            SurnameTextBox.Name = "SurnameTextBox";
-            SurnameTextBox.Size = new Size(125, 23);
-            SurnameTextBox.TabIndex = 2;
-            SurnameTextBox.KeyDown += SurnameTextBox_KeyDown;
+            txtSurname.Location = new Point(146, 37);
+            txtSurname.Name = "txtSurname";
+            txtSurname.Size = new Size(125, 23);
+            txtSurname.TabIndex = 2;
+            txtSurname.KeyDown += txtSurname_KeyDown;
             // 
             // PhoneLabel
             // 
@@ -104,133 +99,133 @@
             PhoneLabel.TabIndex = 5;
             PhoneLabel.Text = "Telefon";
             // 
-            // PhoneTextBox
+            // txtPhone
             // 
-            PhoneTextBox.Location = new Point(286, 37);
-            PhoneTextBox.Name = "PhoneTextBox";
-            PhoneTextBox.Size = new Size(125, 23);
-            PhoneTextBox.TabIndex = 4;
-            PhoneTextBox.KeyDown += PhoneTextBox_KeyDown;
+            txtPhone.Location = new Point(286, 37);
+            txtPhone.Name = "txtPhone";
+            txtPhone.Size = new Size(125, 23);
+            txtPhone.TabIndex = 4;
+            txtPhone.KeyDown += txtPhone_KeyDown;
             // 
-            // SubmitButton
+            // btnSubmit
             // 
-            SubmitButton.Location = new Point(481, 49);
-            SubmitButton.Name = "SubmitButton";
-            SubmitButton.Size = new Size(93, 26);
-            SubmitButton.TabIndex = 6;
-            SubmitButton.Text = "Dodaj";
-            SubmitButton.UseVisualStyleBackColor = true;
-            SubmitButton.Click += SubmitButton_Click;
+            btnSubmit.Location = new Point(481, 49);
+            btnSubmit.Name = "btnSubmit";
+            btnSubmit.Size = new Size(93, 26);
+            btnSubmit.TabIndex = 6;
+            btnSubmit.Text = "Dodaj";
+            btnSubmit.UseVisualStyleBackColor = true;
+            btnSubmit.Click += btnSubmit_Click;
             // 
             // MenuStrip
             // 
-            MenuStrip.Items.AddRange(new ToolStripItem[] { pikToolStripMenuItem, listaToolStripMenuItem });
+            MenuStrip.Items.AddRange(new ToolStripItem[] { tsmiPlik, tsmiList });
             MenuStrip.Location = new Point(0, 0);
             MenuStrip.Name = "MenuStrip";
             MenuStrip.Size = new Size(604, 24);
             MenuStrip.TabIndex = 7;
             MenuStrip.Text = "menuStrip1";
             // 
-            // pikToolStripMenuItem
+            // tsmiPlik
             // 
-            pikToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { NewTsmItem, OpenTsmItem, SaveTsmItem, SaveAsTsmItem, toolStripSeparator1, oProgramieToolStripMenuItem });
-            pikToolStripMenuItem.Name = "pikToolStripMenuItem";
-            pikToolStripMenuItem.Size = new Size(38, 20);
-            pikToolStripMenuItem.Text = "Plik";
+            tsmiPlik.DropDownItems.AddRange(new ToolStripItem[] { tsmiNew, tsmiOpen, tsmiSave, tsmiSaveAs, toolStripSeparator1, tsmiAbout });
+            tsmiPlik.Name = "tsmiPlik";
+            tsmiPlik.Size = new Size(38, 20);
+            tsmiPlik.Text = "Plik";
             // 
-            // NewTsmItem
+            // tsmiNew
             // 
-            NewTsmItem.Name = "NewTsmItem";
-            NewTsmItem.Size = new Size(180, 22);
-            NewTsmItem.Text = "Nowy";
-            NewTsmItem.Click += NewTsmItem_Click;
+            tsmiNew.Name = "tsmiNew";
+            tsmiNew.Size = new Size(180, 22);
+            tsmiNew.Text = "Nowy";
+            tsmiNew.Click += tsmiNew_Click;
             // 
-            // OpenTsmItem
+            // tsmiOpen
             // 
-            OpenTsmItem.Name = "OpenTsmItem";
-            OpenTsmItem.Size = new Size(180, 22);
-            OpenTsmItem.Text = "Otwórz...";
-            OpenTsmItem.Click += OpenTsmItem_Click;
+            tsmiOpen.Name = "tsmiOpen";
+            tsmiOpen.Size = new Size(180, 22);
+            tsmiOpen.Text = "Otwórz...";
+            tsmiOpen.Click += tsmiOpen_Click;
             // 
-            // SaveTsmItem
+            // tsmiSave
             // 
-            SaveTsmItem.Name = "SaveTsmItem";
-            SaveTsmItem.Size = new Size(180, 22);
-            SaveTsmItem.Text = "Zapisz";
-            SaveTsmItem.Click += SaveTsmItem_Click;
+            tsmiSave.Name = "tsmiSave";
+            tsmiSave.Size = new Size(180, 22);
+            tsmiSave.Text = "Zapisz";
+            tsmiSave.Click += tsmiSave_Click;
             // 
-            // SaveAsTsmItem
+            // tsmiSaveAs
             // 
-            SaveAsTsmItem.Name = "SaveAsTsmItem";
-            SaveAsTsmItem.Size = new Size(180, 22);
-            SaveAsTsmItem.Text = "Zapisz jako...";
-            SaveAsTsmItem.Click += SaveAsTsmItem_Click;
+            tsmiSaveAs.Name = "tsmiSaveAs";
+            tsmiSaveAs.Size = new Size(180, 22);
+            tsmiSaveAs.Text = "Zapisz jako...";
+            tsmiSaveAs.Click += tsmiSaveAs_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
             toolStripSeparator1.Size = new Size(177, 6);
             // 
-            // oProgramieToolStripMenuItem
+            // tsmiAbout
             // 
-            oProgramieToolStripMenuItem.Name = "oProgramieToolStripMenuItem";
-            oProgramieToolStripMenuItem.Size = new Size(180, 22);
-            oProgramieToolStripMenuItem.Text = "O programie";
-            oProgramieToolStripMenuItem.Click += oProgramieToolStripMenuItem_Click;
+            tsmiAbout.Name = "tsmiAbout";
+            tsmiAbout.Size = new Size(180, 22);
+            tsmiAbout.Text = "O programie";
+            tsmiAbout.Click += tsmiAbout_Click;
             // 
-            // listaToolStripMenuItem
+            // tsmiList
             // 
-            listaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { SortTsmItem });
-            listaToolStripMenuItem.Name = "listaToolStripMenuItem";
-            listaToolStripMenuItem.Size = new Size(43, 20);
-            listaToolStripMenuItem.Text = "Lista";
+            tsmiList.DropDownItems.AddRange(new ToolStripItem[] { tsmiSort });
+            tsmiList.Name = "tsmiList";
+            tsmiList.Size = new Size(43, 20);
+            tsmiList.Text = "Lista";
             // 
-            // SortTsmItem
+            // tsmiSort
             // 
-            SortTsmItem.Name = "SortTsmItem";
-            SortTsmItem.Size = new Size(180, 22);
-            SortTsmItem.Text = "Sortuj";
-            SortTsmItem.Click += SortTsmItem_Click;
+            tsmiSort.Name = "tsmiSort";
+            tsmiSort.Size = new Size(105, 22);
+            tsmiSort.Text = "Sortuj";
+            tsmiSort.Click += tsmiSort_Click;
             // 
-            // InteractionGroupBox
+            // gbInteraction
             // 
-            InteractionGroupBox.Controls.Add(CancelEditButton);
-            InteractionGroupBox.Controls.Add(EditButton);
-            InteractionGroupBox.Controls.Add(NameTextBox);
-            InteractionGroupBox.Controls.Add(SubmitButton);
-            InteractionGroupBox.Controls.Add(SurnameTextBox);
-            InteractionGroupBox.Controls.Add(PhoneLabel);
-            InteractionGroupBox.Controls.Add(PhoneTextBox);
-            InteractionGroupBox.Controls.Add(SurnameLabel);
-            InteractionGroupBox.Controls.Add(NameLabel);
-            InteractionGroupBox.Location = new Point(12, 448);
-            InteractionGroupBox.Name = "InteractionGroupBox";
-            InteractionGroupBox.Size = new Size(580, 81);
-            InteractionGroupBox.TabIndex = 8;
-            InteractionGroupBox.TabStop = false;
-            InteractionGroupBox.Text = "Dodaj / edytuj kontakt";
+            gbInteraction.Controls.Add(btnCancelEdit);
+            gbInteraction.Controls.Add(btnEdit);
+            gbInteraction.Controls.Add(txtName);
+            gbInteraction.Controls.Add(btnSubmit);
+            gbInteraction.Controls.Add(txtSurname);
+            gbInteraction.Controls.Add(PhoneLabel);
+            gbInteraction.Controls.Add(txtPhone);
+            gbInteraction.Controls.Add(SurnameLabel);
+            gbInteraction.Controls.Add(NameLabel);
+            gbInteraction.Location = new Point(12, 448);
+            gbInteraction.Name = "gbInteraction";
+            gbInteraction.Size = new Size(580, 81);
+            gbInteraction.TabIndex = 8;
+            gbInteraction.TabStop = false;
+            gbInteraction.Text = "Dodaj / edytuj kontakt";
             // 
-            // CancelEditButton
+            // btnCancelEdit
             // 
-            CancelEditButton.Location = new Point(481, 49);
-            CancelEditButton.Name = "CancelEditButton";
-            CancelEditButton.Size = new Size(93, 26);
-            CancelEditButton.TabIndex = 10;
-            CancelEditButton.Text = "Anuluj";
-            CancelEditButton.UseVisualStyleBackColor = true;
-            CancelEditButton.Visible = false;
-            CancelEditButton.Click += CancelEditButton_Click;
+            btnCancelEdit.Location = new Point(480, 49);
+            btnCancelEdit.Name = "btnCancelEdit";
+            btnCancelEdit.Size = new Size(93, 26);
+            btnCancelEdit.TabIndex = 10;
+            btnCancelEdit.Text = "Anuluj";
+            btnCancelEdit.UseVisualStyleBackColor = true;
+            btnCancelEdit.Visible = false;
+            btnCancelEdit.Click += btnCancelEdit_Click;
             // 
-            // EditButton
+            // btnEdit
             // 
-            EditButton.Location = new Point(481, 17);
-            EditButton.Name = "EditButton";
-            EditButton.Size = new Size(93, 26);
-            EditButton.TabIndex = 10;
-            EditButton.Text = "Edytuj";
-            EditButton.UseVisualStyleBackColor = true;
-            EditButton.Visible = false;
-            EditButton.Click += EditButton_Click;
+            btnEdit.Location = new Point(481, 17);
+            btnEdit.Name = "btnEdit";
+            btnEdit.Size = new Size(93, 26);
+            btnEdit.TabIndex = 10;
+            btnEdit.Text = "Edytuj";
+            btnEdit.UseVisualStyleBackColor = true;
+            btnEdit.Visible = false;
+            btnEdit.Click += btnEdit_Click;
             // 
             // dgvContacts
             // 
@@ -239,14 +234,14 @@
             dgvContacts.AllowUserToResizeColumns = false;
             dgvContacts.AllowUserToResizeRows = false;
             dgvContacts.BackgroundColor = Color.WhiteSmoke;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvContacts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvContacts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvContacts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvContacts.Location = new Point(12, 27);
             dgvContacts.Name = "dgvContacts";
@@ -260,23 +255,23 @@
             // 
             // cmsRows
             // 
-            cmsRows.Items.AddRange(new ToolStripItem[] { EditCmItem, DeleteCmItem });
+            cmsRows.Items.AddRange(new ToolStripItem[] { cmiEdit, cmiDelete });
             cmsRows.Name = "cmsRows";
-            cmsRows.Size = new Size(108, 48);
+            cmsRows.Size = new Size(181, 70);
             // 
-            // EditCmItem
+            // cmiEdit
             // 
-            EditCmItem.Name = "EditCmItem";
-            EditCmItem.Size = new Size(107, 22);
-            EditCmItem.Text = "Edytuj";
-            EditCmItem.Click += EditCmItem_Click;
+            cmiEdit.Name = "cmiEdit";
+            cmiEdit.Size = new Size(180, 22);
+            cmiEdit.Text = "Edytuj";
+            cmiEdit.Click += cmiEdit_Click;
             // 
-            // DeleteCmItem
+            // cmiDelete
             // 
-            DeleteCmItem.Name = "DeleteCmItem";
-            DeleteCmItem.Size = new Size(107, 22);
-            DeleteCmItem.Text = "Usuń";
-            DeleteCmItem.Click += DeleteCmItem_Click;
+            cmiDelete.Name = "cmiDelete";
+            cmiDelete.Size = new Size(180, 22);
+            cmiDelete.Text = "Usuń";
+            cmiDelete.Click += cmiDelete_Click;
             // 
             // MainForm
             // 
@@ -284,7 +279,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(604, 541);
             Controls.Add(dgvContacts);
-            Controls.Add(InteractionGroupBox);
+            Controls.Add(gbInteraction);
             Controls.Add(MenuStrip);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -298,8 +293,8 @@
             Load += MainForm_Load;
             MenuStrip.ResumeLayout(false);
             MenuStrip.PerformLayout();
-            InteractionGroupBox.ResumeLayout(false);
-            InteractionGroupBox.PerformLayout();
+            gbInteraction.ResumeLayout(false);
+            gbInteraction.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvContacts).EndInit();
             cmsRows.ResumeLayout(false);
             ResumeLayout(false);
@@ -308,29 +303,29 @@
 
         #endregion
 
-        private TextBox NameTextBox;
+        private TextBox txtName;
         private Label NameLabel;
         private Label SurnameLabel;
-        private TextBox SurnameTextBox;
+        private TextBox txtSurname;
         private Label PhoneLabel;
-        private TextBox PhoneTextBox;
-        private Button SubmitButton;
+        private TextBox txtPhone;
+        private Button btnSubmit;
         private MenuStrip MenuStrip;
-        private ToolStripMenuItem pikToolStripMenuItem;
-        private ToolStripMenuItem NewTsmItem;
-        private ToolStripMenuItem OpenTsmItem;
-        private ToolStripMenuItem SaveTsmItem;
-        private ToolStripMenuItem SaveAsTsmItem;
-        private GroupBox InteractionGroupBox;
+        private ToolStripMenuItem tsmiPlik;
+        private ToolStripMenuItem tsmiNew;
+        private ToolStripMenuItem tsmiOpen;
+        private ToolStripMenuItem tsmiSave;
+        private ToolStripMenuItem tsmiSaveAs;
+        private GroupBox gbInteraction;
         private DataGridView dgvContacts;
-        private ToolStripMenuItem listaToolStripMenuItem;
-        private ToolStripMenuItem SortTsmItem;
+        private ToolStripMenuItem tsmiList;
+        private ToolStripMenuItem tsmiSort;
         private ContextMenuStrip cmsRows;
-        private ToolStripMenuItem EditCmItem;
-        private ToolStripMenuItem DeleteCmItem;
-        private Button EditButton;
-        private Button CancelEditButton;
+        private ToolStripMenuItem cmiEdit;
+        private ToolStripMenuItem cmiDelete;
+        private Button btnEdit;
+        private Button btnCancelEdit;
         private ToolStripSeparator toolStripSeparator1;
-        private ToolStripMenuItem oProgramieToolStripMenuItem;
+        private ToolStripMenuItem tsmiAbout;
     }
 }

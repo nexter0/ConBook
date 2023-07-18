@@ -1,19 +1,19 @@
 ﻿namespace ConBook
 {
-    public class Contact : IComparable<Contact>
+    public class cContact : IComparable<cContact>
     {
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Phone { get; set; }
 
-        public Contact()
+        public cContact()
         {
             Name = string.Empty;
             Surname = string.Empty;
             Phone = string.Empty;
         }
 
-        public Contact(string name, string surname, string phone)
+        public cContact(string name, string surname, string phone)
         {
             Name = name;
             Surname = surname;
@@ -22,13 +22,13 @@
 
         public override bool Equals(object? obj)
         {
-            return obj is Contact contact &&
-                   Name == contact.Name &&
-                   Surname == contact.Surname &&
-                   Phone == contact.Phone;
+            return obj is cContact cContact &&
+                   Name == cContact.Name &&
+                   Surname == cContact.Surname &&
+                   Phone == cContact.Phone;
         }
 
-        public int CompareTo(Contact? other)
+        public int CompareTo(cContact? other)
         {
             if (other == null) return 1;
             return Surname.CompareTo(other.Surname);
