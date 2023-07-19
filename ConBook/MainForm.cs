@@ -1,17 +1,13 @@
 ﻿using System.ComponentModel;
-using System.Media;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace ConBook {
     public partial class MainForm : Form {
         public BindingList<cContact> mContacts = new BindingList<cContact>();
+        public int mSelectedRowIndex = -1;
 
         private string? mCurrentFile = null;
-
-        int mCurrentMouseOverRow = -1;
-
-        bool mIsCurrentMouseOverRowLocked = false;
 
         public MainForm() {
             InitializeComponent();
@@ -20,10 +16,6 @@ namespace ConBook {
         // *****************************
         // *          Events           *
         // *****************************
-
-        private void btnSubmit_Click(object sender, EventArgs e) {
-            SumbitContact();
-        }
 
         private void tsmiSort_Click(object sender, EventArgs e) {
             if (mContacts.Count > 0) {
@@ -35,22 +27,21 @@ namespace ConBook {
             else {
                 MessageBox.Show("Lista jest pusta.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
         }
 
         private void tsmiSave_Click(object sender, EventArgs e) {
             try {
                 if (mContacts.Count > 0) {
                     if (mCurrentFile != null) {
-                        if (mIsCurrentMouseOverRowLocked) {
-                            StopEditMode();
+                        if (Path.GetExtension(mCurrentFile) == ".xml") {
+
+                            SaveToExistingXmlFile(mCurrentFile);
                         }
-                        SaveToExistingFile(mCurrentFile);
+                        else {
+                            SaveToExistingTxtFile(mCurrentFile);
+                        }
                     }
                     else {
-                        if (mIsCurrentMouseOverRowLocked) {
-                            StopEditMode();
-                        }
                         tsmiSaveAs_Click(sender, e);
                     }
                 }
@@ -78,16 +69,22 @@ namespace ConBook {
             if (mContacts.Count > 0) {
                 try {
                     SaveFileDialog SaveFileDialog = new SaveFileDialog() {
-                        Filter = "Dokument XML (*.xml)|*.xml",
+                        Filter = "Plik CSV (rozdzielany przecinkami) (*.csv)|*.csv|Plik TSV (rozdzielany znakiem tabulacji) (*.tsv)|*.tsv|Plik tekstowy (*.txt)|*.txt|Dokument XML (*.xml)|*.xml",
                         Title = "Zapisz jako..."
                     };
 
                     if (SaveFileDialog.ShowDialog() == DialogResult.OK) {
-                        if (mIsCurrentMouseOverRowLocked) {
-                            StopEditMode();
-                        }
                         string fileName = SaveFileDialog.FileName;
-                        SaveToNewFile(fileName);
+                        string fileExtension = Path.GetExtension(fileName);
+                        if (fileExtension == ".xml") {
+                            SaveToNewXmlFile(fileName);
+                        }
+                        else if (fileExtension == ".txt" || fileExtension == ".tsv" || fileExtension == ".csv") {
+                            SaveToNewTxtFile(fileName);
+                        }
+                        else {
+                            MessageBox.Show("Nieobsługiwany format pliku.", "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
                 catch (Exception ex) {
@@ -114,18 +111,24 @@ namespace ConBook {
         private void tsmiOpen_Click(object sender, EventArgs e) {
             try {
                 OpenFileDialog OpenFileDialog = new OpenFileDialog() {
-                    Filter = "Dokument XML (*.xml)|*.xml",
+                    Filter = "Wszystkie pliki (*.*)|*.*|Plik CSV (rozdzielany przecinkami) (*.csv)|*.csv|Plik TSV (rozdzielany znakiem tabulacji) (*.tsv)|*.tsv|Plik tekstowy (*.txt)|*.txt|Dokument XML (*.xml)|*.xml",
                     Title = "Otwórz..."
                 };
 
                 if (OpenFileDialog.ShowDialog() == DialogResult.OK) {
                     string fileName = OpenFileDialog.FileName;
-
-                    LoadFile(fileName);
-                    mCurrentFile = fileName;
-                    if (mIsCurrentMouseOverRowLocked) {
-                        StopEditMode();
+                    string fileExtension = Path.GetExtension(fileName);
+                    if (fileExtension == ".xml") {
+                        LoadXmlFile(fileName);
                     }
+                    else if (fileExtension == ".txt" || fileExtension == ".tsv" || fileExtension == ".csv") {
+                        LoadTxtFile(fileName);
+                    }
+                    else {
+                        MessageBox.Show("Nieobsługiwany format pliku.", "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    mCurrentFile = fileName;
                     RefreshDataGridView();
                 }
             }
@@ -140,13 +143,18 @@ namespace ConBook {
             string? pFile = Directory.EnumerateFiles(pPath, "*.xml").FirstOrDefault();
             if (File.Exists("recent")) {
                 using (StreamReader reader = new StreamReader("recent")) {
-                    string fileTmp = reader.ReadToEnd();
-                    if (File.Exists(fileTmp) && fileTmp != string.Empty && fileTmp != null) {
-                        pFile = fileTmp;
+                    string pFileTmp = reader.ReadToEnd();
+                    if (File.Exists(pFileTmp) && pFileTmp != string.Empty && pFileTmp != null) {
+                        pFile = pFileTmp;
                     }
                     try {
                         if (pFile != string.Empty && pFile != null) {
-                            LoadFile(pFile);
+                            if (Path.GetExtension(pFile) == ".xml") {
+                                LoadXmlFile(pFile);
+                            }
+                            else {
+                                LoadTxtFile(pFile);
+                            }
                             mCurrentFile = pFile;
                         }
 
@@ -159,7 +167,7 @@ namespace ConBook {
             }
             else if (pFile != string.Empty && pFile != null) {
                 try {
-                    LoadFile(pFile);
+                    LoadXmlFile(pFile);
                     mCurrentFile = pFile;
                 }
                 catch (Exception ex) {
@@ -168,80 +176,6 @@ namespace ConBook {
                 }
             }
             RefreshDataGridView();
-        }
-
-        private void txtName_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.Enter) {
-                e.SuppressKeyPress = true;
-                if (!mIsCurrentMouseOverRowLocked) {
-                    SumbitContact();
-                }
-                else {
-                    EditContact();
-                }
-            }
-        }
-
-        private void txtSurname_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.Enter) {
-                e.SuppressKeyPress = true;
-                if (!mIsCurrentMouseOverRowLocked) {
-                    SumbitContact();
-                }
-                else {
-                    EditContact();
-                }
-            }
-        }
-
-        private void txtPhone_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.Enter) {
-                e.SuppressKeyPress = true;
-                if (!mIsCurrentMouseOverRowLocked) {
-                    SumbitContact();
-                }
-                else {
-                    EditContact();
-                }
-            }
-        }
-
-        private void dgvContacts_MouseClick(object sender, MouseEventArgs e) {
-            if (e.Button == MouseButtons.Right) {
-                if (!mIsCurrentMouseOverRowLocked) {
-                    mCurrentMouseOverRow = dgvContacts.HitTest(e.X, e.Y).RowIndex;
-
-                    if (mCurrentMouseOverRow < 0) {
-                        return;
-                    }
-                    cmsRows.Show(dgvContacts, new Point(e.X, e.Y));
-                }
-                else {
-                    SystemSounds.Beep.Play();
-                }
-            }
-        }
-
-        private void cmiDelete_Click(object sender, EventArgs e) {
-            mIsCurrentMouseOverRowLocked = true;
-            DeleteContact();
-            mIsCurrentMouseOverRowLocked = false;
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e) {
-            cContact editedContact = new cContact(txtName.Text, txtSurname.Text, txtPhone.Text);
-            mContacts[mCurrentMouseOverRow] = editedContact;
-            RefreshDataGridView();
-
-            StopEditMode();
-        }
-
-        private void cmiEdit_Click(object sender, EventArgs e) {
-            StartEditMode();
-        }
-
-        private void btnCancelEdit_Click(object sender, EventArgs e) {
-            StopEditMode();
         }
 
         private void tsmiNew_Click(object sender, EventArgs e) {
@@ -253,18 +187,12 @@ namespace ConBook {
                         mContacts.Clear();
                         RefreshDataGridView();
                         mCurrentFile = null;
-                        if (mIsCurrentMouseOverRowLocked) {
-                            StopEditMode();
-                        }
                         break;
                     }
                 case DialogResult.No: {
                         mContacts.Clear();
                         RefreshDataGridView();
                         mCurrentFile = null;
-                        if (mIsCurrentMouseOverRowLocked) {
-                            StopEditMode();
-                        }
                         break;
                     }
             }
@@ -301,13 +229,30 @@ namespace ConBook {
                 }
             }
         }
+        private void btnAdd_Click(object sender, EventArgs e) {
+            DataForm pDataForm = new DataForm(this, false);
+            pDataForm.Location = CalculateDataFormAppearLocation(pDataForm);
+            pDataForm.Show();
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e) {
+            mSelectedRowIndex = dgvContacts.SelectedRows[0].Index;
+            DeleteContact();
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e) {
+            mSelectedRowIndex = dgvContacts.SelectedRows[0].Index;
+            DataForm pDataForm = new DataForm(this, true);
+            pDataForm.Location = CalculateDataFormAppearLocation(pDataForm);
+            pDataForm.Show();
+        }
 
         // *****************************
-        // *          Methods          *
+        // *          Metody           *
         // *****************************
 
         // funkcja odświeżająca DataGridView z danymi
-        private void RefreshDataGridView() {
+        public void RefreshDataGridView() {
             dgvContacts.DataSource = null;
             dgvContacts.DataSource = mContacts;
 
@@ -329,113 +274,22 @@ namespace ConBook {
             dgvContacts.Refresh();
         }
 
-        // funkcja dodająca kontakt do listy
-        private void SumbitContact() {
-            int pValidation = ValidateTextBoxes();
-            if (pValidation == 0) {
-                cContact pNewContact = new cContact(txtName.Text, txtSurname.Text, txtPhone.Text);
-                mContacts.Add(pNewContact);
-
-                txtName.Text = string.Empty;
-                txtSurname.Text = string.Empty;
-                txtPhone.Text = string.Empty;
-            }
-            else {
-                string pCaption = "Błąd";
-                string pMessage = "Nieprawdiłowe dane!\n\n";
-                switch (pValidation) {
-                    case 1: { pMessage += "Wszystkie pola są wymagane."; break; }
-                    case 2: { pMessage += "Niedozwolone znaki w polu Telefon."; break; }
-                    case 3: { pMessage += "Pola Imię i Nazwisko nie mogą zawierać cyfr."; break; }
-                }
-
-                MessageBox.Show(pCaption, pMessage, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
-
-        // funkcja edytująca kontakt
-        private void EditContact() {
-            cContact editedContact = new cContact(txtName.Text, txtSurname.Text, txtPhone.Text);
-            mContacts[mCurrentMouseOverRow] = editedContact;
-            RefreshDataGridView();
-
-            StopEditMode();
-        }
-
-        // funkcja rozpoczynająca tryb edycji kontaktu
-        private void StartEditMode() {
-            mIsCurrentMouseOverRowLocked = true;
-
-            btnSubmit.Enabled = false;
-            btnSubmit.Visible = false;
-            btnEdit.Enabled = true;
-            btnEdit.Visible = true;
-            btnCancelEdit.Enabled = true;
-            btnCancelEdit.Visible = true;
-
-            txtName.Text = mContacts[mCurrentMouseOverRow].Name;
-            txtSurname.Text = mContacts[mCurrentMouseOverRow].Surname;
-            txtPhone.Text = mContacts[mCurrentMouseOverRow].Phone;
-        }
-
-        // funkcja zatrzymująca tryb edycji kontaktu
-        private void StopEditMode() {
-            mIsCurrentMouseOverRowLocked = false;
-
-            btnSubmit.Enabled = true;
-            btnSubmit.Visible = true;
-            btnEdit.Enabled = false;
-            btnEdit.Visible = false;
-            btnCancelEdit.Enabled = false;
-            btnCancelEdit.Visible = false;
-
-            txtName.Text = string.Empty;
-            txtSurname.Text = string.Empty;
-            txtPhone.Text = string.Empty;
-        }
-
         // funkcja usuwająca kontakt
         private void DeleteContact() {
-            DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt {mContacts[mCurrentMouseOverRow].Name} {mContacts[mCurrentMouseOverRow].Surname} z listy?",
+            DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt {mContacts[mSelectedRowIndex].Name} {mContacts[mSelectedRowIndex].Surname} z listy?",
                 "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (deletionQueryResult == DialogResult.Yes) {
-                mContacts.RemoveAt(mCurrentMouseOverRow);
+                mContacts.RemoveAt(mSelectedRowIndex);
                 RefreshDataGridView();
             }
-        }
-
-        // funkcja weryfikująca poprawność wpisanych danych w pola tekstowe
-        private int ValidateTextBoxes() {
-            string pPatternPhone = @"[^0-9\s-+]";
-            string pPatternDigit = @"\d";
-
-            if (string.IsNullOrEmpty(txtName.Text)) { return 1; }
-            if (string.IsNullOrEmpty(txtSurname.Text)) { return 1; }
-            if (string.IsNullOrEmpty(txtPhone.Text)) { return 1; }
-            if (Regex.IsMatch(txtPhone.Text, pPatternPhone)) { return 2; };
-            if (Regex.IsMatch(txtName.Text, pPatternDigit)) { return 3; };
-            if (Regex.IsMatch(txtSurname.Text, pPatternDigit)) { return 3; };
-
-            return 0;
         }
 
         // ************************
         // Serializacja 
 
-        // funkcja funkcja odczytująca dane z pliku XML
-        private void LoadFile(string fileName) {
-            XmlSerializer pSerializer = new XmlSerializer(typeof(BindingList<cContact>));
 
-            using (FileStream pFileStream = new FileStream(fileName, FileMode.Open)) {
-                BindingList<cContact> pLoadedContacts = (BindingList<cContact>)pSerializer.Deserialize(pFileStream);
-
-                mContacts.Clear();
-                mContacts = new BindingList<cContact>(pLoadedContacts);
-            }
-        }
-
-        // funkcja zapisująca do nowego pliku
-        private void SaveToNewFile(string fileName) {
+        // funkcja zapisująca do nowego pliku XML
+        private void SaveToNewXmlFile(string fileName) {
             XmlSerializer pSerializer = new XmlSerializer(typeof(BindingList<cContact>));
 
             using (FileStream pFileStream = new FileStream(fileName, FileMode.Create)) {
@@ -447,16 +301,12 @@ namespace ConBook {
             }
         }
 
-        // funkcja zapisująca do istniejącego pliku
-        private void SaveToExistingFile(string fileName) {
+        // funkcja zapisująca do istniejącego pliku XML
+        private void SaveToExistingXmlFile(string fileName) {
             string pTempFileName = Path.GetTempFileName();
 
             try {
-                XmlSerializer pSerializer = new XmlSerializer(typeof(BindingList<cContact>));
-
-                using (FileStream pFileStream = new FileStream(pTempFileName, FileMode.Create)) {
-                    pSerializer.Serialize(pFileStream, mContacts);
-                }
+                SaveToNewXmlFile(pTempFileName);
                 // File.Replace(tempFileName, fileName, null);
                 File.Delete(fileName);
                 File.Move(pTempFileName, fileName);
@@ -466,6 +316,96 @@ namespace ConBook {
                     File.Delete(pTempFileName);
                 }
             }
+        }
+
+        // funkcja funkcja odczytująca dane z pliku XML
+        private void LoadXmlFile(string fileName) {
+            XmlSerializer pSerializer = new XmlSerializer(typeof(BindingList<cContact>));
+
+            using (FileStream pFileStream = new FileStream(fileName, FileMode.Open)) {
+                BindingList<cContact> pLoadedContacts = (BindingList<cContact>)pSerializer.Deserialize(pFileStream);
+
+                mContacts.Clear();
+                mContacts = new BindingList<cContact>(pLoadedContacts);
+            }
+        }
+
+        // funkcja funkcja odczytująca dane z pliku typu tekstowego (TXT, CSV, TSV)
+        private void LoadTxtFile(string fileName) {
+            mContacts.Clear();
+            using (StreamReader reader = new StreamReader(fileName)) {
+                string? pData = string.Empty;
+                string[]? pDataSplit = null;
+                do {
+                    pData = reader.ReadLine();
+                    if (pData == null) continue;
+                    if (Path.GetExtension(fileName) == ".txt") {
+                        pDataSplit = pData.Split(' ');
+                    }
+                    else if (Path.GetExtension(fileName) == ".csv") {
+                        pDataSplit = pData.Split(',');
+                    }
+                    else if (Path.GetExtension(fileName) == ".tsv") {
+                        pDataSplit = pData.Split('\t');
+                    }
+                    mContacts.Add(new cContact(pDataSplit[0], pDataSplit[1], pDataSplit[2]));
+                    pDataSplit = null;
+                } while (pData != null);
+            }
+        }
+
+        // funkcja zapisująca do nowego pliku typu tekstowego (TXT, CSV, TSV)
+        private void SaveToNewTxtFile(string fileName) {
+            if (Path.GetExtension(fileName) == ".csv") {
+                using (StreamWriter writer = new StreamWriter(fileName)) {
+                    Regex pSpacePatternRegex = new Regex("\\s+");
+                    foreach (cContact contact in mContacts) {
+                        string pContactFormatted = pSpacePatternRegex.Replace(contact.ToString(), ",");
+                        writer.WriteLine(pContactFormatted);
+                    }
+                }
+            }
+            else if (Path.GetExtension(fileName) == ".tsv") {
+                using (StreamWriter writer = new StreamWriter(fileName)) {
+                    Regex pSpacePatternRegex = new Regex("\\s+");
+                    foreach (cContact contact in mContacts) {
+                        string pContactFormatted = pSpacePatternRegex.Replace(contact.ToString(), "\t");
+                        writer.WriteLine(pContactFormatted);
+                    }
+                }
+            }
+            else {
+                using (StreamWriter writer = new StreamWriter(fileName)) {
+                    foreach (cContact contact in mContacts) {
+                        writer.WriteLine(contact);
+                    }
+                }
+            }
+        }
+
+        private void SaveToExistingTxtFile(string fileName) {
+            string pTempFileName = Path.GetTempFileName();
+            try {
+                SaveToNewTxtFile(pTempFileName);
+                // File.Replace(tempFileName, fileName, null);
+                File.Delete(fileName);
+                File.Move(pTempFileName, fileName);
+            }
+            finally {
+                if (File.Exists(pTempFileName)) {
+                    File.Delete(pTempFileName);
+                }
+            }
+        }
+
+
+        // funkcja obliczająca wyśrodkowaną względem głównego formularza pozycję okienka dodawania i edycji kontaktu
+        Point CalculateDataFormAppearLocation(DataForm dataForm) {
+            int pParentCenterX = this.Left + this.Width / 2;
+            int pParentCenterY = this.Top + this.Height / 2;
+            int pChildFormX = pParentCenterX - dataForm.Width / 2;
+            int pChildFormY = pParentCenterY - dataForm.Height / 2;
+            return new Point(pChildFormX, pChildFormY);
         }
     }
 }

@@ -34,5 +34,8 @@
             return Surname.CompareTo(other.Surname);
         }
 
+        public override string ToString() {
+            return $"{Name} {Surname} {Phone}";
+        }
     }
 }
