@@ -2,31 +2,31 @@
 
 namespace ConBook {
     public partial class DataForm : Form {
-        private bool mIsEditing = false;
-        private readonly MainForm mMainForm;
+        public event EventHandler DataFormLoaded;
+        public event EventHandler DataFormClosed;
 
-        public DataForm(MainForm mainForm, bool isEditing) {
+        private bool mIsEditing = false;
+        private IMainComponents mMainForm;
+        
+
+        public DataForm(MainForm xMainForm, bool xIsEditing) {
             InitializeComponent();
-            mMainForm = mainForm;
-            mIsEditing = isEditing;
+            mMainForm = xMainForm;
+            mIsEditing = xIsEditing;
         }
 
         void btnSubmit_Click(object sender, EventArgs e) {
             int pValidation = ValidateTextBoxes();
             if (pValidation == 0) {
                 if (!mIsEditing) {
-                    // dodaj kontakt do listy
-                    cContact pNewContact = new cContact(txtName.Text, txtSurname.Text, txtPhone.Text);
-                    mMainForm.mContacts.Add(pNewContact);
-                    mMainForm.RefreshDataGridView();
+                    cContactListUtils pListUtils = new cContactListUtils(mMainForm);
+                    pListUtils.AddContact(txtName.Text, txtSurname.Text, txtPhone.Text);
                     Close();
 
                 }
                 else {
-                    // edytuj istniejący kontakt
-                    cContact pEditedContact = new cContact(txtName.Text, txtSurname.Text, txtPhone.Text);
-                    mMainForm.mContacts[mMainForm.mSelectedRowIndex] = pEditedContact;
-                    mMainForm.RefreshDataGridView();
+                    cContactListUtils pListUtils = new cContactListUtils(mMainForm);
+                    pListUtils.EditContact(txtName.Text, txtSurname.Text, txtPhone.Text);
                     Close();
                 }
 
@@ -51,7 +51,8 @@ namespace ConBook {
         }
 
         private void DataForm_Load(object sender, EventArgs e) {
-            mMainForm.Enabled = false;
+            DataFormLoaded?.Invoke(this, EventArgs.Empty);
+
             if (mIsEditing) {
                 btnSubmit.Text = "Edytuj";
                 this.Text = "Edytuj kontakt";
@@ -73,7 +74,7 @@ namespace ConBook {
         }
 
         private void DataForm_FormClosed(object sender, FormClosedEventArgs e) {
-            mMainForm.Enabled = true;
+            DataFormClosed?.Invoke(this, EventArgs.Empty);
         }
 
         // funkcja weryfikująca poprawność wpisanych danych w pola tekstowe

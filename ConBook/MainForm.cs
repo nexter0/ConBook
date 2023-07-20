@@ -3,18 +3,20 @@ using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace ConBook {
-    public partial class MainForm : Form {
-        public BindingList<cContact> mContacts = new BindingList<cContact>();
-        public int mSelectedRowIndex = -1;
-
-        private string? mCurrentFile = null;
+    public partial class MainForm : Form, IMainComponents {
+        public BindingList<cContact> mContacts { get; set; }
+        public int mSelectedRowIndex { get; set; }
+        public string? mCurrentFile { get; set; }
 
         public MainForm() {
             InitializeComponent();
+            mSelectedRowIndex = -1;
+            mCurrentFile = null;
+            mContacts = new BindingList<cContact>();
         }
 
         // *****************************
-        // *          Events           *
+        // *          Zdarzenia        *
         // *****************************
 
         private void tsmiSort_Click(object sender, EventArgs e) {
@@ -34,11 +36,12 @@ namespace ConBook {
                 if (mContacts.Count > 0) {
                     if (mCurrentFile != null) {
                         if (Path.GetExtension(mCurrentFile) == ".xml") {
-
-                            SaveToExistingXmlFile(mCurrentFile);
+                            cContactSerializer pSerializer = new cContactSerializer(this);
+                            pSerializer.SaveToExistingXmlFile(mCurrentFile);
                         }
                         else {
-                            SaveToExistingTxtFile(mCurrentFile);
+                            cContactSerializer pSerializer = new cContactSerializer(this);
+                            pSerializer.SaveToExistingTxtFile(mCurrentFile);
                         }
                     }
                     else {
@@ -77,10 +80,12 @@ namespace ConBook {
                         string fileName = SaveFileDialog.FileName;
                         string fileExtension = Path.GetExtension(fileName);
                         if (fileExtension == ".xml") {
-                            SaveToNewXmlFile(fileName);
+                            cContactSerializer pSerializer = new cContactSerializer(this);
+                            pSerializer.SaveToNewXmlFile(fileName);
                         }
                         else if (fileExtension == ".txt" || fileExtension == ".tsv" || fileExtension == ".csv") {
-                            SaveToNewTxtFile(fileName);
+                            cContactSerializer pSerializer = new cContactSerializer(this);
+                            pSerializer.SaveToNewTxtFile(fileName);
                         }
                         else {
                             MessageBox.Show("Nieobsługiwany format pliku.", "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -119,10 +124,12 @@ namespace ConBook {
                     string fileName = OpenFileDialog.FileName;
                     string fileExtension = Path.GetExtension(fileName);
                     if (fileExtension == ".xml") {
-                        LoadXmlFile(fileName);
+                        cContactSerializer pSerializer = new cContactSerializer(this);
+                        pSerializer.LoadXmlFile(fileName);
                     }
                     else if (fileExtension == ".txt" || fileExtension == ".tsv" || fileExtension == ".csv") {
-                        LoadTxtFile(fileName);
+                        cContactSerializer pSerializer = new cContactSerializer(this);
+                        pSerializer.LoadTxtFile(fileName);
                     }
                     else {
                         MessageBox.Show("Nieobsługiwany format pliku.", "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -138,7 +145,7 @@ namespace ConBook {
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
-
+            // TO DO: Zmienić automatyczne wczytywanie istniejącego pliku jeżeli plik "recent" jest pusty
             string pPath = Directory.GetCurrentDirectory();
             string? pFile = Directory.EnumerateFiles(pPath, "*.xml").FirstOrDefault();
             if (File.Exists("recent")) {
@@ -150,10 +157,12 @@ namespace ConBook {
                     try {
                         if (pFile != string.Empty && pFile != null) {
                             if (Path.GetExtension(pFile) == ".xml") {
-                                LoadXmlFile(pFile);
+                                cContactSerializer pSerializer = new cContactSerializer(this);
+                                pSerializer.LoadXmlFile(pFile);
                             }
                             else {
-                                LoadTxtFile(pFile);
+                                cContactSerializer pSerializer = new cContactSerializer(this);
+                                pSerializer.LoadXmlFile(pFile);
                             }
                             mCurrentFile = pFile;
                         }
@@ -167,7 +176,8 @@ namespace ConBook {
             }
             else if (pFile != string.Empty && pFile != null) {
                 try {
-                    LoadXmlFile(pFile);
+                    cContactSerializer pSerializer = new cContactSerializer(this);
+                    pSerializer.LoadXmlFile(pFile);
                     mCurrentFile = pFile;
                 }
                 catch (Exception ex) {
@@ -231,27 +241,38 @@ namespace ConBook {
         }
         private void btnAdd_Click(object sender, EventArgs e) {
             DataForm pDataForm = new DataForm(this, false);
+            pDataForm.DataFormLoaded += DataForm_DataFormLoaded;
+            pDataForm.DataFormClosed += DataForm_DataFormClosed;
             pDataForm.Location = CalculateDataFormAppearLocation(pDataForm);
             pDataForm.Show();
         }
 
         private void btnDelete_Click(object sender, EventArgs e) {
             mSelectedRowIndex = dgvContacts.SelectedRows[0].Index;
-            DeleteContact();
+            cContactListUtils pListUtils = new cContactListUtils(this);
+            pListUtils.DeleteContact();
         }
 
         private void btnEdit_Click(object sender, EventArgs e) {
             mSelectedRowIndex = dgvContacts.SelectedRows[0].Index;
             DataForm pDataForm = new DataForm(this, true);
+            pDataForm.DataFormLoaded += DataForm_DataFormLoaded;
+            pDataForm.DataFormClosed += DataForm_DataFormClosed;
             pDataForm.Location = CalculateDataFormAppearLocation(pDataForm);
             pDataForm.Show();
         }
 
-        // *****************************
-        // *          Metody           *
-        // *****************************
+        // zdarzenie wyłączające kontrolę nad MainForm po włączeniu DataForm
+        private void DataForm_DataFormLoaded(object sender, EventArgs e) {
+            this.Enabled = false;
+        }
 
-        // funkcja odświeżająca DataGridView z danymi
+        // zdarzenie włączające kontrolę nad MainForm po wyłączeniu DataForm
+        private void DataForm_DataFormClosed(object sender, EventArgs e) {
+            this.Enabled = true;
+        }
+
+        // funkcja odświeżająca DataGridView oraz przyciski Edytuj / Usuń
         public void RefreshDataGridView() {
             dgvContacts.DataSource = null;
             dgvContacts.DataSource = mContacts;
@@ -271,140 +292,24 @@ namespace ConBook {
             pDgvColumnName.Width = 215;
             pDgvColumnPhone.Width = 147;
 
+            if (mContacts.Count == 0) {
+                btnEdit.Enabled = false;
+                btnDelete.Enabled = false;
+            }
+            else {
+                btnEdit.Enabled = true;
+                btnDelete.Enabled = true;
+            }
+
             dgvContacts.Refresh();
         }
 
-        // funkcja usuwająca kontakt
-        private void DeleteContact() {
-            DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt {mContacts[mSelectedRowIndex].Name} {mContacts[mSelectedRowIndex].Surname} z listy?",
-                "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (deletionQueryResult == DialogResult.Yes) {
-                mContacts.RemoveAt(mSelectedRowIndex);
-                RefreshDataGridView();
-            }
-        }
-
-        // ************************
-        // Serializacja 
-
-
-        // funkcja zapisująca do nowego pliku XML
-        private void SaveToNewXmlFile(string fileName) {
-            XmlSerializer pSerializer = new XmlSerializer(typeof(BindingList<cContact>));
-
-            using (FileStream pFileStream = new FileStream(fileName, FileMode.Create)) {
-                pSerializer.Serialize(pFileStream, mContacts);
-
-                if (mCurrentFile == null) {
-                    mCurrentFile = fileName;
-                }
-            }
-        }
-
-        // funkcja zapisująca do istniejącego pliku XML
-        private void SaveToExistingXmlFile(string fileName) {
-            string pTempFileName = Path.GetTempFileName();
-
-            try {
-                SaveToNewXmlFile(pTempFileName);
-                // File.Replace(tempFileName, fileName, null);
-                File.Delete(fileName);
-                File.Move(pTempFileName, fileName);
-            }
-            finally {
-                if (File.Exists(pTempFileName)) {
-                    File.Delete(pTempFileName);
-                }
-            }
-        }
-
-        // funkcja funkcja odczytująca dane z pliku XML
-        private void LoadXmlFile(string fileName) {
-            XmlSerializer pSerializer = new XmlSerializer(typeof(BindingList<cContact>));
-
-            using (FileStream pFileStream = new FileStream(fileName, FileMode.Open)) {
-                BindingList<cContact> pLoadedContacts = (BindingList<cContact>)pSerializer.Deserialize(pFileStream);
-
-                mContacts.Clear();
-                mContacts = new BindingList<cContact>(pLoadedContacts);
-            }
-        }
-
-        // funkcja funkcja odczytująca dane z pliku typu tekstowego (TXT, CSV, TSV)
-        private void LoadTxtFile(string fileName) {
-            mContacts.Clear();
-            using (StreamReader reader = new StreamReader(fileName)) {
-                string? pData = string.Empty;
-                string[]? pDataSplit = null;
-                do {
-                    pData = reader.ReadLine();
-                    if (pData == null) continue;
-                    if (Path.GetExtension(fileName) == ".txt") {
-                        pDataSplit = pData.Split(' ');
-                    }
-                    else if (Path.GetExtension(fileName) == ".csv") {
-                        pDataSplit = pData.Split(',');
-                    }
-                    else if (Path.GetExtension(fileName) == ".tsv") {
-                        pDataSplit = pData.Split('\t');
-                    }
-                    mContacts.Add(new cContact(pDataSplit[0], pDataSplit[1], pDataSplit[2]));
-                    pDataSplit = null;
-                } while (pData != null);
-            }
-        }
-
-        // funkcja zapisująca do nowego pliku typu tekstowego (TXT, CSV, TSV)
-        private void SaveToNewTxtFile(string fileName) {
-            if (Path.GetExtension(fileName) == ".csv") {
-                using (StreamWriter writer = new StreamWriter(fileName)) {
-                    Regex pSpacePatternRegex = new Regex("\\s+");
-                    foreach (cContact contact in mContacts) {
-                        string pContactFormatted = pSpacePatternRegex.Replace(contact.ToString(), ",");
-                        writer.WriteLine(pContactFormatted);
-                    }
-                }
-            }
-            else if (Path.GetExtension(fileName) == ".tsv") {
-                using (StreamWriter writer = new StreamWriter(fileName)) {
-                    Regex pSpacePatternRegex = new Regex("\\s+");
-                    foreach (cContact contact in mContacts) {
-                        string pContactFormatted = pSpacePatternRegex.Replace(contact.ToString(), "\t");
-                        writer.WriteLine(pContactFormatted);
-                    }
-                }
-            }
-            else {
-                using (StreamWriter writer = new StreamWriter(fileName)) {
-                    foreach (cContact contact in mContacts) {
-                        writer.WriteLine(contact);
-                    }
-                }
-            }
-        }
-
-        private void SaveToExistingTxtFile(string fileName) {
-            string pTempFileName = Path.GetTempFileName();
-            try {
-                SaveToNewTxtFile(pTempFileName);
-                // File.Replace(tempFileName, fileName, null);
-                File.Delete(fileName);
-                File.Move(pTempFileName, fileName);
-            }
-            finally {
-                if (File.Exists(pTempFileName)) {
-                    File.Delete(pTempFileName);
-                }
-            }
-        }
-
-
         // funkcja obliczająca wyśrodkowaną względem głównego formularza pozycję okienka dodawania i edycji kontaktu
-        Point CalculateDataFormAppearLocation(DataForm dataForm) {
+        Point CalculateDataFormAppearLocation(DataForm xDataForm) {
             int pParentCenterX = this.Left + this.Width / 2;
             int pParentCenterY = this.Top + this.Height / 2;
-            int pChildFormX = pParentCenterX - dataForm.Width / 2;
-            int pChildFormY = pParentCenterY - dataForm.Height / 2;
+            int pChildFormX = pParentCenterX - xDataForm.Width / 2;
+            int pChildFormY = pParentCenterY - xDataForm.Height / 2;
             return new Point(pChildFormX, pChildFormY);
         }
     }
