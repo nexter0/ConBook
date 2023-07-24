@@ -1,21 +1,29 @@
 ﻿using System.Text.RegularExpressions;
 
 namespace ConBook {
-    public partial class DataForm : Form {
-        public event EventHandler DataFormLoaded;
-        public event EventHandler DataFormClosed;
 
-        private bool mIsEditing = false;
+  nazwij klasę formularza frmContactEditor
+
+    public partial class DataForm : Form {
+
+        public event EventHandler DataFormLoaded; opisuj pola klasy
+        public event EventHandler DataFormClosed; opisuj pola klasy
+
+        private bool mIsEditing = false; pola klasy inicjalizuj w  konstrukorze
         private IMainComponents mMainForm;
         
 
+    "nie można " przekayzywac formularza do formularza, użyj do tego dedykowanej klasy
         public DataForm(MainForm xMainForm, bool xIsEditing) {
+
             InitializeComponent();
             mMainForm = xMainForm;
             mIsEditing = xIsEditing;
+
         }
 
         void btnSubmit_Click(object sender, EventArgs e) {
+          zostawiaj przerwy pomidzy naglowkiem funkcji i pierwsza linijka
             int pValidation = ValidateTextBoxes();
             if (pValidation == 0) {
                 if (!mIsEditing) {
@@ -71,14 +79,17 @@ namespace ConBook {
                 txtSurname.Text = String.Empty;
                 txtPhone.Text = String.Empty;
             }
+      zostawiaj przerwy pomidzy ostatnią liniją funkcji i klamrą zamykając
         }
 
         private void DataForm_FormClosed(object sender, FormClosedEventArgs e) {
             DataFormClosed?.Invoke(this, EventArgs.Empty);
         }
 
-        // funkcja weryfikująca poprawność wpisanych danych w pola tekstowe
+
         private int ValidateTextBoxes() {
+          //funkcja weryfikująca poprawność wpisanych danych w pola tekstowe      
+            komentarz funkcji niech będzie zaraz pod nagłówkiem tak, jak tutaj pokazałem
             string pPatternPhone = @"[^0-9\s-+]";
             string pPatternDigit = @"\d";
 
