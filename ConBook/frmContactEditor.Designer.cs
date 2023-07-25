@@ -1,5 +1,5 @@
 ﻿namespace ConBook {
-    partial class DataForm {
+    partial class frmContactEditor {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -23,7 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmContactEditor));
             lbName = new Label();
             txtName = new TextBox();
             txtSurname = new TextBox();
