@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace ConBook {
   public partial class MainForm : Form {
@@ -19,14 +20,11 @@ namespace ConBook {
 
       mContactListUtils = new cContactListUtils();
       mContactSerializer = new cContactSerializer();
-  }
+    }
 
     // *****************************
     // *          Zdarzenia        *
     // *****************************
-
-    //  dodatkowo - ale nie obwiazakowo - sortowanie listy powinno odbywać się klikając na kolumnie
-    //  dodatkowy przycisk do sortowania to średnie rozwiązanie
 
     private void MainForm_Load(object sender, EventArgs e) {
 
@@ -38,7 +36,7 @@ namespace ConBook {
 
     private void tsmiSort_Click(object sender, EventArgs e) {
 
-      SortList();
+      SortList(0); // TO DO: USUNĄĆ LUB PRZEROBIĆ PRZYCISK DO SORTOWANIA W MENU
 
     }
 
@@ -89,12 +87,6 @@ namespace ConBook {
       // formularz musi być pokazany w trybie modalnym, nie moze znikac z oczu, gdy użytkownik kliknie poza nim
       // poszukaj rozwiązania jak to robic
 
-      cMainFormData pData = new cMainFormData() {
-        mContacts = this.mContacts,
-        mSelectedRowIndex = -1,
-        mCurrentFile = this.mCurrentFile
-      };
-
       frmContactEditor pDataForm = new frmContactEditor(mContacts);
 
       pDataForm.DataFormLoaded += DataForm_DataFormLoaded;
@@ -119,6 +111,12 @@ namespace ConBook {
       pDataForm.Location = CalculateDataFormAppearLocation(pDataForm);
 
       pDataForm.Show();
+
+    }
+
+    private void dgvContacts_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e) {
+
+      SortList(e.ColumnIndex);
 
     }
 
@@ -148,16 +146,16 @@ namespace ConBook {
       dgvContacts.DataSource = null;
       dgvContacts.DataSource = mContacts;
 
-      dgvContacts.Columns["Surname"].DisplayIndex = 0;
-      dgvContacts.Columns["Name"].DisplayIndex = 1;
-      dgvContacts.Columns["Phone"].DisplayIndex = 2;
+      //dgvContacts.Columns["Surname"].DisplayIndex = 0;
+      //dgvContacts.Columns["Name"].DisplayIndex = 1;
+      //dgvContacts.Columns["Phone"].DisplayIndex = 2;
 
       DataGridViewColumn pDgvColumnSurname = dgvContacts.Columns["Surname"];
       DataGridViewColumn pDgvColumnName = dgvContacts.Columns["Name"];
       DataGridViewColumn pDgvColumnPhone = dgvContacts.Columns["Phone"];
 
-      pDgvColumnSurname.HeaderText = "Nazwisko";
       pDgvColumnName.HeaderText = "Imię";
+      pDgvColumnSurname.HeaderText = "Nazwisko";
       pDgvColumnPhone.HeaderText = "Telefon";
       pDgvColumnSurname.Width = 215;
       pDgvColumnName.Width = 215;
@@ -391,7 +389,7 @@ namespace ConBook {
 
             if (fileExtension == ".xml") {
 
-              mContactSerializer.SaveToNewXmlFile(fileName, mContacts, ref mCurrentFile);              
+              mContactSerializer.SaveToNewXmlFile(fileName, mContacts, ref mCurrentFile);
 
             } else if (fileExtension == ".txt" || fileExtension == ".tsv" || fileExtension == ".csv") {
 
@@ -498,20 +496,32 @@ namespace ConBook {
       return new Point(pChildFormX, pChildFormY);
     }
 
-    private void SortList() {
+    private void SortList(int xSortTypeId) {
       // funkcja sortująca listę kontaktów
 
-      if (mContacts.Count > 0) {
+      if (xSortTypeId == 0) {
 
-        List<cContact> pTempContactList = new List<cContact>(mContacts);
-        pTempContactList.Sort();
-        mContacts = new BindingList<cContact>(pTempContactList);
+        if (mContacts.Count > 0) {
 
-        RefreshDataGridView();
+          List<cContact> pTempContactList = new List<cContact>(mContacts);
+          pTempContactList.Sort(new cContact.NamesComparer());
+          mContacts = new BindingList<cContact>(pTempContactList);
 
-      } else {
+          RefreshDataGridView();
 
-        MessageBox.Show("Lista jest pusta.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+      } else if (xSortTypeId == 1) {
+
+        if (mContacts.Count > 0) {
+
+          List<cContact> pTempContactList = new List<cContact>(mContacts);
+          pTempContactList.Sort();
+          mContacts = new BindingList<cContact>(pTempContactList);
+
+          RefreshDataGridView();
+
+        }
 
       }
 

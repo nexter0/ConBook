@@ -5,31 +5,52 @@
     public string Phone { get; set; }
 
     public cContact() {
+
       Name = string.Empty;
       Surname = string.Empty;
       Phone = string.Empty;
+
     }
 
     public cContact(string name, string surname, string phone) {
+
       Name = name;
       Surname = surname;
       Phone = phone;
+
     }
 
     public override bool Equals(object? obj) {
+
       return obj is cContact cContact &&
              Name == cContact.Name &&
              Surname == cContact.Surname &&
              Phone == cContact.Phone;
+
+    }
+
+    public class NamesComparer : IComparer<cContact> {
+
+      public int Compare(cContact? xContact, cContact? xOther) {
+
+        if (xContact == null || xOther == null) return 1;
+        return xContact.Name.CompareTo(xOther.Name);
+
+      }
+
     }
 
     public int CompareTo(cContact? other) {
+
       if (other == null) return 1;
       return Surname.CompareTo(other.Surname);
+
     }
 
     public override string ToString() {
+
       return $"{Name} {Surname} {Phone}";
+
     }
   }
 }
