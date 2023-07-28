@@ -1,19 +1,25 @@
 ﻿using System.ComponentModel;
+using System.Drawing.Imaging;
 
 namespace ConBook {
-  public partial class MainForm : Form, IMainComponents {
-    public BindingList<cContact> mContacts { get; set; }
-    public int mSelectedRowIndex { get; set; }
-    public string? mCurrentFile { get; set; }
+  public partial class MainForm : Form {
+
+    public BindingList<cContact> mContacts;
+    private string? mCurrentFile;
+
+    private cContactListUtils mContactListUtils;
+    private cContactSerializer mContactSerializer;
 
     public MainForm() {
 
       InitializeComponent();
-      mSelectedRowIndex = -1;
+
       mCurrentFile = null;
       mContacts = new BindingList<cContact>();
 
-    }
+      mContactListUtils = new cContactListUtils();
+      mContactSerializer = new cContactSerializer();
+  }
 
     // *****************************
     // *          Zdarzenia        *
@@ -83,7 +89,13 @@ namespace ConBook {
       // formularz musi być pokazany w trybie modalnym, nie moze znikac z oczu, gdy użytkownik kliknie poza nim
       // poszukaj rozwiązania jak to robic
 
-      frmContactEditor pDataForm = new frmContactEditor(this, false);
+      cMainFormData pData = new cMainFormData() {
+        mContacts = this.mContacts,
+        mSelectedRowIndex = -1,
+        mCurrentFile = this.mCurrentFile
+      };
+
+      frmContactEditor pDataForm = new frmContactEditor(mContacts);
 
       pDataForm.DataFormLoaded += DataForm_DataFormLoaded;
       pDataForm.DataFormClosed += DataForm_DataFormClosed;
@@ -95,17 +107,13 @@ namespace ConBook {
 
     private void btnDelete_Click(object sender, EventArgs e) {
 
-      mSelectedRowIndex = dgvContacts.SelectedRows[0].Index;
-      cContactListUtils pListUtils = new cContactListUtils(this);
-
-      pListUtils.DeleteContact();
+      mContactListUtils.DeleteContact(mContacts, dgvContacts.SelectedRows[0].Index);
 
     }
 
     private void btnEdit_Click(object sender, EventArgs e) {
 
-      mSelectedRowIndex = dgvContacts.SelectedRows[0].Index;
-      frmContactEditor pDataForm = new frmContactEditor(this, true);
+      frmContactEditor pDataForm = new frmContactEditor(mContacts, true, dgvContacts.SelectedRows[0].Index);
       pDataForm.DataFormLoaded += DataForm_DataFormLoaded;
       pDataForm.DataFormClosed += DataForm_DataFormClosed;
       pDataForm.Location = CalculateDataFormAppearLocation(pDataForm);
@@ -123,6 +131,8 @@ namespace ConBook {
 
     private void DataForm_DataFormClosed(object sender, EventArgs e) {
       // zdarzenie włączające kontrolę nad MainForm po wyłączeniu DataForm
+
+      RefreshDataGridView();
 
       this.Enabled = true;
 
@@ -276,13 +286,12 @@ namespace ConBook {
 
               if (Path.GetExtension(pFile) == ".xml") {
 
-                cContactSerializer pSerializer = new cContactSerializer(this);
-                pSerializer.LoadXmlFile(pFile);
+                mContacts = mContactSerializer.LoadXmlFile(pFile);
 
               } else {
 
-                cContactSerializer pSerializer = new cContactSerializer(this);
-                pSerializer.LoadXmlFile(pFile);
+
+                mContacts = mContactSerializer.LoadTxtFile(pFile);
 
               }
 
@@ -302,8 +311,7 @@ namespace ConBook {
 
         try {
 
-          cContactSerializer pSerializer = new cContactSerializer(this);
-          pSerializer.LoadXmlFile(pFile);
+          mContactSerializer.LoadXmlFile(pFile);
           mCurrentFile = pFile;
 
         } catch (Exception ex) {
@@ -330,18 +338,18 @@ namespace ConBook {
 
         if (OpenFileDialog.ShowDialog() == DialogResult.OK) {
 
-          string fileName = OpenFileDialog.FileName;
-          string fileExtension = Path.GetExtension(fileName);
+          string pFileName = OpenFileDialog.FileName;
+          string pFileExtension = Path.GetExtension(pFileName);
 
-          if (fileExtension == ".xml") {
+          if (pFileExtension == ".xml") {
 
-            cContactSerializer pSerializer = new cContactSerializer(this);
-            pSerializer.LoadXmlFile(fileName);
+            mContacts.Clear();
+            mContacts = mContactSerializer.LoadXmlFile(pFileName);
 
-          } else if (fileExtension == ".txt" || fileExtension == ".tsv" || fileExtension == ".csv") {
+          } else if (pFileExtension == ".txt" || pFileExtension == ".tsv" || pFileExtension == ".csv") {
 
-            cContactSerializer pSerializer = new cContactSerializer(this);
-            pSerializer.LoadTxtFile(fileName);
+            mContacts.Clear();
+            mContacts = mContactSerializer.LoadTxtFile(pFileName);
 
           } else {
 
@@ -350,7 +358,7 @@ namespace ConBook {
 
           }
 
-          mCurrentFile = fileName;
+          mCurrentFile = pFileName;
           RefreshDataGridView();
 
         }
@@ -383,13 +391,11 @@ namespace ConBook {
 
             if (fileExtension == ".xml") {
 
-              cContactSerializer pSerializer = new cContactSerializer(this);
-              pSerializer.SaveToNewXmlFile(fileName);
+              mContactSerializer.SaveToNewXmlFile(fileName, mContacts, ref mCurrentFile);              
 
             } else if (fileExtension == ".txt" || fileExtension == ".tsv" || fileExtension == ".csv") {
 
-              cContactSerializer pSerializer = new cContactSerializer(this);
-              pSerializer.SaveToNewTxtFile(fileName);
+              mContactSerializer.SaveToNewTxtFile(fileName, mContacts, ref mCurrentFile);
 
             } else {
 
@@ -435,13 +441,11 @@ namespace ConBook {
 
             if (Path.GetExtension(mCurrentFile) == ".xml") {
 
-              cContactSerializer pSerializer = new cContactSerializer(this);
-              pSerializer.SaveToExistingXmlFile(mCurrentFile);
+              mContactSerializer.SaveToExistingXmlFile(mCurrentFile, mContacts);
 
             } else {
 
-              cContactSerializer pSerializer = new cContactSerializer(this);
-              pSerializer.SaveToExistingTxtFile(mCurrentFile);
+              mContactSerializer.SaveToExistingTxtFile(mCurrentFile, mContacts);
 
             }
 

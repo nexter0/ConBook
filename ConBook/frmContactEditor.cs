@@ -1,23 +1,30 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace ConBook {
 
   public partial class frmContactEditor : Form {
 
+
+
     // opisuj pola klasy
     public event EventHandler? DataFormLoaded;
     public event EventHandler? DataFormClosed;
 
-    private bool mIsEditing;
-    public IMainComponents mMainForm;
+    private BindingList<cContact> mContacts;
+    private cContactListUtils mContactListUtils;
+    private bool mInEditMode;
+    private int mContactIndex;
 
-
-    // "nie można " przekayzywac formularza do formularza, użyj do tego dedykowanej klasy
-    public frmContactEditor(IMainComponents xMainForm, bool xIsEditing) {
+    public frmContactEditor(BindingList<cContact> xContactList, bool xInEditMode = false, int xContactIndex = -1) {
 
       InitializeComponent();
-      mMainForm = xMainForm;
-      mIsEditing = xIsEditing;
+
+      mContacts = xContactList;
+      mInEditMode = xInEditMode;
+      mContactIndex = xContactIndex;
+
+      mContactListUtils = new cContactListUtils();
 
     }
 
@@ -27,17 +34,15 @@ namespace ConBook {
 
       if (pValidation == 0) {
 
-        if (!mIsEditing) {
+        if (!mInEditMode) {
 
-          cContactListUtils pListUtils = new cContactListUtils(mMainForm);
-          pListUtils.AddContact(txtName.Text, txtSurname.Text, txtPhone.Text);
+          mContactListUtils.AddContact(txtName.Text, txtSurname.Text, txtPhone.Text, mContacts);
 
           Close();
 
         } else {
 
-          cContactListUtils pListUtils = new cContactListUtils(mMainForm);
-          pListUtils.EditContact(txtName.Text, txtSurname.Text, txtPhone.Text);
+          mContactListUtils.EditContact(txtName.Text, txtSurname.Text, txtPhone.Text, mContacts, mContactIndex);
 
           Close();
 
@@ -64,7 +69,7 @@ namespace ConBook {
 
     private void btnCancel_Click(object sender, EventArgs e) {
 
-      mIsEditing = false;
+      mInEditMode = false;
       Close();
 
     }
@@ -73,15 +78,15 @@ namespace ConBook {
 
       DataFormLoaded?.Invoke(this, EventArgs.Empty);
 
-      if (mIsEditing) {
+      if (mInEditMode) {
 
         btnSubmit.Text = "Edytuj";
         this.Text = "Edytuj kontakt";
         this.Icon = Properties.Resources.editIcon;
 
-        txtName.Text = mMainForm.mContacts[mMainForm.mSelectedRowIndex].Name;
-        txtSurname.Text = mMainForm.mContacts[mMainForm.mSelectedRowIndex].Surname;
-        txtPhone.Text = mMainForm.mContacts[mMainForm.mSelectedRowIndex].Phone;
+        txtName.Text = mContacts[mContactIndex].Name;
+        txtSurname.Text = mContacts[mContactIndex].Surname;
+        txtPhone.Text = mContacts[mContactIndex].Phone;
 
       } else {
 
@@ -102,7 +107,6 @@ namespace ConBook {
       DataFormClosed?.Invoke(this, EventArgs.Empty);
 
     }
-
 
     private int ValidateTextBoxes() {
       //funkcja weryfikująca poprawność wpisanych danych w pola tekstowe      

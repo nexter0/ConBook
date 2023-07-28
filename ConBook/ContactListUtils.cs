@@ -1,47 +1,53 @@
-﻿// Klasa odpowiadająca za funkcje typu CRUD konktatków do listy konktatków
+﻿using System.ComponentModel;
+using System.Xml.Linq;
+
 namespace ConBook {
   internal class cContactListUtils {
-    private IMainComponents mMainForm;
-
-    public cContactListUtils(IMainComponents xMainForm) {
-
-      mMainForm = xMainForm;
-
-    }
+    // Klasa odpowiadająca za funkcje typu CRUD konktatków
 
 
-    public void DeleteContact() {
+    public void DeleteContact(BindingList<cContact> xContactList, int xIndex) {
       // funkcja usuwająca kontakt z listy
 
       DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt" +
-          $" {mMainForm.mContacts[mMainForm.mSelectedRowIndex].Name} {mMainForm.mContacts[mMainForm.mSelectedRowIndex].Surname} z listy?",
+          $" {xContactList[xIndex].Name} {xContactList[xIndex].Surname} z listy?",
           "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
       if (deletionQueryResult == DialogResult.Yes) {
 
-        mMainForm.mContacts.RemoveAt(mMainForm.mSelectedRowIndex);
-        mMainForm.RefreshDataGridView();
+        xContactList.RemoveAt(xIndex);
 
       }
 
     }
 
-    public void AddContact(string xName, string xSurname, string xPhone) {
+    public void AddContact(cContact xContact, BindingList<cContact> xContactList) {
+      // funkcja dodająca kontakt do listy
+
+      xContactList.Add(xContact);
+
+    }
+
+    public void AddContact(string xName, string xSurname, string xPhone, BindingList<cContact> xContactList) {
       // funkcja dodająca kontakt do listy
 
       cContact pNewContact = new cContact(xName, xSurname, xPhone);
-      mMainForm.mContacts.Add(pNewContact);
+      xContactList.Add(pNewContact);
 
-      mMainForm.RefreshDataGridView();
     }
 
-    public void EditContact(string xNewName, string xNewSurname, string xNewPhone) {
+    public void EditContact(cContact xEditedContact, BindingList<cContact> xContactList, int xIndex) {
+      // funkcja edytująca istniejący kontakt
+
+      xContactList[xIndex] = xEditedContact;
+
+    }
+
+    public void EditContact(string xNewName, string xNewSurname, string xNewPhone, BindingList<cContact> xContactList, int xIndex) {
       // funkcja edytująca istniejący kontakt
 
       cContact pEditedContact = new cContact(xNewName, xNewSurname, xNewPhone);
-      mMainForm.mContacts[mMainForm.mSelectedRowIndex] = pEditedContact;
-
-      mMainForm.RefreshDataGridView();
+      xContactList[xIndex] = pEditedContact;
 
     }
 
