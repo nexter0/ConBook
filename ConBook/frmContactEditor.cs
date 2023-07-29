@@ -10,12 +10,23 @@ namespace ConBook {
     private cContactListUtils mContactListUtils;      // Obiekt klasy mContactListUtils do operacji na kontaktach
     private BindingList<cContact> mContacts;          // Lista kontatków
    
+    zmienne typu bool muszą zaczynać się od czasownika w tym wypadku powinno być mIsInEditMode
     private bool mInEditMode;                         // Boolean - formularz w trybie edycji
     private int mContactIndex;                        // Indeks edytowanego kontaktu na liście kontaktów
 
     public frmContactEditor(BindingList<cContact> xContactList, bool xInEditMode = false, int xContactIndex = -1) {
 
       InitializeComponent();
+
+      pole mContacts jest tutaj dosyć karkołomne 
+        tak samo mContactListUtils
+      ten formularz ma operować wyłącznie na klasie cContact
+      on generalnie nie ma prawa ingerować w żadne kolecje
+      jesli usuniesz mContact to on Ci się uprości
+        nie bedziesz musiał używać żadnego znacznika, czy jest w trybie edycji czy dodawania
+        formularza ma to w ogóle nie obchodzić
+        on ma przyjąć dane kontaktu i je zwrócić nowe
+        póżniej niżej piszę jaką funkcję zrobić
 
       mContacts = xContactList;
       mInEditMode = xInEditMode;
@@ -99,10 +110,21 @@ namespace ConBook {
 
     private void DataForm_FormClosed(object sender, FormClosedEventArgs e) {
 
+      to jest w ogóle niepotrzebne, funkcja ShowMe umozliwi Ci ominięcie takiej konstrukcji
+
       DataFormClosed?.Invoke(this, EventArgs.Empty);
 
     }
+    
+    to jest oczywiście jedna z wielu, wielu możliwości
+    utwórz funkcję:
+      internal bool ShowMe(cContact xContact){
 
+    ...
+      this.ShowDialog();
+    ..
+
+    }
     private int ValidateTextBoxes() {
       //funkcja weryfikująca poprawność wpisanych danych w pola tekstowe      
 

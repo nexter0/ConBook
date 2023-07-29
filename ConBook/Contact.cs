@@ -12,17 +12,17 @@
 
     }
 
-    public cContact(string name, string surname, string phone) {
+    public cContact(string xName, string xSurname, string xPhone) {
 
-      Name = name;
-      Surname = surname;
-      Phone = phone;
+      Name = xName;
+      Surname = xSurname;
+      Phone = xPhone;
 
     }
 
-    public override bool Equals(object? obj) {
+    public override bool Equals(object? xObject) {
 
-      return obj is cContact cContact &&
+      return xObject is cContact cContact &&
              Name == cContact.Name &&
              Surname == cContact.Surname &&
              Phone == cContact.Phone;
@@ -40,10 +40,11 @@
 
     }
 
-    public int CompareTo(cContact? other) {
+    public int CompareTo(cContact? xOther) {
 
-      if (other == null) return 1;
-      return Surname.CompareTo(other.Surname);
+      if (xOther == null) return 1;
+
+      return Surname.CompareTo(xOther.Surname);
 
     }
 

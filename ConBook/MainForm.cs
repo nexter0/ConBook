@@ -20,6 +20,7 @@ namespace ConBook {
 
       mContactListUtils = new cContactListUtils();
       mContactSerializer = new cContactSerializer();
+
     }
 
     // *****************************
@@ -29,6 +30,7 @@ namespace ConBook {
     private void MainForm_Load(object sender, EventArgs e) {
 
       OpenRecentFile();
+
       RefreshDataGridView();
 
     }
@@ -36,11 +38,22 @@ namespace ConBook {
 
     private void tsmiSort_Click(object sender, EventArgs e) {
 
+      tak, wyrzuć sortowanie za pomoca przycisku, ono jest totalnie niepraktyczne i daj mozliwosc sortowania klikajac na kolumne
+
       SortList(0); // TO DO: USUNĄĆ LUB PRZEROBIĆ PRZYCISK DO SORTOWANIA W MENU
 
     }
 
     private void tsmiSave_Click(object sender, EventArgs e) {
+
+      usuń konieczność ręcznego zapisu danych przez użytkownika, to jest bardzo niepraktyczne
+        dane mają się wczytywać od razu po odpalniu programu
+        typ pliku ktory program wykorzystuje możesz rozwiązac na szytwno w kodzie
+        ale w taki sposbo, zeby latwo go mozna bylo zmienic
+        np. jesli wprowadzisz pole mFileTyp_Data
+        to jesli stworzysz numerator npo Enum FileType_DataEnum{ CSV, txt, ... }
+       to jesli przed kompilacją dasz mi mozliwość wyboru np. mFileType_Data = FileType_DataEnum.CSV
+        to będzie super
 
       SaveFileAction();
 
@@ -84,10 +97,8 @@ namespace ConBook {
 
     private void btnAdd_Click(object sender, EventArgs e) {
 
-      // formularz musi być pokazany w trybie modalnym, nie moze znikac z oczu, gdy użytkownik kliknie poza nim
-      // poszukaj rozwiązania jak to robic
-
       frmContactEditor pContactEditor = new frmContactEditor(mContacts);
+
 
       pContactEditor.DataFormClosed += DataForm_DataFormClosed;
 
@@ -128,22 +139,20 @@ namespace ConBook {
     // *****************************
 
     public void DeleteContact() {
-      // funkcja obsługująca usuwanie kontaktu z listy
+      //funkcja obsługująca usuwanie kontaktu z listy
 
       mContactListUtils.DeleteContact(mContacts, dgvContacts.SelectedRows[0].Index);
+
       RefreshDataGridView();
 
     }
 
     public void RefreshDataGridView() {
-      // funkcja odświeżająca DataGridView oraz przyciski Edytuj / Usuń
+      //funkcja odświeżająca DataGridView oraz przyciski Edytuj / Usuń
 
       dgvContacts.DataSource = null;
       dgvContacts.DataSource = mContacts;
 
-      //dgvContacts.Columns["Surname"].DisplayIndex = 0;
-      //dgvContacts.Columns["Name"].DisplayIndex = 1;
-      //dgvContacts.Columns["Phone"].DisplayIndex = 2;
 
       DataGridViewColumn pDgvColumnSurname = dgvContacts.Columns["Surname"];
       DataGridViewColumn pDgvColumnName = dgvContacts.Columns["Name"];
@@ -157,15 +166,11 @@ namespace ConBook {
       pDgvColumnPhone.Width = 147;
 
       if (mContacts.Count == 0) {
-
         btnEdit.Enabled = false;
         btnDelete.Enabled = false;
-
       } else {
-
         btnEdit.Enabled = true;
         btnDelete.Enabled = true;
-
       }
 
       dgvContacts.Refresh();
@@ -202,7 +207,7 @@ namespace ConBook {
     }
 
     private void ShowAboutInfo() {
-      // funkcja wyświetlająca okienko z informacjami o proramie
+      //funkcja wyświetlająca okienko z informacjami o proramie
 
       MessageBox.Show("ConBook - Nikodem Przbyszewski 2023\n\n" +
         "Oprogramowanie: Visual Studio 2022 (.NET Framework 64-bit)\n" +
@@ -211,29 +216,23 @@ namespace ConBook {
     }
 
     private void ClearList() {
-      // funkcja tworząca nową listę
+      //funkcja tworząca nową listę
 
 
       DialogResult pSaveQueryResult = MessageBox.Show("Niezapisane zmiany zostaną utracone. \nCzy chcesz zapisać teraz?",
         "Zapisz zmiany", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
       switch (pSaveQueryResult) {
-
         case DialogResult.Yes: {
-
             SaveFileAction();
-
             mContacts.Clear();
             RefreshDataGridView();
-
             mCurrentFile = null;
             break;
           }
         case DialogResult.No: {
-
             mContacts.Clear();
             RefreshDataGridView();
-
             mCurrentFile = null;
             break;
           }
@@ -245,11 +244,8 @@ namespace ConBook {
       // funkcja zapsiująca ostatnio otwartą listę kontaktów do pliku "recent"
 
       if (mCurrentFile != string.Empty && mCurrentFile != null) {
-
-        using (StreamWriter writer = new StreamWriter("recent")) {
-
-          writer.Write(mCurrentFile);
-
+        using (StreamWriter pStreamWriter = new StreamWriter("recent")) {
+          pStreamWriter.Write(mCurrentFile);
         }
       }
 
@@ -262,36 +258,20 @@ namespace ConBook {
       string? pFile = Directory.EnumerateFiles(pPath, "*.xml").FirstOrDefault();
 
       if (File.Exists("recent")) {
-
-        using (StreamReader reader = new StreamReader("recent")) {
-
-          string pFileTmp = reader.ReadToEnd();
-
+        using (StreamReader pStreamReader = new StreamReader("recent")) {
+          string pFileTmp = pStreamReader.ReadToEnd();
           if (File.Exists(pFileTmp) && pFileTmp != string.Empty && pFileTmp != null) {
-
             pFile = pFileTmp;
-
           }
-
           try {
-
             if (pFile != string.Empty && pFile != null) {
-
               if (Path.GetExtension(pFile) == ".xml") {
-
                 mContacts = mContactSerializer.LoadXmlFile(pFile);
-
               } else {
-
-
                 mContacts = mContactSerializer.LoadTxtFile(pFile);
-
               }
-
               mCurrentFile = pFile;
-
             }
-
           } catch (Exception ex) {
 
             MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pFile}", "Błąd wczytywania",
