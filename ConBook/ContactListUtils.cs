@@ -5,7 +5,6 @@ namespace ConBook {
   internal class cContactListUtils {
     // Klasa odpowiadająca za funkcje typu CRUD konktatków
 
-
     public void DeleteContact(BindingList<cContact> xContactList, int xIndex) {
       // funkcja usuwająca kontakt z listy
 

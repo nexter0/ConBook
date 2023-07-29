@@ -5,11 +5,11 @@ using System.Windows.Forms;
 namespace ConBook {
   public partial class MainForm : Form {
 
-    public BindingList<cContact> mContacts;
-    private string? mCurrentFile;
+    public BindingList<cContact> mContacts;               // Lista kontaktów
+    private string? mCurrentFile;                         // Ścieżka pliku, w którym zapisana jest otwarta lista
 
-    private cContactListUtils mContactListUtils;
-    private cContactSerializer mContactSerializer;
+    private cContactListUtils mContactListUtils;          // Klasa mContactListUtils - do operacji na kontaktach
+    private cContactSerializer mContactSerializer;        // Klasa mContactSerializer - do zapisu i odczytu plików
 
     public MainForm() {
 
@@ -87,30 +87,27 @@ namespace ConBook {
       // formularz musi być pokazany w trybie modalnym, nie moze znikac z oczu, gdy użytkownik kliknie poza nim
       // poszukaj rozwiązania jak to robic
 
-      frmContactEditor pDataForm = new frmContactEditor(mContacts);
+      frmContactEditor pContactEditor = new frmContactEditor(mContacts);
 
-      pDataForm.DataFormLoaded += DataForm_DataFormLoaded;
-      pDataForm.DataFormClosed += DataForm_DataFormClosed;
-      pDataForm.Location = CalculateDataFormAppearLocation(pDataForm);
+      pContactEditor.DataFormClosed += DataForm_DataFormClosed;
 
-      pDataForm.Show();
+      pContactEditor.ShowDialog();
 
     }
 
     private void btnDelete_Click(object sender, EventArgs e) {
 
-      mContactListUtils.DeleteContact(mContacts, dgvContacts.SelectedRows[0].Index);
+      DeleteContact();
 
     }
 
     private void btnEdit_Click(object sender, EventArgs e) {
 
-      frmContactEditor pDataForm = new frmContactEditor(mContacts, true, dgvContacts.SelectedRows[0].Index);
-      pDataForm.DataFormLoaded += DataForm_DataFormLoaded;
-      pDataForm.DataFormClosed += DataForm_DataFormClosed;
-      pDataForm.Location = CalculateDataFormAppearLocation(pDataForm);
+      frmContactEditor pContactEditor = new frmContactEditor(mContacts, true, dgvContacts.SelectedRows[0].Index);
 
-      pDataForm.Show();
+      pContactEditor.DataFormClosed += DataForm_DataFormClosed;
+
+      pContactEditor.ShowDialog();
 
     }
 
@@ -120,25 +117,23 @@ namespace ConBook {
 
     }
 
-    private void DataForm_DataFormLoaded(object sender, EventArgs e) {
-      // zdarzenie wyłączające kontrolę nad MainForm po włączeniu DataForm
-
-      this.Enabled = false;
-
-    }
-
     private void DataForm_DataFormClosed(object sender, EventArgs e) {
-      // zdarzenie włączające kontrolę nad MainForm po wyłączeniu DataForm
 
       RefreshDataGridView();
-
-      this.Enabled = true;
 
     }
 
     // *****************************
     // *          Metody           *
     // *****************************
+
+    public void DeleteContact() {
+      // funkcja obsługująca usuwanie kontaktu z listy
+
+      mContactListUtils.DeleteContact(mContacts, dgvContacts.SelectedRows[0].Index);
+      RefreshDataGridView();
+
+    }
 
     public void RefreshDataGridView() {
       // funkcja odświeżająca DataGridView oraz przyciski Edytuj / Usuń
@@ -481,19 +476,6 @@ namespace ConBook {
 
       }
 
-    }
-
-    private Point CalculateDataFormAppearLocation(frmContactEditor xDataForm) {
-      // funkcja obliczająca wyśrodkowaną względem głównego formularza pozycję okienka dodawania i edycji kontaktu
-
-      // formularze mają wlasciwość umozliwiająca centrowanie ich wyswietlania na ekranie, badz wzglemd formularza rodzica, poszukaj tego i zastosju
-
-      int pParentCenterX = this.Left + this.Width / 2;
-      int pParentCenterY = this.Top + this.Height / 2;
-      int pChildFormX = pParentCenterX - xDataForm.Width / 2;
-      int pChildFormY = pParentCenterY - xDataForm.Height / 2;
-
-      return new Point(pChildFormX, pChildFormY);
     }
 
     private void SortList(int xSortTypeId) {

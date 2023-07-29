@@ -5,16 +5,13 @@ namespace ConBook {
 
   public partial class frmContactEditor : Form {
 
+    public event EventHandler? DataFormClosed;        // Zdarzenie - zamknięcie formularza
 
-
-    // opisuj pola klasy
-    public event EventHandler? DataFormLoaded;
-    public event EventHandler? DataFormClosed;
-
-    private BindingList<cContact> mContacts;
-    private cContactListUtils mContactListUtils;
-    private bool mInEditMode;
-    private int mContactIndex;
+    private cContactListUtils mContactListUtils;      // Obiekt klasy mContactListUtils do operacji na kontaktach
+    private BindingList<cContact> mContacts;          // Lista kontatków
+   
+    private bool mInEditMode;                         // Boolean - formularz w trybie edycji
+    private int mContactIndex;                        // Indeks edytowanego kontaktu na liście kontaktów
 
     public frmContactEditor(BindingList<cContact> xContactList, bool xInEditMode = false, int xContactIndex = -1) {
 
@@ -75,8 +72,6 @@ namespace ConBook {
     }
 
     private void DataForm_Load(object sender, EventArgs e) {
-
-      DataFormLoaded?.Invoke(this, EventArgs.Empty);
 
       if (mInEditMode) {
 

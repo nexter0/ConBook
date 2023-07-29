@@ -6,10 +6,6 @@ namespace ConBook {
   internal class cContactSerializer {
     // Klasa odpowiadająca za zapisywanie i wczytywanie listy kontaków
 
-    public cContactSerializer() {
-
-    }
-
     public void SaveToNewXmlFile(string xFileName, BindingList<cContact> xContactList, ref string? xCurrentFile) {
       // funkcja zapisująca do nowego pliku XML
 
