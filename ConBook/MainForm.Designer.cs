@@ -33,8 +33,6 @@
       tsmiSaveAs = new ToolStripMenuItem();
       toolStripSeparator1 = new ToolStripSeparator();
       tsmiAbout = new ToolStripMenuItem();
-      tsmiList = new ToolStripMenuItem();
-      tsmiSort = new ToolStripMenuItem();
       dgvContacts = new DataGridView();
       btnAdd = new Button();
       btnDelete = new Button();
@@ -45,7 +43,7 @@
       // 
       // MenuStrip
       // 
-      MenuStrip.Items.AddRange(new ToolStripItem[] { tsmiPlik, tsmiList });
+      MenuStrip.Items.AddRange(new ToolStripItem[] { tsmiPlik });
       MenuStrip.Location = new Point(0, 0);
       MenuStrip.Name = "MenuStrip";
       MenuStrip.Size = new Size(604, 24);
@@ -98,20 +96,6 @@
       tsmiAbout.Size = new Size(180, 22);
       tsmiAbout.Text = "O programie";
       tsmiAbout.Click += tsmiAbout_Click;
-      // 
-      // tsmiList
-      // 
-      tsmiList.DropDownItems.AddRange(new ToolStripItem[] { tsmiSort });
-      tsmiList.Name = "tsmiList";
-      tsmiList.Size = new Size(43, 20);
-      tsmiList.Text = "Lista";
-      // 
-      // tsmiSort
-      // 
-      tsmiSort.Name = "tsmiSort";
-      tsmiSort.Size = new Size(105, 22);
-      tsmiSort.Text = "Sortuj";
-      tsmiSort.Click += tsmiSort_Click;
       // 
       // dgvContacts
       // 
@@ -214,8 +198,6 @@
     private ToolStripMenuItem tsmiSave;
     private ToolStripMenuItem tsmiSaveAs;
     private DataGridView dgvContacts;
-    private ToolStripMenuItem tsmiList;
-    private ToolStripMenuItem tsmiSort;
     private ToolStripSeparator toolStripSeparator1;
     private ToolStripMenuItem tsmiAbout;
     private Button btnAdd;

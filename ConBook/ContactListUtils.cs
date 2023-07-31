@@ -4,6 +4,7 @@ using System.Xml.Linq;
 namespace ConBook {
   internal class cContactListUtils {
     //Klasa odpowiadająca za funkcje typu CRUD konktatków
+    //TO DO: cContactListUtils okazuje się niepotrzebne - usunąć lub przerobić
 
     public void DeleteContact(BindingList<cContact> xContactList, int xIndex) {
       //funkcja usuwająca kontakt z listy

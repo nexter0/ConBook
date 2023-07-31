@@ -1,60 +1,47 @@
-﻿using System.ComponentModel;
+﻿using System.Configuration;
 using System.Text.RegularExpressions;
 
 namespace ConBook {
 
   public partial class frmContactEditor : Form {
 
-    public event EventHandler? DataFormClosed;        // Zdarzenie - zamknięcie formularza
+    bool mIsCanceled;
 
-    private cContactListUtils mContactListUtils;      // Obiekt klasy mContactListUtils do operacji na kontaktach
-    private BindingList<cContact> mContacts;          // Lista kontatków
-   
-    zmienne typu bool muszą zaczynać się od czasownika w tym wypadku powinno być mIsInEditMode
-    private bool mInEditMode;                         // Boolean - formularz w trybie edycji
-    private int mContactIndex;                        // Indeks edytowanego kontaktu na liście kontaktów
-
-    public frmContactEditor(BindingList<cContact> xContactList, bool xInEditMode = false, int xContactIndex = -1) {
+    public frmContactEditor() {
 
       InitializeComponent();
-
-      pole mContacts jest tutaj dosyć karkołomne 
-        tak samo mContactListUtils
-      ten formularz ma operować wyłącznie na klasie cContact
-      on generalnie nie ma prawa ingerować w żadne kolecje
-      jesli usuniesz mContact to on Ci się uprości
-        nie bedziesz musiał używać żadnego znacznika, czy jest w trybie edycji czy dodawania
-        formularza ma to w ogóle nie obchodzić
-        on ma przyjąć dane kontaktu i je zwrócić nowe
-        póżniej niżej piszę jaką funkcję zrobić
-
-      mContacts = xContactList;
-      mInEditMode = xInEditMode;
-      mContactIndex = xContactIndex;
-
-      mContactListUtils = new cContactListUtils();
+      mIsCanceled = false;
 
     }
 
-    void btnSubmit_Click(object sender, EventArgs e) {
+
+    private void btnSubmit_Click(object sender, EventArgs e) {
+
+      SubmitAction();
+
+    }
+
+    private void btnCancel_Click(object sender, EventArgs e) {
+
+      CancelAction();
+
+    }
+
+    private void CancelAction() {
+
+      this.mIsCanceled = true;
+      this.Close();
+
+    }
+
+    private void SubmitAction() {
 
       int pValidation = ValidateTextBoxes();
 
       if (pValidation == 0) {
 
-        if (!mInEditMode) {
-
-          mContactListUtils.AddContact(txtName.Text, txtSurname.Text, txtPhone.Text, mContacts);
-
-          Close();
-
-        } else {
-
-          mContactListUtils.EditContact(txtName.Text, txtSurname.Text, txtPhone.Text, mContacts, mContactIndex);
-
-          Close();
-
-        }
+        //mContact = new cContact(txtName.Text, txtSurname.Text, txtPhone.Text);
+        this.Close();
 
       } else {
 
@@ -75,24 +62,27 @@ namespace ConBook {
 
     }
 
-    private void btnCancel_Click(object sender, EventArgs e) {
+    private void InitializeTextBoxes(cContact xContact) {
 
-      mInEditMode = false;
-      Close();
+      if (xContact != null) {
+        txtName.Text = xContact.Name;
+        txtSurname.Text = xContact.Surname;
+        txtPhone.Text = xContact.Phone;
+      } else {
+        txtName.Text = string.Empty;
+        txtSurname.Text = string.Empty;
+        txtPhone.Text = string.Empty;
+      }
 
     }
 
-    private void DataForm_Load(object sender, EventArgs e) {
+    private void CustiomizeWidow(bool xIsEmptyContact) {
 
-      if (mInEditMode) {
+      if (!xIsEmptyContact) {
 
         btnSubmit.Text = "Edytuj";
         this.Text = "Edytuj kontakt";
         this.Icon = Properties.Resources.editIcon;
-
-        txtName.Text = mContacts[mContactIndex].Name;
-        txtSurname.Text = mContacts[mContactIndex].Surname;
-        txtPhone.Text = mContacts[mContactIndex].Phone;
 
       } else {
 
@@ -100,31 +90,29 @@ namespace ConBook {
         this.Text = "Dodaj kontakt";
         this.Icon = Properties.Resources.plusIcon;
 
-        txtName.Text = String.Empty;
-        txtSurname.Text = String.Empty;
-        txtPhone.Text = String.Empty;
-
       }
 
     }
 
-    private void DataForm_FormClosed(object sender, FormClosedEventArgs e) {
+    internal bool ShowMe(cContact xContact) {
 
-      to jest w ogóle niepotrzebne, funkcja ShowMe umozliwi Ci ominięcie takiej konstrukcji
+      mIsCanceled = false;
 
-      DataFormClosed?.Invoke(this, EventArgs.Empty);
-
-    }
-    
-    to jest oczywiście jedna z wielu, wielu możliwości
-    utwórz funkcję:
-      internal bool ShowMe(cContact xContact){
-
-    ...
+      InitializeTextBoxes(xContact);
+      CustiomizeWidow(xContact.IsEmpty());
       this.ShowDialog();
-    ..
+
+      if (mIsCanceled)
+        return false;
+
+      xContact.Name = txtName.Text;
+      xContact.Surname = txtSurname.Text;
+      xContact.Phone = txtPhone.Text;
+
+      return true;
 
     }
+
     private int ValidateTextBoxes() {
       //funkcja weryfikująca poprawność wpisanych danych w pola tekstowe      
 

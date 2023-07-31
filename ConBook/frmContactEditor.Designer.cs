@@ -126,8 +126,6 @@
       ShowInTaskbar = false;
       StartPosition = FormStartPosition.CenterParent;
       Text = "Dodaj / edytuj kontakt";
-      FormClosed += DataForm_FormClosed;
-      Load += DataForm_Load;
       ResumeLayout(false);
       PerformLayout();
     }

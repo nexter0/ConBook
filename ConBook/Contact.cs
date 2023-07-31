@@ -53,5 +53,12 @@
       return $"{Name} {Surname} {Phone}";
 
     }
+
+    public bool IsEmpty() {
+
+      return (Name == string.Empty) && (Surname == string.Empty) && (Phone == string.Empty);
+
+    }
+
   }
 }

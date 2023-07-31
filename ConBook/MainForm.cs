@@ -10,6 +10,7 @@ namespace ConBook {
 
     private cContactListUtils mContactListUtils;          // Klasa mContactListUtils - do operacji na kontaktach
     private cContactSerializer mContactSerializer;        // Klasa mContactSerializer - do zapisu i odczytu plików
+    private frmContactEditor mEditor;                     // Klasa frmContactEditor - okienko dodawania / edycji kontaktów
 
     public MainForm() {
 
@@ -20,6 +21,7 @@ namespace ConBook {
 
       mContactListUtils = new cContactListUtils();
       mContactSerializer = new cContactSerializer();
+      mEditor = new frmContactEditor();
 
     }
 
@@ -35,25 +37,16 @@ namespace ConBook {
 
     }
 
-
-    private void tsmiSort_Click(object sender, EventArgs e) {
-
-      tak, wyrzuć sortowanie za pomoca przycisku, ono jest totalnie niepraktyczne i daj mozliwosc sortowania klikajac na kolumne
-
-      SortList(0); // TO DO: USUNĄĆ LUB PRZEROBIĆ PRZYCISK DO SORTOWANIA W MENU
-
-    }
-
     private void tsmiSave_Click(object sender, EventArgs e) {
 
-      usuń konieczność ręcznego zapisu danych przez użytkownika, to jest bardzo niepraktyczne
-        dane mają się wczytywać od razu po odpalniu programu
-        typ pliku ktory program wykorzystuje możesz rozwiązac na szytwno w kodzie
-        ale w taki sposbo, zeby latwo go mozna bylo zmienic
-        np. jesli wprowadzisz pole mFileTyp_Data
-        to jesli stworzysz numerator npo Enum FileType_DataEnum{ CSV, txt, ... }
-       to jesli przed kompilacją dasz mi mozliwość wyboru np. mFileType_Data = FileType_DataEnum.CSV
-        to będzie super
+      //usuń konieczność ręcznego zapisu danych przez użytkownika, to jest bardzo niepraktyczne
+      //  dane mają się wczytywać od razu po odpalniu programu
+      //  typ pliku ktory program wykorzystuje możesz rozwiązac na szytwno w kodzie
+      //  ale w taki sposbo, zeby latwo go mozna bylo zmienic
+      //  np. jesli wprowadzisz pole mFileTyp_Data
+      //  to jesli stworzysz numerator npo Enum FileType_DataEnum{ CSV, txt, ... }
+      // to jesli przed kompilacją dasz mi mozliwość wyboru np. mFileType_Data = FileType_DataEnum.CSV
+      //  to będzie super
 
       SaveFileAction();
 
@@ -97,12 +90,7 @@ namespace ConBook {
 
     private void btnAdd_Click(object sender, EventArgs e) {
 
-      frmContactEditor pContactEditor = new frmContactEditor(mContacts);
-
-
-      pContactEditor.DataFormClosed += DataForm_DataFormClosed;
-
-      pContactEditor.ShowDialog();
+      AddAction();
 
     }
 
@@ -114,23 +102,13 @@ namespace ConBook {
 
     private void btnEdit_Click(object sender, EventArgs e) {
 
-      frmContactEditor pContactEditor = new frmContactEditor(mContacts, true, dgvContacts.SelectedRows[0].Index);
-
-      pContactEditor.DataFormClosed += DataForm_DataFormClosed;
-
-      pContactEditor.ShowDialog();
+      EditAction();
 
     }
 
     private void dgvContacts_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e) {
 
       SortList(e.ColumnIndex);
-
-    }
-
-    private void DataForm_DataFormClosed(object sender, EventArgs e) {
-
-      RefreshDataGridView();
 
     }
 
@@ -144,6 +122,29 @@ namespace ConBook {
       mContactListUtils.DeleteContact(mContacts, dgvContacts.SelectedRows[0].Index);
 
       RefreshDataGridView();
+
+    }
+
+    public void AddAction() {
+      //funkcja obsługująca usuwanie kontaktu z listy
+
+      cContact pNewContact = new cContact();
+
+      if (mEditor.ShowMe(pNewContact)) {
+
+        mContactListUtils.AddContact(pNewContact, mContacts);
+
+        RefreshDataGridView();
+
+      }
+
+    }
+
+    public void EditAction() {
+      //funkcja obsługująca usuwanie kontaktu z listy
+
+      if(mEditor.ShowMe(mContacts[dgvContacts.SelectedRows[0].Index]))
+        RefreshDataGridView();
 
     }
 
@@ -178,7 +179,7 @@ namespace ConBook {
     }
 
     private void SaveOnClose(FormClosingEventArgs e) {
-      // funkcja wyświetlająca dialog zapisu przy zamknięciu programu
+      //funkcja wyświetlająca dialog zapisu przy zamknięciu programu
 
       DialogResult pSaveQueryResult = MessageBox.Show("Niezapisane zmiany zostaną utracone. \nCzy chcesz zapisać teraz?",
     "Zapisz zmiany", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
