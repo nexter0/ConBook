@@ -180,7 +180,6 @@
       Name = "MainForm";
       StartPosition = FormStartPosition.CenterScreen;
       Text = "ConBook";
-      FormClosing += MainForm_FormClosing;
       FormClosed += MainForm_FormClosed;
       Load += MainForm_Load;
       MenuStrip.ResumeLayout(false);

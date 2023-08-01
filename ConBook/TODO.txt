@@ -1,0 +1,2 @@
+﻿*) Refactor cContactListUtils - unnecessary class
+*) Add an option do enable / disable auto saving (it has to be persistent)

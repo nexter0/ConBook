@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel;
+using System.Security.Cryptography.Xml;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace ConBook {
   internal class cContactSerializer {
     // Klasa odpowiadająca za zapisywanie i wczytywanie listy kontaków
+
+    internal enum mFileTypes { CSV, TXT, XML, TSV };
 
     public void SaveToNewXmlFile(string xFileName, BindingList<cContact> xContactList, ref string? xCurrentFile) {
       // funkcja zapisująca do nowego pliku XML
@@ -60,8 +63,6 @@ namespace ConBook {
 
         BindingList<cContact> pLoadedContacts = (BindingList<cContact>)pSerializer.Deserialize(pFileStream);
 
-        // xContactList.Clear(); ZEWNĘTRZNA FUNKCJA MUSI WYCZYŚCIĆ LISTĘ!!!
-
         return pLoadedContacts;
 
       }
@@ -70,8 +71,6 @@ namespace ConBook {
 
     public BindingList<cContact> LoadTxtFile(string xFileName) {
       // funkcja funkcja odczytująca dane z pliku typu tekstowego (TXT, CSV, TSV)
-
-      // xContactList.Clear(); ZEWNĘTRZNA FUNKCJA MUSI WYCZYŚCIĆ LISTĘ!!!
 
       BindingList <cContact> pLoadedContacts = new BindingList<cContact>();
 

@@ -1,16 +1,18 @@
 ﻿using System.ComponentModel;
-using System.Drawing.Imaging;
-using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ConBook {
   public partial class MainForm : Form {
 
-    public BindingList<cContact> mContacts;               // Lista kontaktów
-    private string? mCurrentFile;                         // Ścieżka pliku, w którym zapisana jest otwarta lista
+    private cContactListUtils mContactListUtils;                 // Klasa mContactListUtils - do operacji na kontaktach
+    private cContactSerializer mContactSerializer;               // Klasa mContactSerializer - do zapisu i odczytu plików
+    private frmContactEditor mEditor;                            // Klasa frmContactEditor - okienko dodawania / edycji kontaktów
 
-    private cContactListUtils mContactListUtils;          // Klasa mContactListUtils - do operacji na kontaktach
-    private cContactSerializer mContactSerializer;        // Klasa mContactSerializer - do zapisu i odczytu plików
-    private frmContactEditor mEditor;                     // Klasa frmContactEditor - okienko dodawania / edycji kontaktów
+    public BindingList<cContact> mContacts;                      // Lista kontaktów
+    private string? mCurrentFile;                                // Ścieżka pliku, w którym zapisana jest otwarta lista
+    private cContactSerializer.mFileTypes mDefaultFileType;      // Domyślny typ pliku autozapisu
+
+
 
     public MainForm() {
 
@@ -22,6 +24,8 @@ namespace ConBook {
       mContactListUtils = new cContactListUtils();
       mContactSerializer = new cContactSerializer();
       mEditor = new frmContactEditor();
+
+      mDefaultFileType = cContactSerializer.mFileTypes.CSV;
 
     }
 
@@ -38,15 +42,6 @@ namespace ConBook {
     }
 
     private void tsmiSave_Click(object sender, EventArgs e) {
-
-      //usuń konieczność ręcznego zapisu danych przez użytkownika, to jest bardzo niepraktyczne
-      //  dane mają się wczytywać od razu po odpalniu programu
-      //  typ pliku ktory program wykorzystuje możesz rozwiązac na szytwno w kodzie
-      //  ale w taki sposbo, zeby latwo go mozna bylo zmienic
-      //  np. jesli wprowadzisz pole mFileTyp_Data
-      //  to jesli stworzysz numerator npo Enum FileType_DataEnum{ CSV, txt, ... }
-      // to jesli przed kompilacją dasz mi mozliwość wyboru np. mFileType_Data = FileType_DataEnum.CSV
-      //  to będzie super
 
       SaveFileAction();
 
@@ -67,12 +62,6 @@ namespace ConBook {
     private void tsmiNew_Click(object sender, EventArgs e) {
 
       ClearList();
-
-    }
-
-    private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-
-      SaveOnClose(e);
 
     }
 
@@ -122,6 +111,7 @@ namespace ConBook {
       mContactListUtils.DeleteContact(mContacts, dgvContacts.SelectedRows[0].Index);
 
       RefreshDataGridView();
+      AutoSave();
 
     }
 
@@ -135,6 +125,7 @@ namespace ConBook {
         mContactListUtils.AddContact(pNewContact, mContacts);
 
         RefreshDataGridView();
+        AutoSave();
 
       }
 
@@ -143,9 +134,9 @@ namespace ConBook {
     public void EditAction() {
       //funkcja obsługująca usuwanie kontaktu z listy
 
-      if(mEditor.ShowMe(mContacts[dgvContacts.SelectedRows[0].Index]))
+      if (mEditor.ShowMe(mContacts[dgvContacts.SelectedRows[0].Index]))
         RefreshDataGridView();
-
+      AutoSave();
     }
 
     public void RefreshDataGridView() {
@@ -178,41 +169,12 @@ namespace ConBook {
 
     }
 
-    private void SaveOnClose(FormClosingEventArgs e) {
-      //funkcja wyświetlająca dialog zapisu przy zamknięciu programu
-
-      DialogResult pSaveQueryResult = MessageBox.Show("Niezapisane zmiany zostaną utracone. \nCzy chcesz zapisać teraz?",
-    "Zapisz zmiany", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-
-      switch (pSaveQueryResult) {
-
-        case DialogResult.Yes: {
-
-            SaveFileAction();
-            break;
-
-          }
-        case DialogResult.No: {
-
-            break;
-
-          }
-        default: {
-
-            e.Cancel = true;
-            break;
-
-          }
-      }
-
-    }
-
     private void ShowAboutInfo() {
       //funkcja wyświetlająca okienko z informacjami o proramie
 
       MessageBox.Show("ConBook - Nikodem Przbyszewski 2023\n\n" +
         "Oprogramowanie: Visual Studio 2022 (.NET Framework 64-bit)\n" +
-        "Ikona: Icongeek26 @ flaticon.com", "ConBook v1.0", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        "Ikona: Icongeek26 @ flaticon.com", "ConBook v1.1", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 
     }
 
@@ -454,6 +416,21 @@ namespace ConBook {
           MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
         }
+
+      }
+
+    }
+
+    private void AutoSave() {
+
+      if (mCurrentFile == null) {
+
+        string pExt = mDefaultFileType.ToString().ToLower();
+        mContactSerializer.SaveToNewTxtFile("conctact_list." + pExt, mContacts);
+        mCurrentFile = "conctact_list." + pExt;
+      } else {
+
+        SaveFileAction();
 
       }
 
