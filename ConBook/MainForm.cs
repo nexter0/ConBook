@@ -29,6 +29,7 @@ namespace ConBook {
       mContactSerializer = new cContactSerializer();
       mEditor = new frmContactEditor();
 
+
       mDefaultFileType = cContactSerializer.mFileTypes.CSV;
 
     }
