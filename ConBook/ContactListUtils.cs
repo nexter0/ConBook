@@ -1,17 +1,22 @@
 ﻿using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+using static ConBook.cContactListUtils;
 
 namespace ConBook {
   internal class cContactListUtils {
     //Klasa odpowiadająca za funkcje typu CRUD konktatków
 
     private BindingList<cContact> mContacts;
+    private cContactSerializer mSerializer;                   // Klasa mContactSerializer - do zapisu i odczytu plików
+
     public BindingList<cContact> Contacts { get { return mContacts; } set { mContacts = value; } }
+    public cContactSerializer Serializer { get { return mSerializer; } }
 
     public cContactListUtils() {
 
       mContacts = new BindingList<cContact>();
+      mSerializer = new cContactSerializer();
 
     }
 

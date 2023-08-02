@@ -4,7 +4,6 @@ namespace ConBook {
   public partial class MainForm : Form {
 
     private cContactListUtils mContactListUtils;                 // Klasa mContactListUtils - do operacji na kontaktach
-    private cContactSerializer mContactSerializer;               // Klasa mContactSerializer - do zapisu i odczytu plików
     private frmContactEditor mEditor;                            // Klasa frmContactEditor - okienko dodawania / edycji kontaktów
 
     private string? mCurrentFile;                                // Ścieżka pliku, w którym zapisana jest otwarta lista
@@ -20,7 +19,6 @@ namespace ConBook {
       mCurrentFile = null;
 
       mContactListUtils = new cContactListUtils();
-      mContactSerializer = new cContactSerializer();
       mEditor = new frmContactEditor();
 
 
@@ -244,9 +242,9 @@ namespace ConBook {
           try {
             if (pFile != string.Empty && pFile != null) {
               if (Path.GetExtension(pFile) == ".xml") {
-                mContactListUtils.Contacts = mContactSerializer.LoadXmlFile(pFile);
+                mContactListUtils.Contacts = mContactListUtils.Serializer.LoadXmlFile(pFile);
               } else {
-                mContactListUtils.Contacts = mContactSerializer.LoadTxtFile(pFile);
+                mContactListUtils.Contacts = mContactListUtils.Serializer.LoadTxtFile(pFile);
               }
               mCurrentFile = pFile;
             }
@@ -259,7 +257,7 @@ namespace ConBook {
         }
       } else if (pFile != string.Empty && pFile != null) {
         try {
-          mContactSerializer.LoadXmlFile(pFile);
+          mContactListUtils.Serializer.LoadXmlFile(pFile);
           mCurrentFile = pFile;
         } catch (Exception ex) {
           MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pFile}", "Błąd wczytywania",
@@ -283,10 +281,10 @@ namespace ConBook {
           string pFileExtension = Path.GetExtension(pFileName);
           if (pFileExtension == ".xml") {
             mContactListUtils.Contacts.Clear();
-            mContactListUtils.Contacts = mContactSerializer.LoadXmlFile(pFileName);
+            mContactListUtils.Contacts = mContactListUtils.Serializer.LoadXmlFile(pFileName);
           } else if (pFileExtension == ".txt" || pFileExtension == ".tsv" || pFileExtension == ".csv") {
             mContactListUtils.Contacts.Clear();
-            mContactListUtils.Contacts = mContactSerializer.LoadTxtFile(pFileName);
+            mContactListUtils.Contacts = mContactListUtils.Serializer.LoadTxtFile(pFileName);
           } else {
             MessageBox.Show("Nieobsługiwany format pliku.", "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
@@ -314,9 +312,9 @@ namespace ConBook {
             string fileName = SaveFileDialog.FileName;
             string fileExtension = Path.GetExtension(fileName);
             if (fileExtension == ".xml") {
-              mContactSerializer.SaveToNewXmlFile(fileName, mContactListUtils.Contacts, ref mCurrentFile);
+              mContactListUtils.Serializer.SaveToNewXmlFile(fileName, mContactListUtils.Contacts, ref mCurrentFile);
             } else if (fileExtension == ".txt" || fileExtension == ".tsv" || fileExtension == ".csv") {
-              mContactSerializer.SaveToNewTxtFile(fileName, mContactListUtils.Contacts, ref mCurrentFile);
+              mContactListUtils.Serializer.SaveToNewTxtFile(fileName, mContactListUtils.Contacts, ref mCurrentFile);
             } else {
               MessageBox.Show("Nieobsługiwany format pliku.", "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -346,9 +344,9 @@ namespace ConBook {
         if (mContactListUtils.Contacts.Count > 0) {
           if (mCurrentFile != null) {
             if (Path.GetExtension(mCurrentFile) == ".xml") {
-              mContactSerializer.SaveToExistingXmlFile(mCurrentFile, mContactListUtils.Contacts);
+              mContactListUtils.Serializer.SaveToExistingXmlFile(mCurrentFile, mContactListUtils.Contacts);
             } else {
-              mContactSerializer.SaveToExistingTxtFile(mCurrentFile, mContactListUtils.Contacts);
+              mContactListUtils.Serializer.SaveToExistingTxtFile(mCurrentFile, mContactListUtils.Contacts);
             }
           } else {
             SaveFileAs();
@@ -377,7 +375,7 @@ namespace ConBook {
 
       if (mCurrentFile == null) {
         string pExt = mDefaultFileType.ToString().ToLower();
-        mContactSerializer.SaveToNewTxtFile("conctact_list." + pExt, mContactListUtils.Contacts);
+        mContactListUtils.Serializer.SaveToNewTxtFile("conctact_list." + pExt, mContactListUtils.Contacts);
         mCurrentFile = "conctact_list." + pExt;
       } else {
         SaveFile();
