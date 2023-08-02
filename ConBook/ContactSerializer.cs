@@ -2,16 +2,11 @@
 using System.Security.Cryptography.Xml;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+using static ConBook.cContactSerializer;
 
 namespace ConBook {
   internal class cContactSerializer {
     // Klasa odpowiadająca za zapisywanie i wczytywanie listy kontaków
-
-    to pole klasy nie moze byc internal - m-ek nie udostępniamy w taki sposób
-    zrób dla niej property, czyli zostaw mFileTypes i udostępnij ją na zewnątrz jako property
-    od biedy mozna od razu zlikwidowac m i zrobić samo property, ale nie zalecam tego
-
-    internal enum mFileTypes { CSV, TXT, XML, TSV };
 
     public void SaveToNewXmlFile(string xFileName, BindingList<cContact> xContactList, ref string? xCurrentFile) {
       // funkcja zapisująca do nowego pliku XML

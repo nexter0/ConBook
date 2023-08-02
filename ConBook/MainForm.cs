@@ -3,10 +3,10 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace ConBook {
   public partial class MainForm : Form {
-    wydaje się, że cContactListUtils jest tutaj zbędna bo nic szczególnego nie robi
-    zalecam jednak żeby ją zostawić i wpakować do niej ContactSerializer oraz mContacts
-    przy czym wtedy do serializera mozesz robic dostęp w stylu ContactListUtils.Serializer
-    takie rzeczy dojrzewają poźniej, gdy kod się rozrasta
+    //wydaje się, że cContactListUtils jest tutaj zbędna bo nic szczególnego nie robi
+    //zalecam jednak żeby ją zostawić i wpakować do niej ContactSerializer oraz mContacts
+    //przy czym wtedy do serializera mozesz robic dostęp w stylu ContactListUtils.Serializer
+    //takie rzeczy dojrzewają poźniej, gdy kod się rozrasta
 
     private cContactListUtils mContactListUtils;                 // Klasa mContactListUtils - do operacji na kontaktach
     private cContactSerializer mContactSerializer;               // Klasa mContactSerializer - do zapisu i odczytu plików
@@ -14,7 +14,7 @@ namespace ConBook {
 
     public BindingList<cContact> mContacts;                      // Lista kontaktów
     private string? mCurrentFile;                                // Ścieżka pliku, w którym zapisana jest otwarta lista
-    private cContactSerializer.mFileTypes mDefaultFileType;      // Domyślny typ pliku autozapisu
+    private FileTypes mDefaultFileType;                         // Domyślny typ pliku autozapisu
 
 
 
@@ -30,13 +30,11 @@ namespace ConBook {
       mEditor = new frmContactEditor();
 
 
-      mDefaultFileType = cContactSerializer.mFileTypes.CSV;
+      mDefaultFileType = FileTypes.CSV;
 
     }
 
-    // *****************************
-    // *          Zdarzenia        *
-    // *****************************
+    #region Zdarzenia
 
     private void MainForm_Load(object sender, EventArgs e) {
 
@@ -48,19 +46,19 @@ namespace ConBook {
 
     private void tsmiSave_Click(object sender, EventArgs e) {
 
-      SaveFileAction();
+      SaveFile();
 
     }
 
     private void tsmiSaveAs_Click(object sender, EventArgs e) {
 
-      SaveFileAsAction();
+      SaveFileAs();
 
     }
 
     private void tsmiOpen_Click(object sender, EventArgs e) {
 
-      OpenFileAction();
+      OpenFile();
 
     }
 
@@ -84,7 +82,7 @@ namespace ConBook {
 
     private void btnAdd_Click(object sender, EventArgs e) {
 
-      AddAction();
+      AddContact();
 
     }
 
@@ -96,7 +94,7 @@ namespace ConBook {
 
     private void btnEdit_Click(object sender, EventArgs e) {
 
-      EditAction();
+      EditContact();
 
     }
 
@@ -105,12 +103,10 @@ namespace ConBook {
       SortList(e.ColumnIndex);
 
     }
-    
-    formatuję kod w tej klasie i proszę przyjrzyj się co jest formatowane i staraj się potem to zastosować 
 
-    // *****************************
-    // *          Metody           *
-    // *****************************
+    #endregion
+
+    #region Metody
 
     public void DeleteContact() {
       //funkcja obsługująca usuwanie kontaktu z listy
@@ -123,21 +119,15 @@ namespace ConBook {
 
     }
 
-    funkcja ma złą nazwę, ona musi oddawać to, co robi, jeśli ten formularz bedzie dodawał jeszcze jakis inny obiekt, to bedziesz miał balagan
-      funkcja powinna po prostu nazywac sie AddContact
-    public void AddAction() {
+    public void AddContact() {
       //funkcja obsługująca usuwanie kontaktu z listy
 
-      //jeśli w funkcji jest mało zmiennych i jest krótka, to zalecałbym unikanie sufiksow lub prefiksow 
-      //tutaj wystarczy po procstu pContact
-      //gdyby funkcja była większa i wystąpiłyby inne obiekty konaktu, wtedy obowiązkowo prefiks lub sufiks
+      cContact pContact = new cContact();
 
-      cContact pNewContact = new cContact();
-
-      if (!mEditor.ShowMe(pNewContact))
+      if (!mEditor.ShowMe(pContact))
         return;
 
-      mContactListUtils.AddContact(pNewContact, mContacts);
+      mContactListUtils.AddContact(pContact, mContacts);
 
       RefreshDataGridView();
       
@@ -145,8 +135,7 @@ namespace ConBook {
 
     }
 
-    zła nazwa funkcji
-    public void EditAction() {
+    public void EditContact() {
       //funkcja obsługująca usuwanie kontaktu z listy
 
       cContact pContact = mContacts[dgvContacts.SelectedRows[0].Index];
@@ -204,7 +193,7 @@ namespace ConBook {
 
       switch (pSaveQueryResult) {
         case DialogResult.Yes: 
-          SaveFileAction();
+          SaveFile();
           mContacts.Clear();
           RefreshDataGridView();
           mCurrentFile = null;
@@ -270,8 +259,7 @@ namespace ConBook {
 
     }
 
-    wywal dopisek action z naz. funkcji
-    private void OpenFileAction() {
+    private void OpenFile() {
       //funkcja obsługująca otwieranie plików
 
       try {
@@ -301,7 +289,7 @@ namespace ConBook {
 
     }
 
-    private void SaveFileAsAction() {
+    private void SaveFileAs() {
       //funkcja obsługująca zapis do nowego pliku
 
       if (mContacts.Count > 0) {
@@ -340,8 +328,7 @@ namespace ConBook {
 
     }
 
-    wywal słowo Action z nazwy funkcji
-    private void SaveFileAction() {
+    private void SaveFile() {
       //funkcja obsługująca zapis do istniejącego pliku
 
       try {
@@ -353,7 +340,7 @@ namespace ConBook {
               mContactSerializer.SaveToExistingTxtFile(mCurrentFile, mContacts);
             }
           } else {
-            SaveFileAsAction();
+            SaveFileAs();
           }
         } else {
           MessageBox.Show("Nie można zapisać pustej listy.", "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -375,19 +362,19 @@ namespace ConBook {
     }
 
     private void AutoSave() {
-      brak opisu funkcji
+      //brak opisu funkcji
 
       if (mCurrentFile == null) {
         string pExt = mDefaultFileType.ToString().ToLower();
         mContactSerializer.SaveToNewTxtFile("conctact_list." + pExt, mContacts);
         mCurrentFile = "conctact_list." + pExt;
       } else {
-        SaveFileAction();
+        SaveFile();
       }
 
     }
 
-    xSortTypeId nie moze byc int-em. zrob numerator do tego parametru, który bedzie czytelny
+    //xSortTypeId nie moze byc int-em. zrob numerator do tego parametru, który bedzie czytelny
     private void SortList(int xSortTypeId) {
       //funkcja sortująca listę kontaktów
 
@@ -410,4 +397,6 @@ namespace ConBook {
     }
 
   }
+  #endregion
+
 }

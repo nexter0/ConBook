@@ -5,10 +5,7 @@ namespace ConBook {
 
   public partial class frmContactEditor : Form {
 
-    bool mIsCanceled;brak opisu pola
-
-      pousuwaj Acction z nazw funkcji i ew. napisz co robią
-        wszystkie funkcje muszą byc opisane
+    bool mIsCanceled;             // Zmienna przechowująca info, czy formularz anulowany
 
     public frmContactEditor() {
 
@@ -79,8 +76,7 @@ namespace ConBook {
 
     }
 
-    literowka w nazwie funkcji
-    private void CustiomizeWidow(bool xIsEmptyContact) {
+    private void CustomizeWidow(bool xIsEmptyContact) {
 
       if (!xIsEmptyContact) {
 
@@ -102,17 +98,13 @@ namespace ConBook {
 
       mIsCanceled = false;
 
-      oddzielaj poszczególne linie kodu, chyba, ze są w klamrach np if itd...
-          lub chcesz pokazac, ze pewne linie kodu stanowią całosc
-
       InitializeTextBoxes(xContact);
-      CustiomizeWidow(xContact.IsEmpty());
+      CustomizeWidow(xContact.IsEmpty());
       this.ShowDialog();
 
       if (mIsCanceled)
         return false;
 
-      tutaj linie sklejnoe i ok, bo stanowią calosc
       xContact.Name = txtName.Text;
       xContact.Surname = txtSurname.Text;
       xContact.Phone = txtPhone.Text;
