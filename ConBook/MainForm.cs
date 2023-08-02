@@ -2,10 +2,6 @@
 
 namespace ConBook {
   public partial class MainForm : Form {
-    //wydaje się, że cContactListUtils jest tutaj zbędna bo nic szczególnego nie robi
-    //zalecam jednak żeby ją zostawić i wpakować do niej ContactSerializer oraz mContacts
-    //przy czym wtedy do serializera mozesz robic dostęp w stylu ContactListUtils.Serializer
-    //takie rzeczy dojrzewają poźniej, gdy kod się rozrasta
 
     private cContactListUtils mContactListUtils;                 // Klasa mContactListUtils - do operacji na kontaktach
     private cContactSerializer mContactSerializer;               // Klasa mContactSerializer - do zapisu i odczytu plików
@@ -22,7 +18,6 @@ namespace ConBook {
       InitializeComponent();
 
       mCurrentFile = null;
-      // mContacts = new BindingList<cContact>();
 
       mContactListUtils = new cContactListUtils();
       mContactSerializer = new cContactSerializer();
@@ -390,7 +385,6 @@ namespace ConBook {
 
     }
 
-    //xSortTypeId nie moze byc int-em. zrob numerator do tego parametru, który bedzie czytelny
     private void SortList(SortType xSortType) {
       //funkcja sortująca listę kontaktów
 
