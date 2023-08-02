@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Security.Cryptography.Xml;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
-using static ConBook.cContactSerializer;
 
 namespace ConBook {
   internal class cContactSerializer {
@@ -110,52 +108,47 @@ namespace ConBook {
     }
 
     // funkcja zapisująca do nowego pliku typu tekstowego (TXT, CSV, TSV)
-    public void SaveToNewTxtFile(string xFileName, BindingList<cContact> xContactList, ref string? xCurrentFile) {
+    public void SaveToNewTxtFile(string xFileName, BindingList<cContact> xContactList, ref string? xCurrentFile, string? xExtension = null) {
 
-      if (Path.GetExtension(xFileName) == ".csv") {
+      string pExtension;
 
-        using (StreamWriter writer = new StreamWriter(xFileName)) {
-
-          Regex pSpacePatternRegex = new Regex("\\s+");
-
-          foreach (cContact contact in xContactList) {
-
-            string pContactFormatted = pSpacePatternRegex.Replace(contact.ToString(), ",");
-            writer.WriteLine(pContactFormatted);
-
-          }
-
-          xCurrentFile ??= xFileName;
-
-        }
-
-      } else if (Path.GetExtension(xFileName) == ".tsv") {
-
-        using (StreamWriter writer = new StreamWriter(xFileName)) {
-
-          Regex pSpacePatternRegex = new Regex("\\s+");
-
-          foreach (cContact contact in xContactList) {
-
-            string pContactFormatted = pSpacePatternRegex.Replace(contact.ToString(), "\t");
-            writer.WriteLine(pContactFormatted);
-
-          }
-
-          xCurrentFile ??= xFileName;
-
-        }
+      if (xExtension != null) {
+        pExtension = xExtension;
       } else {
+        pExtension = Path.GetExtension(xFileName);
+      }
+        
+      using (StreamWriter pWriter = new StreamWriter(xFileName)) {
 
-        using (StreamWriter writer = new StreamWriter(xFileName)) {
-
-          foreach (cContact contact in xContactList) {
-            writer.WriteLine(contact);
-          }
-
-          xCurrentFile ??= xFileName;
-
+        if (pExtension == ".csv") {
+          WriteContactList(pWriter, xContactList, ",");
+        } else if (pExtension == ".tsv") {
+          WriteContactList(pWriter, xContactList, "\t");
+        } else {
+          WriteContactList(pWriter, xContactList, null);
         }
+
+        xCurrentFile ??= xFileName;
+
+      }
+
+    }
+
+    private void WriteContactList(StreamWriter xWriter, BindingList<cContact> xContactList, string? xDelimiter) {
+
+      Regex pSpacePatternRegex = new Regex("\\s+");
+
+      foreach (cContact contact in xContactList) {
+        string pContactFormatted;
+
+        if (xDelimiter != null) {
+          pContactFormatted = pSpacePatternRegex.Replace(contact.ToString(), xDelimiter);
+        } else {
+          pContactFormatted = contact.ToString();
+        }
+
+        xWriter.WriteLine(pContactFormatted);
+
 
       }
 
@@ -167,7 +160,7 @@ namespace ConBook {
 
       try {
 
-        SaveToNewTxtFile(pTempFileName, xContactList);
+        SaveToNewTxtFile(pTempFileName, xContactList, Path.GetExtension(xFileName));
 
         File.Delete(xFileName);
         File.Move(pTempFileName, xFileName);
@@ -179,13 +172,13 @@ namespace ConBook {
         }
 
       }
-
+       
     }
 
-    public void SaveToNewTxtFile(string xFileName, BindingList<cContact> xContactList) {
+    public void SaveToNewTxtFile(string xFileName, BindingList<cContact> xContactList, string? xExtension = null) {
 
       string? pTemp = null;
-      SaveToNewTxtFile(xFileName, xContactList, ref pTemp);
+      SaveToNewTxtFile(xFileName, xContactList, ref pTemp, xExtension);
 
     }
 
