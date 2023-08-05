@@ -16,24 +16,24 @@ namespace ConBook {
 
     private void btnSubmit_Click(object sender, EventArgs e) {
 
-      SubmitAction();
+      Submit();
 
     }
 
     private void btnCancel_Click(object sender, EventArgs e) {
 
-      CancelAction();
+      Cancel();
 
     }
 
-    private void CancelAction() {
+    private void Cancel() {
 
       this.mIsCanceled = true;
       this.Close();
 
     }
 
-    private void SubmitAction() {
+    private void Submit() {
 
       int pValidation = ValidateTextBoxes();
 
@@ -67,10 +67,14 @@ namespace ConBook {
         txtName.Text = xContact.Name;
         txtSurname.Text = xContact.Surname;
         txtPhone.Text = xContact.Phone;
+        rtbDescription.Text = xContact.Description;
+        rtbNotes.Text = xContact.Notes;
       } else {
         txtName.Text = string.Empty;
         txtSurname.Text = string.Empty;
         txtPhone.Text = string.Empty;
+        rtbDescription.Text = string.Empty;
+        rtbNotes.Text = string.Empty; 
       }
 
     }
@@ -107,6 +111,8 @@ namespace ConBook {
       xContact.Name = txtName.Text;
       xContact.Surname = txtSurname.Text;
       xContact.Phone = txtPhone.Text;
+      xContact.Description = rtbDescription.Text;
+      xContact.Notes = rtbNotes.Text;
 
       return true;
 

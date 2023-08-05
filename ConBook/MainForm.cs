@@ -8,7 +8,7 @@ namespace ConBook {
 
     private string? mCurrentFile;                                // Ścieżka pliku, w którym zapisana jest otwarta lista
     private FileTypes mDefaultFileType;                          // Domyślny typ pliku autozapisu
-    private enum SortType { byName = 0, bySurname = 1 }
+    private enum SortType { byName = 0, bySurname = 1 }          // Możliwe tryby sortowania listy kontaktów
 
 
 

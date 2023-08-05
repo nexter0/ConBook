@@ -84,7 +84,7 @@ namespace ConBook {
 
           if (Path.GetExtension(xFileName) == ".txt") {
 
-            pDataSplit = pData.Split(' ');
+            pDataSplit = pData.Split(":");
 
           } else if (Path.GetExtension(xFileName) == ".csv") {
 
@@ -136,7 +136,7 @@ namespace ConBook {
 
     private void WriteContactList(StreamWriter xWriter, BindingList<cContact> xContactList, string? xDelimiter) {
 
-      Regex pSpacePatternRegex = new Regex("\\s+");
+      Regex pSpacePatternRegex = new Regex(":+");
 
       foreach (cContact contact in xContactList) {
         string pContactFormatted;

@@ -1,22 +1,36 @@
 ﻿namespace ConBook {
   public class cContact : IComparable<cContact> {
+
+    private string mName;
+    private string mSurname;
+    private string mPhone;
+    private string mDescription;
+    private string mNotes;
+
     public string Name { get; set; }
     public string Surname { get; set; }
     public string Phone { get; set; }
+    public string Description { get; set; }
+    public string Notes { get; set; }
+
 
     public cContact() {
 
       Name = string.Empty;
       Surname = string.Empty;
       Phone = string.Empty;
+      Description = string.Empty;
+      Notes = string.Empty;
 
     }
 
-    public cContact(string xName, string xSurname, string xPhone) {
+    public cContact(string xName, string xSurname, string xPhone, string xDescription = "", string xNotes = "") {
 
       Name = xName;
       Surname = xSurname;
       Phone = xPhone;
+      Description = xDescription;
+      Notes = xNotes;
 
     }
 
@@ -50,7 +64,7 @@
 
     public override string ToString() {
 
-      return $"{Name} {Surname} {Phone}";
+      return $"{Name}:{Surname}:{Phone}:{Description}:";
 
     }
 

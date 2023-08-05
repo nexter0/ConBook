@@ -1,10 +1,5 @@
 ﻿*) Add an option do enable / disable auto saving (it has to be persistent)
 
-wydaje się, że cContactListUtils jest tutaj zbędna bo nic szczególnego nie robi
-zalecam jednak żeby ją zostawić i wpakować do niej ContactSerializer oraz mContacts
-przy czym wtedy do serializera mozesz robic dostęp w stylu ContactListUtils.Serializer
-takie rzeczy dojrzewają poźniej, gdy kod się rozrasta
-
 następne zadanie jest takie: 
 - na razie posługujmy się plikiem tekstowym
 - dodaj do programu kilka kontaktów

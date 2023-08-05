@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
-using static ConBook.cContactListUtils;
 
 namespace ConBook {
   internal class cContactListUtils {
     //Klasa odpowiadająca za funkcje typu CRUD konktatków
 
-    private BindingList<cContact> mContacts;
+    private BindingList<cContact> mContacts;                  // Lista przechowująca kontakty
     private cContactSerializer mSerializer;                   // Klasa mContactSerializer - do zapisu i odczytu plików
 
     public BindingList<cContact> Contacts { get { return mContacts; } set { mContacts = value; } }
@@ -148,7 +147,7 @@ namespace ConBook {
 
             if (Path.GetExtension(xFileName) == ".txt") {
 
-              pDataSplit = pData.Split(' ');
+              pDataSplit = pData.Split(":");
 
             } else if (Path.GetExtension(xFileName) == ".csv") {
 
@@ -160,7 +159,7 @@ namespace ConBook {
 
             }
 
-            pLoadedContacts.Add(new cContact(pDataSplit[0], pDataSplit[1], pDataSplit[2]));
+            pLoadedContacts.Add(new cContact(pDataSplit[0], pDataSplit[1], pDataSplit[2], pDataSplit[3], pDataSplit[4]));
             pDataSplit = null;
 
           } while (pData != null);
@@ -200,7 +199,7 @@ namespace ConBook {
 
       private void WriteContactList(StreamWriter xWriter, BindingList<cContact> xContactList, string? xDelimiter) {
 
-        Regex pSpacePatternRegex = new Regex("\\s+");
+        Regex pSpacePatternRegex = new Regex(":+");
 
         foreach (cContact contact in xContactList) {
           string pContactFormatted;
@@ -247,7 +246,6 @@ namespace ConBook {
       }
 
     }
-
 
   }
 }

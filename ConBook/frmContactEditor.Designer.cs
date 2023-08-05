@@ -27,11 +27,15 @@
       lbName = new Label();
       txtName = new TextBox();
       txtSurname = new TextBox();
-      label1 = new Label();
+      lbSurname = new Label();
       txtPhone = new TextBox();
       lbPhone = new Label();
       btnSubmit = new Button();
       btnCancel = new Button();
+      rtbDescription = new RichTextBox();
+      lbDescription = new Label();
+      rtbNotes = new RichTextBox();
+      lbNotes = new Label();
       SuspendLayout();
       // 
       // lbName
@@ -57,14 +61,14 @@
       txtSurname.Size = new Size(352, 23);
       txtSurname.TabIndex = 3;
       // 
-      // label1
+      // lbSurname
       // 
-      label1.AutoSize = true;
-      label1.Location = new Point(12, 54);
-      label1.Name = "label1";
-      label1.Size = new Size(57, 15);
-      label1.TabIndex = 2;
-      label1.Text = "Nazwisko";
+      lbSurname.AutoSize = true;
+      lbSurname.Location = new Point(12, 54);
+      lbSurname.Name = "lbSurname";
+      lbSurname.Size = new Size(57, 15);
+      lbSurname.TabIndex = 2;
+      lbSurname.Text = "Nazwisko";
       // 
       // txtPhone
       // 
@@ -84,7 +88,7 @@
       // 
       // btnSubmit
       // 
-      btnSubmit.Location = new Point(258, 130);
+      btnSubmit.Location = new Point(492, 285);
       btnSubmit.Name = "btnSubmit";
       btnSubmit.Size = new Size(75, 23);
       btnSubmit.TabIndex = 6;
@@ -94,7 +98,7 @@
       // 
       // btnCancel
       // 
-      btnCancel.Location = new Point(339, 130);
+      btnCancel.Location = new Point(492, 314);
       btnCancel.Name = "btnCancel";
       btnCancel.Size = new Size(75, 23);
       btnCancel.TabIndex = 7;
@@ -102,19 +106,57 @@
       btnCancel.UseVisualStyleBackColor = true;
       btnCancel.Click += btnCancel_Click;
       // 
+      // rtbDescription
+      // 
+      rtbDescription.Location = new Point(12, 162);
+      rtbDescription.Name = "rtbDescription";
+      rtbDescription.Size = new Size(352, 96);
+      rtbDescription.TabIndex = 8;
+      rtbDescription.Text = "";
+      // 
+      // lbDescription
+      // 
+      lbDescription.AutoSize = true;
+      lbDescription.Location = new Point(12, 144);
+      lbDescription.Name = "lbDescription";
+      lbDescription.Size = new Size(31, 15);
+      lbDescription.TabIndex = 9;
+      lbDescription.Text = "Opis";
+      // 
+      // rtbNotes
+      // 
+      rtbNotes.Location = new Point(12, 285);
+      rtbNotes.Name = "rtbNotes";
+      rtbNotes.Size = new Size(352, 52);
+      rtbNotes.TabIndex = 10;
+      rtbNotes.Text = "";
+      // 
+      // lbNotes
+      // 
+      lbNotes.AutoSize = true;
+      lbNotes.Location = new Point(11, 267);
+      lbNotes.Name = "lbNotes";
+      lbNotes.Size = new Size(46, 15);
+      lbNotes.TabIndex = 11;
+      lbNotes.Text = "Notatki";
+      // 
       // frmContactEditor
       // 
       AcceptButton = btnSubmit;
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
       CancelButton = btnCancel;
-      ClientSize = new Size(424, 165);
+      ClientSize = new Size(579, 397);
+      Controls.Add(lbNotes);
+      Controls.Add(rtbNotes);
+      Controls.Add(lbDescription);
+      Controls.Add(rtbDescription);
       Controls.Add(btnCancel);
       Controls.Add(btnSubmit);
       Controls.Add(txtPhone);
       Controls.Add(lbPhone);
       Controls.Add(txtSurname);
-      Controls.Add(label1);
+      Controls.Add(lbSurname);
       Controls.Add(txtName);
       Controls.Add(lbName);
       FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -135,10 +177,14 @@
     private Label lbName;
     private TextBox txtName;
     private TextBox txtSurname;
-    private Label label1;
+    private Label lbSurname;
     private TextBox txtPhone;
     private Label lbPhone;
     private Button btnSubmit;
     private Button btnCancel;
+    private RichTextBox rtbDescription;
+    private Label lbDescription;
+    private RichTextBox rtbNotes;
+    private Label lbNotes;
   }
 }
