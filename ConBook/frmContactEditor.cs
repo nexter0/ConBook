@@ -39,7 +39,6 @@ namespace ConBook {
 
       if (pValidation == 0) {
 
-        //mContact = new cContact(txtName.Text, txtSurname.Text, txtPhone.Text);
         this.Close();
 
       } else {
@@ -74,7 +73,7 @@ namespace ConBook {
         txtSurname.Text = string.Empty;
         txtPhone.Text = string.Empty;
         rtbDescription.Text = string.Empty;
-        rtbNotes.Text = string.Empty; 
+        rtbNotes.Text = string.Empty;
       }
 
     }

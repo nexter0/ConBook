@@ -7,7 +7,7 @@ namespace ConBook {
     private frmContactEditor mEditor;                            // Klasa frmContactEditor - okienko dodawania / edycji kontaktów
 
     private string? mCurrentFile;                                // Ścieżka pliku, w którym zapisana jest otwarta lista
-    private FileTypes mDefaultFileType;                          // Domyślny typ pliku autozapisu
+    private FileType mDefaultFileType;                           // Domyślny typ pliku autozapisu
     private enum SortType { byName = 0, bySurname = 1 }          // Możliwe tryby sortowania listy kontaktów
 
 
@@ -22,7 +22,7 @@ namespace ConBook {
       mEditor = new frmContactEditor();
 
 
-      mDefaultFileType = FileTypes.CSV;
+      mDefaultFileType = FileType.TXT;
 
     }
 
@@ -190,7 +190,7 @@ namespace ConBook {
 
       MessageBox.Show("ConBook - Nikodem Przbyszewski 2023\n\n" +
         "Oprogramowanie: Visual Studio 2022 (.NET Framework 64-bit)\n" +
-        "Ikona: Icongeek26 @ flaticon.com", "ConBook v1.1", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        "Ikona: Icongeek26 @ flaticon.com", "ConBook v1.2", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 
     }
 
@@ -236,9 +236,11 @@ namespace ConBook {
       if (File.Exists("recent")) {
         using (StreamReader pStreamReader = new StreamReader("recent")) {
           string pFileTmp = pStreamReader.ReadToEnd();
+
           if (File.Exists(pFileTmp) && pFileTmp != string.Empty && pFileTmp != null) {
             pFile = pFileTmp;
           }
+
           try {
             if (pFile != string.Empty && pFile != null) {
               if (Path.GetExtension(pFile) == ".xml") {
@@ -249,7 +251,6 @@ namespace ConBook {
               mCurrentFile = pFile;
             }
           } catch (Exception ex) {
-
             MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pFile}", "Błąd wczytywania",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -273,22 +274,24 @@ namespace ConBook {
 
       try {
         OpenFileDialog OpenFileDialog = new OpenFileDialog() {
-          Filter = "Wszystkie pliki (*.*)|*.*|Plik CSV (rozdzielany przecinkami) (*.csv)|*.csv|Plik TSV (rozdzielany znakiem tabulacji) (*.tsv)|*.tsv|Plik tekstowy (*.txt)|*.txt|Dokument XML (*.xml)|*.xml",
+          Filter = "Wszystkie pliki (*.*)|*.*|Plik tekstowy (*.txt)|*.txt|Dokument XML (*.xml)|*.xml",
           Title = "Otwórz..."
         };
         if (OpenFileDialog.ShowDialog() == DialogResult.OK) {
           string pFileName = OpenFileDialog.FileName;
           string pFileExtension = Path.GetExtension(pFileName);
+
           if (pFileExtension == ".xml") {
             mContactListUtils.Contacts.Clear();
             mContactListUtils.Contacts = mContactListUtils.Serializer.LoadXmlFile(pFileName);
-          } else if (pFileExtension == ".txt" || pFileExtension == ".tsv" || pFileExtension == ".csv") {
+          } else if (pFileExtension == ".txt") {
             mContactListUtils.Contacts.Clear();
             mContactListUtils.Contacts = mContactListUtils.Serializer.LoadTxtFile(pFileName);
           } else {
             MessageBox.Show("Nieobsługiwany format pliku.", "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
           }
+
           mCurrentFile = pFileName;
           RefreshDataGridView();
         }
@@ -304,16 +307,16 @@ namespace ConBook {
       if (mContactListUtils.Contacts.Count > 0) {
         try {
           SaveFileDialog SaveFileDialog = new SaveFileDialog() {
-            Filter = "Plik CSV (rozdzielany przecinkami) (*.csv)|*.csv|Plik TSV (rozdzielany znakiem tabulacji) " +
-              "(*.tsv)|*.tsv|Plik tekstowy (*.txt)|*.txt|Dokument XML (*.xml)|*.xml",
+            Filter = "Plik tekstowy (*.txt)|*.txt|Dokument XML (*.xml)|*.xml",
             Title = "Zapisz jako..."
           };
           if (SaveFileDialog.ShowDialog() == DialogResult.OK) {
             string fileName = SaveFileDialog.FileName;
             string fileExtension = Path.GetExtension(fileName);
+
             if (fileExtension == ".xml") {
               mContactListUtils.Serializer.SaveToNewXmlFile(fileName, mContactListUtils.Contacts, ref mCurrentFile);
-            } else if (fileExtension == ".txt" || fileExtension == ".tsv" || fileExtension == ".csv") {
+            } else if (fileExtension == ".txt") {
               mContactListUtils.Serializer.SaveToNewTxtFile(fileName, mContactListUtils.Contacts, ref mCurrentFile);
             } else {
               MessageBox.Show("Nieobsługiwany format pliku.", "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -324,10 +327,12 @@ namespace ConBook {
             Exception pInnerException = ex.InnerException;
             string pMessage = "Błąd: \n" + pInnerException.Message + "\n"
                 + "InnerException StackTrace: \n" + pInnerException.StackTrace;
+
             MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
           } else {
             string pMessage = "Błąd: \n" + ex.Message + "\n"
                 + "StackTrace: \n" + ex.StackTrace;
+
             MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
           }
         }
@@ -359,10 +364,12 @@ namespace ConBook {
           Exception pInnerException = ex.InnerException;
           string pMessage = "Błąd: \n" + pInnerException.Message + "\n"
               + "InnerException StackTrace: \n" + pInnerException.StackTrace;
+
           MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
         } else {
           string pMessage = "Błąd: \n" + ex.Message + "\n"
               + "StackTrace: \n" + ex.StackTrace;
+
           MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
@@ -375,6 +382,7 @@ namespace ConBook {
 
       if (mCurrentFile == null) {
         string pExt = mDefaultFileType.ToString().ToLower();
+
         mContactListUtils.Serializer.SaveToNewTxtFile("conctact_list." + pExt, mContactListUtils.Contacts);
         mCurrentFile = "conctact_list." + pExt;
       } else {
@@ -389,8 +397,10 @@ namespace ConBook {
       if (xSortType == SortType.byName) {
         if (mContactListUtils.Contacts.Count > 0) {
           List<cContact> pTempContactList = new List<cContact>(mContactListUtils.Contacts);
+
           pTempContactList.Sort(new cContact.NamesComparer());
           mContactListUtils.Contacts = new BindingList<cContact>(pTempContactList);
+
           RefreshDataGridView();
         }
       } else if (xSortType == SortType.bySurname) {
@@ -398,6 +408,7 @@ namespace ConBook {
           List<cContact> pTempContactList = new List<cContact>(mContactListUtils.Contacts);
           pTempContactList.Sort();
           mContactListUtils.Contacts = new BindingList<cContact>(pTempContactList);
+
           RefreshDataGridView();
         }
       }

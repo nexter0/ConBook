@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
-using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace ConBook {
   internal class cContactSerializer {
     // Klasa odpowiadająca za zapisywanie i wczytywanie listy kontaków
 
+    #region XML Serializer
     public void SaveToNewXmlFile(string xFileName, BindingList<cContact> xContactList, ref string? xCurrentFile) {
       // funkcja zapisująca do nowego pliku XML
 
@@ -65,90 +65,28 @@ namespace ConBook {
       }
 
     }
+    #endregion
 
-    public BindingList<cContact> LoadTxtFile(string xFileName) {
-      // funkcja funkcja odczytująca dane z pliku typu tekstowego (TXT, CSV, TSV)
+    #region TXT Serializer
+    public void SaveToNewTxtFile(string xFileName, BindingList<cContact> xContactList, ref string? xCurrentFile) {
 
-      BindingList <cContact> pLoadedContacts = new BindingList<cContact>();
+      //string pExtension;
 
-      using (StreamReader reader = new StreamReader(xFileName)) {
+      //if (xExtension != null) {
+      //  pExtension = xExtension;
+      //} else {
+      //  pExtension = Path.GetExtension(xFileName);
+      //}
 
-        string? pData = string.Empty;
-        string[]? pDataSplit = null;
-
-        do {
-
-          pData = reader.ReadLine();
-
-          if (pData == null) continue;
-
-          if (Path.GetExtension(xFileName) == ".txt") {
-
-            pDataSplit = pData.Split(":");
-
-          } else if (Path.GetExtension(xFileName) == ".csv") {
-
-            pDataSplit = pData.Split(',');
-
-          } else if (Path.GetExtension(xFileName) == ".tsv") {
-
-            pDataSplit = pData.Split('\t');
-
-          }
-
-          pLoadedContacts.Add(new cContact(pDataSplit[0], pDataSplit[1], pDataSplit[2]));
-          pDataSplit = null;
-
-        } while (pData != null);
-
-      }
-
-      return pLoadedContacts;
-
-    }
-
-    // funkcja zapisująca do nowego pliku typu tekstowego (TXT, CSV, TSV)
-    public void SaveToNewTxtFile(string xFileName, BindingList<cContact> xContactList, ref string? xCurrentFile, string? xExtension = null) {
-
-      string pExtension;
-
-      if (xExtension != null) {
-        pExtension = xExtension;
-      } else {
-        pExtension = Path.GetExtension(xFileName);
-      }
-        
       using (StreamWriter pWriter = new StreamWriter(xFileName)) {
 
-        if (pExtension == ".csv") {
-          WriteContactList(pWriter, xContactList, ",");
-        } else if (pExtension == ".tsv") {
-          WriteContactList(pWriter, xContactList, "\t");
-        } else {
-          WriteContactList(pWriter, xContactList, null);
+        foreach (cContact contact in xContactList) { 
+        
+          pWriter.WriteLine(contact.ToString());
+
         }
 
-        xCurrentFile ??= xFileName;
-
-      }
-
-    }
-
-    private void WriteContactList(StreamWriter xWriter, BindingList<cContact> xContactList, string? xDelimiter) {
-
-      Regex pSpacePatternRegex = new Regex(":+");
-
-      foreach (cContact contact in xContactList) {
-        string pContactFormatted;
-
-        if (xDelimiter != null) {
-          pContactFormatted = pSpacePatternRegex.Replace(contact.ToString(), xDelimiter);
-        } else {
-          pContactFormatted = contact.ToString();
-        }
-
-        xWriter.WriteLine(pContactFormatted);
-
+          xCurrentFile ??= xFileName;
 
       }
 
@@ -160,7 +98,7 @@ namespace ConBook {
 
       try {
 
-        SaveToNewTxtFile(pTempFileName, xContactList, Path.GetExtension(xFileName));
+        SaveToNewTxtFile(pTempFileName, xContactList);
 
         File.Delete(xFileName);
         File.Move(pTempFileName, xFileName);
@@ -172,15 +110,47 @@ namespace ConBook {
         }
 
       }
-       
+
     }
 
-    public void SaveToNewTxtFile(string xFileName, BindingList<cContact> xContactList, string? xExtension = null) {
+    public void SaveToNewTxtFile(string xFileName, BindingList<cContact> xContactList) {
 
       string? pTemp = null;
-      SaveToNewTxtFile(xFileName, xContactList, ref pTemp, xExtension);
+      SaveToNewTxtFile(xFileName, xContactList, ref pTemp);
 
     }
+
+    public BindingList<cContact> LoadTxtFile(string xFileName) {
+      // funkcja funkcja odczytująca dane z pliku typu tekstowego (TXT, CSV, TSV)
+
+      BindingList<cContact> pLoadedContacts = new BindingList<cContact>();
+
+      using (StreamReader reader = new StreamReader(xFileName)) {
+
+        string? pLine = string.Empty;
+        string pData = string.Empty;
+        string[]? pDataSplit = null;
+
+        while ((pLine = reader.ReadLine()) != null) {
+          if (pLine == "<") continue;
+
+          if (pLine != ">") {
+            pData += pLine + "\n";
+          } else {
+            pDataSplit = pData.Split("|");
+            pLoadedContacts.Add(new cContact(pDataSplit));
+            pData = string.Empty;
+          }
+
+        }
+      }
+
+      return pLoadedContacts;
+
+    }
+
+
+    #endregion
 
   }
 

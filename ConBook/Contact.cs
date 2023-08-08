@@ -1,4 +1,6 @@
-﻿namespace ConBook {
+﻿using System.Xml.Linq;
+
+namespace ConBook {
   public class cContact : IComparable<cContact> {
 
     private string mName;
@@ -34,6 +36,16 @@
 
     }
 
+    public cContact(string[] xData) {
+
+      Name = xData[0];
+      Surname = xData[1];
+      Phone = xData[2];
+      Description = xData.Length >= 4 ? xData[3] : string.Empty;
+      Notes = xData.Length >= 5 ? xData[4] : string.Empty;
+
+    }
+
     public override bool Equals(object? xObject) {
 
       return xObject is cContact cContact &&
@@ -64,7 +76,7 @@
 
     public override string ToString() {
 
-      return $"{Name}:{Surname}:{Phone}:{Description}:";
+      return $"<\n{Name}|{Surname}|{Phone}|{Description}|{Notes}\n>";
 
     }
 
