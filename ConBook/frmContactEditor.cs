@@ -38,16 +38,12 @@ namespace ConBook {
       int pValidation = ValidateTextBoxes();
 
       if (pValidation == 0) {
-
         this.Close();
-
       } else {
-
         string pCaption = "Błąd";
         string pMessage = "Nieprawdiłowe dane!\n\n";
 
         switch (pValidation) {
-
           case 1: { pMessage += "Wszystkie pola są wymagane."; break; }
           case 2: { pMessage += "Niedozwolone znaki w polu Telefon."; break; }
           case 3: { pMessage += "Pola Imię i Nazwisko nie mogą zawierać cyfr."; break; }
@@ -67,13 +63,13 @@ namespace ConBook {
         txtSurname.Text = xContact.Surname;
         txtPhone.Text = xContact.Phone;
         rtbDescription.Text = xContact.Description;
-        rtbNotes.Text = xContact.Notes;
+        //rtbNotes.Text = xContact.Notes;
       } else {
         txtName.Text = string.Empty;
         txtSurname.Text = string.Empty;
         txtPhone.Text = string.Empty;
         rtbDescription.Text = string.Empty;
-        rtbNotes.Text = string.Empty;
+        //rtbNotes.Text = string.Empty;
       }
 
     }
@@ -111,7 +107,7 @@ namespace ConBook {
       xContact.Surname = txtSurname.Text;
       xContact.Phone = txtPhone.Text;
       xContact.Description = rtbDescription.Text;
-      xContact.Notes = rtbNotes.Text;
+      //xContact.Notes = rtbNotes.Text;
 
       return true;
 

@@ -7,13 +7,13 @@ namespace ConBook {
     private string mSurname;
     private string mPhone;
     private string mDescription;
-    private string mNotes;
+    //private string mNotes;
 
     public string Name { get; set; }
     public string Surname { get; set; }
     public string Phone { get; set; }
     public string Description { get; set; }
-    public string Notes { get; set; }
+    //public string Notes { get; set; }
 
 
     public cContact() {
@@ -22,7 +22,7 @@ namespace ConBook {
       Surname = string.Empty;
       Phone = string.Empty;
       Description = string.Empty;
-      Notes = string.Empty;
+      //Notes = string.Empty;
 
     }
 
@@ -32,7 +32,7 @@ namespace ConBook {
       Surname = xSurname;
       Phone = xPhone;
       Description = xDescription;
-      Notes = xNotes;
+      //Notes = xNotes;
 
     }
 
@@ -42,7 +42,7 @@ namespace ConBook {
       Surname = xData[1];
       Phone = xData[2];
       Description = xData.Length >= 4 ? xData[3] : string.Empty;
-      Notes = xData.Length >= 5 ? xData[4] : string.Empty;
+      //Notes = xData.Length >= 5 ? xData[4] : string.Empty;
 
     }
 
@@ -76,7 +76,7 @@ namespace ConBook {
 
     public override string ToString() {
 
-      return $"<\n{Name}|{Surname}|{Phone}|{Description}|{Notes}\n>";
+      return $"<\n{Name}|{Surname}|{Phone}|{Description}\n>";
 
     }
 

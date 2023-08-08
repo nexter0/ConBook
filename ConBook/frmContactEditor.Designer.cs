@@ -34,8 +34,6 @@
       btnCancel = new Button();
       rtbDescription = new RichTextBox();
       lbDescription = new Label();
-      lbNotes = new Label();
-      rtbNotes = new RichTextBox();
       SuspendLayout();
       // 
       // lbName
@@ -88,7 +86,7 @@
       // 
       // btnSubmit
       // 
-      btnSubmit.Location = new Point(344, 312);
+      btnSubmit.Location = new Point(344, 200);
       btnSubmit.Name = "btnSubmit";
       btnSubmit.Size = new Size(75, 23);
       btnSubmit.TabIndex = 6;
@@ -98,7 +96,7 @@
       // 
       // btnCancel
       // 
-      btnCancel.Location = new Point(344, 341);
+      btnCancel.Location = new Point(344, 227);
       btnCancel.Name = "btnCancel";
       btnCancel.Size = new Size(75, 23);
       btnCancel.TabIndex = 7;
@@ -123,31 +121,12 @@
       lbDescription.TabIndex = 9;
       lbDescription.Text = "Opis";
       // 
-      // lbNotes
-      // 
-      lbNotes.AutoSize = true;
-      lbNotes.Location = new Point(11, 267);
-      lbNotes.Name = "lbNotes";
-      lbNotes.Size = new Size(46, 15);
-      lbNotes.TabIndex = 11;
-      lbNotes.Text = "Notatki";
-      // 
-      // rtbNotes
-      // 
-      rtbNotes.Location = new Point(12, 285);
-      rtbNotes.Name = "rtbNotes";
-      rtbNotes.Size = new Size(263, 71);
-      rtbNotes.TabIndex = 10;
-      rtbNotes.Text = "";
-      // 
       // frmContactEditor
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
       CancelButton = btnCancel;
-      ClientSize = new Size(431, 370);
-      Controls.Add(lbNotes);
-      Controls.Add(rtbNotes);
+      ClientSize = new Size(431, 258);
       Controls.Add(lbDescription);
       Controls.Add(rtbDescription);
       Controls.Add(btnCancel);
@@ -183,7 +162,5 @@
     private Button btnCancel;
     private RichTextBox rtbDescription;
     private Label lbDescription;
-    private Label lbNotes;
-    private RichTextBox rtbNotes;
   }
 }
