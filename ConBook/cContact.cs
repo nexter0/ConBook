@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace ConBook {
+﻿namespace ConBook {
   public class cContact : IComparable<cContact> {
 
     private string mName;
@@ -58,6 +56,7 @@ namespace ConBook {
     public class NamesComparer : IComparer<cContact> {
 
       public int Compare(cContact? xContact, cContact? xOther) {
+        //funkcja porównująca kontakty po imionach
 
         if (xContact == null || xOther == null) return 1;
         return xContact.Name.CompareTo(xOther.Name);
@@ -67,6 +66,7 @@ namespace ConBook {
     }
 
     public int CompareTo(cContact? xOther) {
+      // funkcja porównująca kontakty po nazwiskach (domyślne porównywanie)
 
       if (xOther == null) return 1;
 
@@ -76,11 +76,12 @@ namespace ConBook {
 
     public override string ToString() {
 
-      return $"<\n{Name}|{Surname}|{Phone}|{Description}\n>";
+      return $"{Name}, {Surname}, {Phone}, {Description}";
 
     }
 
     public bool IsEmpty() {
+      //funkcja sprawdzająca, czy kontakt jest pusty
 
       return (Name == string.Empty) && (Surname == string.Empty) && (Phone == string.Empty);
 

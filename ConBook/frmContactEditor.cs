@@ -6,6 +6,8 @@ namespace ConBook {
 
     bool mIsCanceled;             // Zmienna przechowująca info, czy formularz anulowany
 
+    private enum mValidationResult { OK, FIELD_EMPTY, PHONE_ERROR, DIGIT_ERROR, MARKERS_ERROR }
+
     public frmContactEditor() {
 
       InitializeComponent();
@@ -35,18 +37,19 @@ namespace ConBook {
 
     private void Submit() {
 
-      int pValidation = ValidateTextBoxes();
+      mValidationResult pValidation = ValidateTextBoxes();
 
-      if (pValidation == 0) {
+      if (pValidation == mValidationResult.OK) {
         this.Close();
       } else {
         string pCaption = "Błąd";
         string pMessage = "Nieprawdiłowe dane!\n\n";
 
         switch (pValidation) {
-          case 1: { pMessage += "Wszystkie pola są wymagane."; break; }
-          case 2: { pMessage += "Niedozwolone znaki w polu Telefon."; break; }
-          case 3: { pMessage += "Pola Imię i Nazwisko nie mogą zawierać cyfr."; break; }
+          case mValidationResult.FIELD_EMPTY: { pMessage += "Pola Imię, Nazwisko, Telefon są wymagane."; break; }
+          case mValidationResult.PHONE_ERROR: { pMessage += "Niedozwolone znaki w polu Telefon."; break; }
+          case mValidationResult.DIGIT_ERROR: { pMessage += "Pola Imię i Nazwisko nie mogą zawierać cyfr."; break; }
+          case mValidationResult.MARKERS_ERROR: { pMessage += "Niedozwolona kombinacja znaków ('~~', '~<', '>~')."; break; }
 
         }
 
@@ -109,25 +112,33 @@ namespace ConBook {
       xContact.Description = rtbDescription.Text;
       //xContact.Notes = rtbNotes.Text;
 
+      if (xContact.IsEmpty())
+        return false;
+
       return true;
 
     }
 
-    private int ValidateTextBoxes() {
+    private mValidationResult ValidateTextBoxes() {
       //funkcja weryfikująca poprawność wpisanych danych w pola tekstowe      
 
       string pPatternPhone = @"[^0-9\s-+]";
       string pPatternDigit = @"\d";
+      string pPatternMarkers = @"~~|~<|>~";
 
-      if (string.IsNullOrEmpty(txtName.Text)) { return 1; }
-      if (string.IsNullOrEmpty(txtSurname.Text)) { return 1; }
-      if (string.IsNullOrEmpty(txtPhone.Text)) { return 1; }
-      if (Regex.IsMatch(txtPhone.Text, pPatternPhone)) { return 2; };
-      if (Regex.IsMatch(txtName.Text, pPatternDigit)) { return 3; };
-      if (Regex.IsMatch(txtSurname.Text, pPatternDigit)) { return 3; };
+      if (string.IsNullOrEmpty(txtName.Text)) { return mValidationResult.FIELD_EMPTY; }
+      if (string.IsNullOrEmpty(txtSurname.Text)) { return mValidationResult.FIELD_EMPTY; }
+      if (string.IsNullOrEmpty(txtPhone.Text)) { return mValidationResult.FIELD_EMPTY; }
+      if (Regex.IsMatch(txtPhone.Text, pPatternPhone)) { return mValidationResult.PHONE_ERROR; };
+      if (Regex.IsMatch(txtName.Text, pPatternDigit)) { return mValidationResult.DIGIT_ERROR; };
+      if (Regex.IsMatch(txtSurname.Text, pPatternDigit)) { return mValidationResult.DIGIT_ERROR; };
+      if (Regex.IsMatch(txtName.Text, pPatternDigit)) { return mValidationResult.DIGIT_ERROR; };
+      if (Regex.IsMatch(txtName.Text, pPatternMarkers)) { return mValidationResult.MARKERS_ERROR; };
+      if (Regex.IsMatch(txtSurname.Text, pPatternMarkers)) { return mValidationResult.MARKERS_ERROR; };
+      if (Regex.IsMatch(rtbDescription.Text, pPatternMarkers)) { return mValidationResult.MARKERS_ERROR; };
 
-      return 0;
+      return mValidationResult.OK;
+
     }
-
   }
 }

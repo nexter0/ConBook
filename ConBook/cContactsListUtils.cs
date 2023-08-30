@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel;
-using System.Text.RegularExpressions;
-using System.Xml.Serialization;
 
 namespace ConBook {
-  internal class cContactListUtils {
+  internal class cContactsListUtils {
     //Klasa odpowiadająca za funkcje typu CRUD konktatków
 
     private BindingList<cContact> mContacts;                  // Lista przechowująca kontakty
@@ -12,13 +10,13 @@ namespace ConBook {
     public BindingList<cContact> Contacts { get { return mContacts; } set { mContacts = value; } }
     public cContactSerializer Serializer { get { return mSerializer; } }
 
-    public cContactListUtils() {
+    public cContactsListUtils() {
 
       mContacts = new BindingList<cContact>();
       mSerializer = new cContactSerializer();
 
     }
-
+    
     public void DeleteContact(int xIndex) {
       //funkcja usuwająca kontakt z listy
 

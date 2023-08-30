@@ -3,7 +3,7 @@
 namespace ConBook {
   public partial class MainForm : Form {
 
-    private cContactListUtils mContactListUtils;                 // Klasa mContactListUtils - do operacji na kontaktach
+    private cContactsListUtils cContactsListUtils;               // Klasa cContactsListUtils - do operacji na kontaktach
     private frmContactEditor mEditor;                            // Klasa frmContactEditor - okienko dodawania / edycji kontaktów
 
     private string? mCurrentFile;                                // Ścieżka pliku, w którym zapisana jest otwarta lista
@@ -18,9 +18,8 @@ namespace ConBook {
 
       mCurrentFile = null;
 
-      mContactListUtils = new cContactListUtils();
+      cContactsListUtils = new cContactsListUtils();
       mEditor = new frmContactEditor();
-
 
       mDefaultFileType = FileType.TXT;
 
@@ -74,37 +73,27 @@ namespace ConBook {
 
     private void btnAdd_Click(object sender, EventArgs e) {
 
-      cContact pContact = new cContact();
-
-      if (!mEditor.ShowMe(pContact))
-        return;
-
-      mContactListUtils.AddContact(pContact);
-
-      RefreshDataGridView();
-
-      AutoSave();
+      AddContact();
 
     }
 
     private void btnDelete_Click(object sender, EventArgs e) {
 
-      mContactListUtils.DeleteContact(dgvContacts.SelectedRows[0].Index);
-
-      RefreshDataGridView();
-
-      AutoSave();
+      DeleteContact();
 
     }
 
     private void btnEdit_Click(object sender, EventArgs e) {
 
-      cContact pContact = mContactListUtils.Contacts[dgvContacts.SelectedRows[0].Index];
+      EditContact();
 
-      if (mEditor.ShowMe(pContact))
-        RefreshDataGridView();
+    }
 
-      AutoSave();
+    private void dgvContacts_CellDoubleClick(object sender, DataGridViewCellEventArgs e) {
+
+      cContact pContact = cContactsListUtils.Contacts[dgvContacts.SelectedRows[0].Index];
+
+      EditContact();
 
     }
 
@@ -121,7 +110,7 @@ namespace ConBook {
     public void DeleteContact() {
       //funkcja obsługująca usuwanie kontaktu z listy
 
-      mContactListUtils.DeleteContact(dgvContacts.SelectedRows[0].Index);
+      cContactsListUtils.DeleteContact(dgvContacts.SelectedRows[0].Index);
 
       RefreshDataGridView();
 
@@ -136,7 +125,7 @@ namespace ConBook {
       if (!mEditor.ShowMe(pContact))
         return;
 
-      mContactListUtils.AddContact(pContact);
+      cContactsListUtils.AddContact(pContact);
 
       RefreshDataGridView();
 
@@ -147,7 +136,7 @@ namespace ConBook {
     public void EditContact() {
       //funkcja obsługująca usuwanie kontaktu z listy
 
-      cContact pContact = mContactListUtils.Contacts[dgvContacts.SelectedRows[0].Index];
+      cContact pContact = cContactsListUtils.Contacts[dgvContacts.SelectedRows[0].Index];
 
       if (mEditor.ShowMe(pContact))
         RefreshDataGridView();
@@ -159,7 +148,7 @@ namespace ConBook {
     public void RefreshDataGridView() {
       //funkcja odświeżająca DataGridView oraz przyciski Edytuj / Usuń
 
-      dgvContacts.DataSource = mContactListUtils.Contacts;
+      dgvContacts.DataSource = cContactsListUtils.Contacts;
 
 
       DataGridViewColumn pDgvColumnSurname = dgvContacts.Columns["Surname"];
@@ -173,7 +162,7 @@ namespace ConBook {
       pDgvColumnName.Width = 215;
       pDgvColumnPhone.Width = 147;
 
-      if (mContactListUtils.Contacts.Count == 0) {
+      if (cContactsListUtils.Contacts.Count == 0) {
         btnEdit.Enabled = false;
         btnDelete.Enabled = false;
       } else {
@@ -203,12 +192,12 @@ namespace ConBook {
       switch (pSaveQueryResult) {
         case DialogResult.Yes:
           SaveFile();
-          mContactListUtils.Contacts.Clear();
+          cContactsListUtils.Contacts.Clear();
           RefreshDataGridView();
           mCurrentFile = null;
           break;
         case DialogResult.No:
-          mContactListUtils.Contacts.Clear();
+          cContactsListUtils.Contacts.Clear();
           RefreshDataGridView();
           mCurrentFile = null;
           break;
@@ -244,9 +233,9 @@ namespace ConBook {
           try {
             if (pFile != string.Empty && pFile != null) {
               if (Path.GetExtension(pFile) == ".xml") {
-                mContactListUtils.Contacts = mContactListUtils.Serializer.LoadXmlFile(pFile);
+                cContactsListUtils.Contacts = cContactsListUtils.Serializer.LoadXmlFile(pFile);
               } else {
-                mContactListUtils.Contacts = mContactListUtils.Serializer.LoadTxtFile(pFile);
+                cContactsListUtils.Contacts = cContactsListUtils.Serializer.LoadTxtFile(pFile);
               }
               mCurrentFile = pFile;
             }
@@ -258,7 +247,7 @@ namespace ConBook {
         }
       } else if (pFile != string.Empty && pFile != null) {
         try {
-          mContactListUtils.Serializer.LoadXmlFile(pFile);
+          cContactsListUtils.Serializer.LoadXmlFile(pFile);
           mCurrentFile = pFile;
         } catch (Exception ex) {
           MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pFile}", "Błąd wczytywania",
@@ -282,11 +271,11 @@ namespace ConBook {
           string pFileExtension = Path.GetExtension(pFileName);
 
           if (pFileExtension == ".xml") {
-            mContactListUtils.Contacts.Clear();
-            mContactListUtils.Contacts = mContactListUtils.Serializer.LoadXmlFile(pFileName);
+            cContactsListUtils.Contacts.Clear();
+            cContactsListUtils.Contacts = cContactsListUtils.Serializer.LoadXmlFile(pFileName);
           } else if (pFileExtension == ".txt") {
-            mContactListUtils.Contacts.Clear();
-            mContactListUtils.Contacts = mContactListUtils.Serializer.LoadTxtFile(pFileName);
+            cContactsListUtils.Contacts.Clear();
+            cContactsListUtils.Contacts = cContactsListUtils.Serializer.LoadTxtFile(pFileName);
           } else {
             MessageBox.Show("Nieobsługiwany format pliku.", "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
@@ -304,7 +293,7 @@ namespace ConBook {
     private void SaveFileAs() {
       //funkcja obsługująca zapis do nowego pliku
 
-      if (mContactListUtils.Contacts.Count > 0) {
+      if (cContactsListUtils.Contacts.Count > 0) {
         try {
           SaveFileDialog SaveFileDialog = new SaveFileDialog() {
             Filter = "Plik tekstowy (*.txt)|*.txt|Dokument XML (*.xml)|*.xml",
@@ -315,9 +304,9 @@ namespace ConBook {
             string fileExtension = Path.GetExtension(fileName);
 
             if (fileExtension == ".xml") {
-              mContactListUtils.Serializer.SaveToNewXmlFile(fileName, mContactListUtils.Contacts, ref mCurrentFile);
+              cContactsListUtils.Serializer.SaveToNewXmlFile(fileName, cContactsListUtils.Contacts, ref mCurrentFile);
             } else if (fileExtension == ".txt") {
-              mContactListUtils.Serializer.SaveToNewTxtFile(fileName, mContactListUtils.Contacts, ref mCurrentFile);
+              cContactsListUtils.Serializer.SaveToNewTxtFile(fileName, cContactsListUtils.Contacts, ref mCurrentFile);
             } else {
               MessageBox.Show("Nieobsługiwany format pliku.", "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -346,12 +335,12 @@ namespace ConBook {
       //funkcja obsługująca zapis do istniejącego pliku
 
       try {
-        if (mContactListUtils.Contacts.Count > 0) {
+        if (cContactsListUtils.Contacts.Count > 0) {
           if (mCurrentFile != null) {
             if (Path.GetExtension(mCurrentFile) == ".xml") {
-              mContactListUtils.Serializer.SaveToExistingXmlFile(mCurrentFile, mContactListUtils.Contacts);
+              cContactsListUtils.Serializer.SaveToExistingXmlFile(mCurrentFile, cContactsListUtils.Contacts);
             } else {
-              mContactListUtils.Serializer.SaveToExistingTxtFile(mCurrentFile, mContactListUtils.Contacts);
+              cContactsListUtils.Serializer.SaveToExistingTxtFile(mCurrentFile, cContactsListUtils.Contacts);
             }
           } else {
             SaveFileAs();
@@ -383,7 +372,7 @@ namespace ConBook {
       if (mCurrentFile == null) {
         string pExt = mDefaultFileType.ToString().ToLower();
 
-        mContactListUtils.Serializer.SaveToNewTxtFile("conctact_list." + pExt, mContactListUtils.Contacts);
+        cContactsListUtils.Serializer.SaveToNewTxtFile("conctact_list." + pExt, cContactsListUtils.Contacts);
         mCurrentFile = "conctact_list." + pExt;
       } else {
         SaveFile();
@@ -395,19 +384,19 @@ namespace ConBook {
       //funkcja sortująca listę kontaktów
 
       if (xSortType == SortType.byName) {
-        if (mContactListUtils.Contacts.Count > 0) {
-          List<cContact> pTempContactList = new List<cContact>(mContactListUtils.Contacts);
+        if (cContactsListUtils.Contacts.Count > 0) {
+          List<cContact> pTempContactList = new List<cContact>(cContactsListUtils.Contacts);
 
           pTempContactList.Sort(new cContact.NamesComparer());
-          mContactListUtils.Contacts = new BindingList<cContact>(pTempContactList);
+          cContactsListUtils.Contacts = new BindingList<cContact>(pTempContactList);
 
           RefreshDataGridView();
         }
       } else if (xSortType == SortType.bySurname) {
-        if (mContactListUtils.Contacts.Count > 0) {
-          List<cContact> pTempContactList = new List<cContact>(mContactListUtils.Contacts);
+        if (cContactsListUtils.Contacts.Count > 0) {
+          List<cContact> pTempContactList = new List<cContact>(cContactsListUtils.Contacts);
           pTempContactList.Sort();
-          mContactListUtils.Contacts = new BindingList<cContact>(pTempContactList);
+          cContactsListUtils.Contacts = new BindingList<cContact>(pTempContactList);
 
           RefreshDataGridView();
         }
