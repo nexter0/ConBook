@@ -382,6 +382,7 @@ namespace ConBook {
 
     private void SortList(SortType xSortType) {
       //funkcja sortująca listę kontaktów
+      //xSortType - typ sortowania (byName, bySurname)
 
       if (xSortType == SortType.byName) {
         if (cContactsListUtils.Contacts.Count > 0) {

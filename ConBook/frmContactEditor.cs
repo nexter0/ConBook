@@ -49,7 +49,7 @@ namespace ConBook {
           case mValidationResult.FIELD_EMPTY: { pMessage += "Pola Imię, Nazwisko, Telefon są wymagane."; break; }
           case mValidationResult.PHONE_ERROR: { pMessage += "Niedozwolone znaki w polu Telefon."; break; }
           case mValidationResult.DIGIT_ERROR: { pMessage += "Pola Imię i Nazwisko nie mogą zawierać cyfr."; break; }
-          case mValidationResult.MARKERS_ERROR: { pMessage += "Niedozwolona kombinacja znaków ('~~', '~<', '>~')."; break; }
+          case mValidationResult.MARKERS_ERROR: { pMessage += "Niedozwolona kombinacja znaków ('::', '$<', '>$')."; break; }
 
         }
 
@@ -60,6 +60,7 @@ namespace ConBook {
     }
 
     private void InitializeTextBoxes(cContact xContact) {
+      //funkcja czyszcząca lub uzupełniająca pola tekstowa
 
       if (xContact != null) {
         txtName.Text = xContact.Name;
@@ -78,6 +79,7 @@ namespace ConBook {
     }
 
     private void CustomizeWidow(bool xIsEmptyContact) {
+      //funkcja ustawiająca właściwości okna w zależności od trybu edycji / dodawania
 
       if (!xIsEmptyContact) {
 
@@ -96,6 +98,7 @@ namespace ConBook {
     }
 
     internal bool ShowMe(cContact xContact) {
+      //funkcja wywołująca formularz frmContactEditor
 
       mIsCanceled = false;
 
@@ -124,7 +127,7 @@ namespace ConBook {
 
       string pPatternPhone = @"[^0-9\s-+]";
       string pPatternDigit = @"\d";
-      string pPatternMarkers = @"~~|~<|>~";
+      string pPatternMarkers = @"(::|\$<|\>\$)";
 
       if (string.IsNullOrEmpty(txtName.Text)) { return mValidationResult.FIELD_EMPTY; }
       if (string.IsNullOrEmpty(txtSurname.Text)) { return mValidationResult.FIELD_EMPTY; }
