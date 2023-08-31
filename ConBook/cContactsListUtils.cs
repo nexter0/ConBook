@@ -64,5 +64,5 @@ namespace ConBook {
 
     }
 
-  }23456
+  }
 }

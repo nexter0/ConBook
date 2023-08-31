@@ -34,6 +34,8 @@
       btnCancel = new Button();
       rtbDescription = new RichTextBox();
       lbDescription = new Label();
+      rtbNotes = new RichTextBox();
+      label1 = new Label();
       SuspendLayout();
       // 
       // lbName
@@ -121,12 +123,31 @@
       lbDescription.TabIndex = 9;
       lbDescription.Text = "Opis";
       // 
+      // rtbNotes
+      // 
+      rtbNotes.Location = new Point(12, 270);
+      rtbNotes.Name = "rtbNotes";
+      rtbNotes.Size = new Size(263, 88);
+      rtbNotes.TabIndex = 10;
+      rtbNotes.Text = "";
+      // 
+      // label1
+      // 
+      label1.AutoSize = true;
+      label1.Location = new Point(12, 253);
+      label1.Name = "label1";
+      label1.Size = new Size(46, 15);
+      label1.TabIndex = 11;
+      label1.Text = "Notatki";
+      // 
       // frmContactEditor
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
       CancelButton = btnCancel;
-      ClientSize = new Size(431, 258);
+      ClientSize = new Size(434, 394);
+      Controls.Add(label1);
+      Controls.Add(rtbNotes);
       Controls.Add(lbDescription);
       Controls.Add(rtbDescription);
       Controls.Add(btnCancel);
@@ -162,5 +183,7 @@
     private Button btnCancel;
     private RichTextBox rtbDescription;
     private Label lbDescription;
+    private RichTextBox rtbNotes;
+    private Label label1;
   }
 }

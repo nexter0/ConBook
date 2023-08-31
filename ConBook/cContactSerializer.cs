@@ -84,6 +84,7 @@ namespace ConBook {
         $"{BEGIN_TAG}NAME{END_TAG}{xContact.Name}{SEPARATOR}" +
         $"{BEGIN_TAG}SURNAME{END_TAG}{xContact.Surname}{SEPARATOR}" +
         $"{BEGIN_TAG}PHONE{END_TAG}{xContact.Phone}{SEPARATOR}" +
+        $"{BEGIN_TAG}NOTES{END_TAG}{xContact.Notes}{SEPARATOR}" +
         $"{BEGIN_TAG}DESCRIPTION{END_TAG}{xContact.Description}\n" +
         $"{END_MARKER}";
 
@@ -96,10 +97,12 @@ namespace ConBook {
       cContact pContact = new cContact();
 
       foreach (string xData in xContactData) {
-        if (xData.Contains($"{BEGIN_TAG}NAME{END_TAG}")) pContact.Name = RemoveTags(xData);
-        if (xData.Contains($"{BEGIN_TAG}SURNAME{END_TAG}")) pContact.Surname = RemoveTags(xData);
-        if (xData.Contains($"{BEGIN_TAG}PHONE{END_TAG}")) pContact.Phone = RemoveTags(xData);
-        if (xData.Contains($"{BEGIN_TAG}DESCRIPTION{END_TAG}")) pContact.Description = RemoveTags(xData);
+        if (xData.Contains($"{BEGIN_TAG}NAME{END_TAG}")) { pContact.Name = RemoveTags(xData); continue; }
+        if (xData.Contains($"{BEGIN_TAG}SURNAME{END_TAG}")) { pContact.Surname = RemoveTags(xData); continue; }
+        if (xData.Contains($"{BEGIN_TAG}PHONE{END_TAG}")) { pContact.Phone = RemoveTags(xData); continue; }
+        if (xData.Contains($"{BEGIN_TAG}DESCRIPTION{END_TAG}")) { pContact.Description = RemoveTags(xData); continue; }
+        if (xData.Contains($"{BEGIN_TAG}NOTES{END_TAG}")) { pContact.Notes = RemoveTags(xData); continue; }
+        //if (xData.Contains($"{BEGIN_TAG}ADDRESS{END_TAG}")) { pContact.Address = RemoveTags(xData); continue; }
       }
 
       return pContact;

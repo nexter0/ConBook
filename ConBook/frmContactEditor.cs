@@ -37,6 +37,7 @@ namespace ConBook {
 
     private void Submit() {
 
+
       mValidationResult pValidation = ValidateTextBoxes();
 
       if (pValidation == mValidationResult.OK) {
@@ -67,13 +68,15 @@ namespace ConBook {
         txtSurname.Text = xContact.Surname;
         txtPhone.Text = xContact.Phone;
         rtbDescription.Text = xContact.Description;
-        //rtbNotes.Text = xContact.Notes;
+        rtbNotes.Text = xContact.Notes;
+        //rtbAddress.Text = xContact.Address;
       } else {
         txtName.Text = string.Empty;
         txtSurname.Text = string.Empty;
         txtPhone.Text = string.Empty;
         rtbDescription.Text = string.Empty;
-        //rtbNotes.Text = string.Empty;
+        rtbNotes.Text = string.Empty;
+        //rtbAddress.Text = string.Empty;
       }
 
     }
@@ -113,7 +116,8 @@ namespace ConBook {
       xContact.Surname = txtSurname.Text;
       xContact.Phone = txtPhone.Text;
       xContact.Description = rtbDescription.Text;
-      //xContact.Notes = rtbNotes.Text;
+      xContact.Notes = rtbNotes.Text;
+      //xContact.Address = rtbAddress.Text;
 
       if (xContact.IsEmpty())
         return false;

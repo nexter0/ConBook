@@ -8,7 +8,11 @@ namespace ConBook {
 
     private string? mCurrentFile;                                // Ścieżka pliku, w którym zapisana jest otwarta lista
     private FileType mDefaultFileType;                           // Domyślny typ pliku autozapisu
-    private enum SortType { byName = 0, bySurname = 1 }          // Możliwe tryby sortowania listy kontaktów
+    
+    private enum SortTypeEnum {                                  // numerator sposobu sortowania listy kontaktów
+      ByName = 0,
+      bySurname = 1
+    }          
 
 
 
@@ -99,7 +103,7 @@ namespace ConBook {
 
     private void dgvContacts_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e) {
 
-      SortList((SortType)e.ColumnIndex);
+      SortList((SortTypeEnum)e.ColumnIndex);
 
     }
 
@@ -134,7 +138,7 @@ namespace ConBook {
     }
 
     public void EditContact() {
-      //funkcja obsługująca usuwanie kontaktu z listy
+      //funkcja obsługująca edycję kontaktu
 
       cContact pContact = cContactsListUtils.Contacts[dgvContacts.SelectedRows[0].Index];
 
@@ -380,11 +384,11 @@ namespace ConBook {
 
     }
 
-    private void SortList(SortType xSortType) {
+    private void SortList(SortTypeEnum xCntSortType) {
       //funkcja sortująca listę kontaktów
       //xSortType - typ sortowania (byName, bySurname)
 
-      if (xSortType == SortType.byName) {
+      if (xCntSortType == SortTypeEnum.ByName) {
         if (cContactsListUtils.Contacts.Count > 0) {
           List<cContact> pTempContactList = new List<cContact>(cContactsListUtils.Contacts);
 
@@ -393,7 +397,7 @@ namespace ConBook {
 
           RefreshDataGridView();
         }
-      } else if (xSortType == SortType.bySurname) {
+      } else if (xCntSortType == SortTypeEnum.bySurname) {
         if (cContactsListUtils.Contacts.Count > 0) {
           List<cContact> pTempContactList = new List<cContact>(cContactsListUtils.Contacts);
           pTempContactList.Sort();

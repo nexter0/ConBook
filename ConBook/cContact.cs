@@ -1,17 +1,21 @@
-﻿namespace ConBook {
+﻿using System.Net.Sockets;
+
+namespace ConBook {
   public class cContact : IComparable<cContact> {
 
     private string mName;
     private string mSurname;
     private string mPhone;
     private string mDescription;
-    //private string mNotes;
+    private string mNotes;
+    //private string mAddress;
 
     public string Name { get; set; }
     public string Surname { get; set; }
     public string Phone { get; set; }
     public string Description { get; set; }
-    //public string Notes { get; set; }
+    public string Notes { get; set; }
+    //public string Address { get; set; }
 
 
     public cContact() {
@@ -20,7 +24,8 @@
       Surname = string.Empty;
       Phone = string.Empty;
       Description = string.Empty;
-      //Notes = string.Empty;
+      Notes = string.Empty;
+      //Address = string.Empty;
       
     }
 
@@ -30,7 +35,8 @@
       Surname = xSurname;
       Phone = xPhone;
       Description = xDescription;
-      //Notes = xNotes;
+      Notes = xNotes;
+      //Address = xAddress;
 
     }
 
