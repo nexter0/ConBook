@@ -73,6 +73,16 @@ namespace ConBook.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap contactsModuleIcon {
+            get {
+                object obj = ResourceManager.GetObject("contactsModuleIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap edit_file {
             get {
                 object obj = ResourceManager.GetObject("edit_file", resourceCulture);
@@ -107,6 +117,16 @@ namespace ConBook.Properties {
             get {
                 object obj = ResourceManager.GetObject("plusIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap productsModuleIcon {
+            get {
+                object obj = ResourceManager.GetObject("productsModuleIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

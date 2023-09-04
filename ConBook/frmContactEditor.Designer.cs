@@ -88,7 +88,7 @@
       // 
       // btnSubmit
       // 
-      btnSubmit.Location = new Point(344, 200);
+      btnSubmit.Location = new Point(330, 306);
       btnSubmit.Name = "btnSubmit";
       btnSubmit.Size = new Size(75, 23);
       btnSubmit.TabIndex = 6;
@@ -98,7 +98,7 @@
       // 
       // btnCancel
       // 
-      btnCancel.Location = new Point(344, 227);
+      btnCancel.Location = new Point(330, 335);
       btnCancel.Name = "btnCancel";
       btnCancel.Size = new Size(75, 23);
       btnCancel.TabIndex = 7;
@@ -145,7 +145,7 @@
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
       CancelButton = btnCancel;
-      ClientSize = new Size(434, 394);
+      ClientSize = new Size(412, 368);
       Controls.Add(label1);
       Controls.Add(rtbNotes);
       Controls.Add(lbDescription);

@@ -2,7 +2,7 @@
 
 namespace ConBook {
   internal class cContactsListUtils {
-    //Klasa odpowiadająca za funkcje typu CRUD konktatków
+    //Klasa odpowiadająca za obsługę listy konktatków
 
     private BindingList<cContact> mContacts;                  // Lista przechowująca kontakty
     private cContactSerializer mSerializer;                   // Klasa mContactSerializer - do zapisu i odczytu plików

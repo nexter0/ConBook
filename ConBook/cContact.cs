@@ -1,6 +1,4 @@
-﻿using System.Net.Sockets;
-
-namespace ConBook {
+﻿namespace ConBook {
   public class cContact : IComparable<cContact> {
 
     private string mName;
@@ -26,7 +24,7 @@ namespace ConBook {
       Description = string.Empty;
       Notes = string.Empty;
       //Address = string.Empty;
-      
+
     }
 
     public cContact(string xName, string xSurname, string xPhone, string xDescription = "", string xNotes = "") {
