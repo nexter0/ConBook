@@ -1,5 +1,5 @@
 ﻿namespace ConBook {
-  partial class frmProductsEditor {
+  partial class frmProductEditor {
     /// <summary>
     /// Required designer variable.
     /// </summary>
@@ -99,8 +99,9 @@
       btnCancel.TabIndex = 7;
       btnCancel.Text = "Anuluj";
       btnCancel.UseVisualStyleBackColor = true;
+      btnCancel.Click += btnCancel_Click;
       // 
-      // frmProductsEditor
+      // frmProductEditor
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
@@ -113,7 +114,9 @@
       Controls.Add(txtPrice);
       Controls.Add(txtSymbol);
       Controls.Add(txtName);
-      Name = "frmProductsEditor";
+      FormBorderStyle = FormBorderStyle.FixedSingle;
+      Name = "frmProductEditor";
+      StartPosition = FormStartPosition.CenterParent;
       Text = "frmProductEditor";
       ResumeLayout(false);
       PerformLayout();

@@ -1,3 +1,3 @@
 ﻿namespace ConBook {
-  public enum FileType { TXT, XML }
+  public enum FileTypesEnum { TXT, XML }
 }

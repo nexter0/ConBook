@@ -24,7 +24,6 @@
     /// </summary>
     private void InitializeComponent() {
       DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
       MenuStrip = new MenuStrip();
       tsmiPlik = new ToolStripMenuItem();
       tsmiNew = new ToolStripMenuItem();
@@ -163,7 +162,7 @@
       btnEdit.UseVisualStyleBackColor = true;
       btnEdit.Click += btnEdit_Click;
       // 
-      // MainForm
+      // frmContactsModule
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
@@ -174,12 +173,11 @@
       Controls.Add(dgvContacts);
       Controls.Add(MenuStrip);
       FormBorderStyle = FormBorderStyle.FixedSingle;
-      Icon = (Icon)resources.GetObject("$this.Icon");
       MainMenuStrip = MenuStrip;
       MaximizeBox = false;
       MinimizeBox = false;
-      Name = "MainForm";
-      StartPosition = FormStartPosition.CenterScreen;
+      Name = "frmContactsModule";
+      StartPosition = FormStartPosition.CenterParent;
       Text = "ConBook - Kontakty";
       FormClosed += frmContactsModule_FormClosed;
       Load += frmContactsModule_Load;

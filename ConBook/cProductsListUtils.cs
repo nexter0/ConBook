@@ -4,16 +4,21 @@ namespace ConBook {
   internal class cProductListUtils {
     //klasa odpowiadająca za obsługę listy produktów
 
-    private BindingList<cProduct> mProducts;                   // lista produktów
-    private frmProductsEditor mEditor;                  // formularz dodawania / edycji produktów
+    private BindingList<cProduct> mProducts;            // lista produktów
+    private frmProductEditor mEditor;                   // formularz dodawania / edycji produktów
+    private cProductSerializer mSerializer;             // klasa do zapisu i wczytywania listy produktów
 
-    public  BindingList<cProduct> Products { get; set; }
+
+
+    public BindingList<cProduct> Products { get; set; }
+    public cProductSerializer Serializer { get; set; }
 
     public cProductListUtils() {
 
-       Products = new BindingList<cProduct>();
+      Products = new BindingList<cProduct>();
+      Serializer = new cProductSerializer();
 
-       mEditor = new frmProductsEditor();
+      mEditor = new frmProductEditor();
 
     }
 

@@ -25,7 +25,7 @@ namespace ConBook {
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
-      DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
       dgvProducts = new DataGridView();
       btnEdit = new Button();
       btnDelete = new Button();
@@ -40,14 +40,14 @@ namespace ConBook {
       dgvProducts.AllowUserToResizeColumns = false;
       dgvProducts.AllowUserToResizeRows = false;
       dgvProducts.BackgroundColor = Color.WhiteSmoke;
-      dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewCellStyle2.BackColor = SystemColors.Control;
-      dataGridViewCellStyle2.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-      dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-      dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-      dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-      dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-      dgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+      dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle1.BackColor = SystemColors.Control;
+      dataGridViewCellStyle1.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+      dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+      dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+      dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+      dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+      dgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
       dgvProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       dgvProducts.Location = new Point(12, 62);
       dgvProducts.Name = "dgvProducts";
@@ -106,8 +106,12 @@ namespace ConBook {
       Controls.Add(btnDelete);
       Controls.Add(btnAdd);
       Controls.Add(dgvProducts);
+      FormBorderStyle = FormBorderStyle.FixedSingle;
       Name = "frmProductsModule";
+      StartPosition = FormStartPosition.CenterParent;
       Text = "ConBook - Towary";
+      FormClosing += frmProductsModule_FormClosing;
+      Load += frmProductsModule_Load;
       ((System.ComponentModel.ISupportInitialize)dgvProducts).EndInit();
       ResumeLayout(false);
     }

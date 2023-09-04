@@ -83,7 +83,7 @@ namespace ConBook {
 
     }
 
-    public BindingList<cContact> LoadTxtFile(string xFileName) {
+    public new BindingList<cContact> LoadTxtFile(string xFileName) {
 
       return GetContactListFromFormatedData(xFileName);
 

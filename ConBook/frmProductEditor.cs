@@ -2,17 +2,25 @@
 using System.Text.RegularExpressions;
 
 namespace ConBook {
-  public partial class frmProductsEditor : Form {
+  public partial class frmProductEditor : Form {
 
     bool mIsCanceled;
     private enum mValidationResultEnum { OK, FIELD_EMPTY, VALUE_ERROR, MARKERS_ERROR }
 
 
-    public frmProductsEditor() {
+    public frmProductEditor() {
       InitializeComponent();
     }
     private void btnSubmit_Click(object sender, EventArgs e) {
+
       Submit();
+
+    }
+
+    private void btnCancel_Click(object sender, EventArgs e) {
+
+      mIsCanceled = true;
+
     }
 
     internal bool ShowMe(cProduct xProduct) {
@@ -28,7 +36,11 @@ namespace ConBook {
 
       xProduct.Name = txtName.Text;
       xProduct.Symbol = txtSymbol.Text;
-      xProduct.Price = double.Parse(txtPrice.Text);
+      try {
+        xProduct.Price = Math.Truncate(100 * double.Parse(txtPrice.Text)) / 100;
+      } catch (Exception ex) {
+        MessageBox.Show($"Podczas edycji kontaktu wystąpił błąd:\n{ex.Message}", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
       if (xProduct.IsEmpty())
         return false;
 
@@ -74,17 +86,23 @@ namespace ConBook {
       //funkcja weryfikująca poprawność wpisanych danych w pola tekstowe      
 
       string pPatternMarkers = @"(::|\$<|\>\$)";
-      string pPatternPrice = @"[\d,.]+";
+      string pPatternPrice = @"[^0-9,.]+";
 
       if (txtPrice.Text.Contains('.')) {
         string pPriceFormatted = txtPrice.Text.Replace('.', ',');
         txtPrice.Text = pPriceFormatted;
       }
-        
+
       if (string.IsNullOrEmpty(txtName.Text)) { return mValidationResultEnum.FIELD_EMPTY; }
       if (string.IsNullOrEmpty(txtSymbol.Text)) { return mValidationResultEnum.FIELD_EMPTY; }
-      if (!Regex.IsMatch(txtPrice.Text, pPatternPrice)) { return mValidationResultEnum.VALUE_ERROR; }
-      if (double.Parse(txtPrice.Text) < 0) { return mValidationResultEnum.VALUE_ERROR; }
+      if (Regex.IsMatch(txtPrice.Text, pPatternPrice)) { return mValidationResultEnum.VALUE_ERROR; }
+      try {
+        if (double.Parse(txtPrice.Text) < 0) { return mValidationResultEnum.VALUE_ERROR; }
+      } catch (Exception ex) {
+        return mValidationResultEnum.VALUE_ERROR;
+      }
+
+
       if (Regex.IsMatch(txtName.Text, pPatternMarkers)) { return mValidationResultEnum.MARKERS_ERROR; };
       if (Regex.IsMatch(txtSymbol.Text, pPatternMarkers)) { return mValidationResultEnum.MARKERS_ERROR; };
       if (Regex.IsMatch(txtPrice.Text, pPatternMarkers)) { return mValidationResultEnum.MARKERS_ERROR; };
@@ -115,7 +133,5 @@ namespace ConBook {
       }
 
     }
-
-
   }
 }

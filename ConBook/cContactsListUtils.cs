@@ -5,7 +5,7 @@ namespace ConBook {
     //Klasa odpowiadająca za obsługę listy konktatków
 
     private BindingList<cContact> mContacts;                  // Lista przechowująca kontakty
-    private cContactSerializer mSerializer;                   // Klasa mContactSerializer - do zapisu i odczytu plików
+    private cContactSerializer mSerializer;                   // klasa do zapisu i wczytywania listy kontaktów
 
     public BindingList<cContact> Contacts { get { return mContacts; } set { mContacts = value; } }
     public cContactSerializer Serializer { get { return mSerializer; } }
