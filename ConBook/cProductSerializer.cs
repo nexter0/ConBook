@@ -3,7 +3,7 @@
 namespace ConBook {
   internal class cProductSerializer : cSerializer {
 
-    private const string DEFAULT_SAVE_FILE_PATH = "product_list.txt";
+    public const string DEFAULT_SAVE_FILE_PATH = "product_list.txt";
 
     private static string GetFormattedContactString(cProduct xProduct) {
       //funkcja zwracająca produkt w sformatowanej postaci (gotowej do zapisu do pliku)
@@ -83,7 +83,7 @@ namespace ConBook {
 
     }
 
-    public static void SaveToExistingTxtFile(string xFileName = DEFAULT_SAVE_FILE_PATH, BindingList<cProduct> xProductsList) {
+    public static void SaveToExistingTxtFile(string xFileName, BindingList<cProduct> xProductsList) {
       //funkcja zapisująca listę produktów do istniejącego pliku
       //xFileName - nazwa pliku do wczytania
       //xProductsList - lista produktów do zapisania

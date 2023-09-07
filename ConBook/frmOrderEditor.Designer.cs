@@ -51,6 +51,7 @@
       // 
       // clbProductsSelection
       // 
+      clbProductsSelection.CheckOnClick = true;
       clbProductsSelection.FormattingEnabled = true;
       clbProductsSelection.Location = new Point(11, 65);
       clbProductsSelection.Name = "clbProductsSelection";
@@ -105,6 +106,7 @@
       // 
       // clbContactsSelection
       // 
+      clbContactsSelection.CheckOnClick = true;
       clbContactsSelection.FormattingEnabled = true;
       clbContactsSelection.Location = new Point(379, 65);
       clbContactsSelection.Name = "clbContactsSelection";

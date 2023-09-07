@@ -3,7 +3,7 @@
 namespace ConBook {
   internal class cContactSerializer : cSerializer {
 
-    private const string DEFAULT_SAVE_FILE_PATH = "contact_list.txt";
+    public const string DEFAULT_SAVE_FILE_PATH = "contact_list.txt";
 
     private static string GetFormattedContactString(cContact xContact) {
       //funkcja zwracająca kontakt w sformatowanej postaci (gotowej do zapisu do pliku)
@@ -65,7 +65,7 @@ namespace ConBook {
       return pFormattedDataList;
     }
 
-    public static void SaveToNewTxtFile(string xFileName = DEFAULT_SAVE_FILE_PATH, BindingList<cContact> xContactsList) {
+    public static void SaveToNewTxtFile(string xFileName, BindingList<cContact> xContactsList) {
       //funkcja zapisująca listę kontaktów do nowego pliku
       //xFileName - nazwa pliku do wczytania
       //xContactsList - lista kontaktów do zapisania

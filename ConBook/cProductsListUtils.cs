@@ -5,12 +5,16 @@ namespace ConBook {
     //klasa odpowiadająca za obsługę listy produktów
 
     private BindingList<cProduct> mProductsList;                    // lista produktów
+    private int mLastProductIndex;
 
     public BindingList<cProduct> ProductsList { get; set; }
+    public int LastProductIndex { get { return mLastProductIndex; } set { mLastProductIndex = value; } }
 
     public cProductListUtils() {
 
       ProductsList = new BindingList<cProduct>();
+
+      mLastProductIndex = cIndexTracker.GetIndexValue("Product");
 
     }
 
@@ -23,7 +27,12 @@ namespace ConBook {
       if (!pProductEditor.ShowMe(pProduct, ProductsList)) {
         return;
       }
-      pProduct.Index = GetNewIndex();
+
+      int pNewProductIndex = LastProductIndex + 1;
+      LastProductIndex = pNewProductIndex;
+      cIndexTracker.SetIndexValue("Product", pNewProductIndex);
+
+      pProduct.Index = pNewProductIndex;
       ProductsList.Add(pProduct);
 
     }

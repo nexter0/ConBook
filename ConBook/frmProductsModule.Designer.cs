@@ -30,14 +30,8 @@ namespace ConBook {
       btnEdit = new Button();
       btnDelete = new Button();
       btnAdd = new Button();
-      MenuStrip = new MenuStrip();
-      tsmiPlik = new ToolStripMenuItem();
-      tsmiNew = new ToolStripMenuItem();
-      tsmiOpen = new ToolStripMenuItem();
-      tsmiSave = new ToolStripMenuItem();
-      tsmiSaveAs = new ToolStripMenuItem();
+      label1 = new Label();
       ((System.ComponentModel.ISupportInitialize)dgvProducts).BeginInit();
-      MenuStrip.SuspendLayout();
       SuspendLayout();
       // 
       // dgvProducts
@@ -56,20 +50,20 @@ namespace ConBook {
       dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
       dgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
       dgvProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      dgvProducts.Location = new Point(12, 62);
+      dgvProducts.Location = new Point(12, 49);
       dgvProducts.Name = "dgvProducts";
       dgvProducts.ReadOnly = true;
       dgvProducts.RowHeadersVisible = false;
       dgvProducts.RowTemplate.Height = 25;
       dgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      dgvProducts.Size = new Size(826, 376);
+      dgvProducts.Size = new Size(826, 389);
       dgvProducts.TabIndex = 9;
       // 
       // btnEdit
       // 
       btnEdit.Image = Properties.Resources.edit_file;
       btnEdit.ImageAlign = ContentAlignment.MiddleLeft;
-      btnEdit.Location = new Point(672, 27);
+      btnEdit.Location = new Point(672, 12);
       btnEdit.Name = "btnEdit";
       btnEdit.Size = new Size(80, 29);
       btnEdit.TabIndex = 15;
@@ -82,7 +76,7 @@ namespace ConBook {
       // 
       btnDelete.Image = Properties.Resources.bin;
       btnDelete.ImageAlign = ContentAlignment.MiddleLeft;
-      btnDelete.Location = new Point(758, 27);
+      btnDelete.Location = new Point(758, 12);
       btnDelete.Name = "btnDelete";
       btnDelete.Size = new Size(80, 29);
       btnDelete.TabIndex = 14;
@@ -95,7 +89,7 @@ namespace ConBook {
       // 
       btnAdd.Image = Properties.Resources.plus;
       btnAdd.ImageAlign = ContentAlignment.MiddleLeft;
-      btnAdd.Location = new Point(586, 27);
+      btnAdd.Location = new Point(586, 12);
       btnAdd.Name = "btnAdd";
       btnAdd.Size = new Size(80, 29);
       btnAdd.TabIndex = 13;
@@ -104,56 +98,22 @@ namespace ConBook {
       btnAdd.UseVisualStyleBackColor = true;
       btnAdd.Click += btnAdd_Click;
       // 
-      // MenuStrip
+      // label1
       // 
-      MenuStrip.Items.AddRange(new ToolStripItem[] { tsmiPlik });
-      MenuStrip.Location = new Point(0, 0);
-      MenuStrip.Name = "MenuStrip";
-      MenuStrip.Size = new Size(850, 24);
-      MenuStrip.TabIndex = 16;
-      MenuStrip.Text = "msProducts";
-      // 
-      // tsmiPlik
-      // 
-      tsmiPlik.DropDownItems.AddRange(new ToolStripItem[] { tsmiNew, tsmiOpen, tsmiSave, tsmiSaveAs });
-      tsmiPlik.Name = "tsmiPlik";
-      tsmiPlik.Size = new Size(38, 20);
-      tsmiPlik.Text = "Plik";
-      // 
-      // tsmiNew
-      // 
-      tsmiNew.Name = "tsmiNew";
-      tsmiNew.Size = new Size(141, 22);
-      tsmiNew.Text = "Nowy";
-      tsmiNew.Click += tsmiNew_Click;
-      // 
-      // tsmiOpen
-      // 
-      tsmiOpen.Name = "tsmiOpen";
-      tsmiOpen.Size = new Size(141, 22);
-      tsmiOpen.Text = "Otwórz...";
-      tsmiOpen.Click += tsmiOpen_Click;
-      // 
-      // tsmiSave
-      // 
-      tsmiSave.Name = "tsmiSave";
-      tsmiSave.Size = new Size(141, 22);
-      tsmiSave.Text = "Zapisz";
-      tsmiSave.Click += tsmiSave_Click;
-      // 
-      // tsmiSaveAs
-      // 
-      tsmiSaveAs.Name = "tsmiSaveAs";
-      tsmiSaveAs.Size = new Size(141, 22);
-      tsmiSaveAs.Text = "Zapisz jako...";
-      tsmiSaveAs.Click += tsmiSaveAs_Click;
+      label1.AutoSize = true;
+      label1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+      label1.Location = new Point(12, 27);
+      label1.Name = "label1";
+      label1.Size = new Size(108, 19);
+      label1.TabIndex = 17;
+      label1.Text = "Lista produktów";
       // 
       // frmProductsModule
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
       ClientSize = new Size(850, 450);
-      Controls.Add(MenuStrip);
+      Controls.Add(label1);
       Controls.Add(btnEdit);
       Controls.Add(btnDelete);
       Controls.Add(btnAdd);
@@ -161,12 +121,10 @@ namespace ConBook {
       FormBorderStyle = FormBorderStyle.FixedSingle;
       Name = "frmProductsModule";
       StartPosition = FormStartPosition.CenterParent;
-      Text = "ConBook - Towary";
+      Text = "ConBook - Produkty";
       FormClosing += frmProductsModule_FormClosing;
       Load += frmProductsModule_Load;
       ((System.ComponentModel.ISupportInitialize)dgvProducts).EndInit();
-      MenuStrip.ResumeLayout(false);
-      MenuStrip.PerformLayout();
       ResumeLayout(false);
       PerformLayout();
     }
@@ -177,11 +135,6 @@ namespace ConBook {
     private Button btnEdit;
     private Button btnDelete;
     private Button btnAdd;
-    private MenuStrip MenuStrip;
-    private ToolStripMenuItem tsmiPlik;
-    private ToolStripMenuItem tsmiNew;
-    private ToolStripMenuItem tsmiOpen;
-    private ToolStripMenuItem tsmiSave;
-    private ToolStripMenuItem tsmiSaveAs;
+    private Label label1;
   }
 }

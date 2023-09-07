@@ -69,12 +69,12 @@ namespace ConBook {
     }
     public List<int> IdxProducts { 
 
-      get {  return mIdxProducts; } 
+      get {  return mIdxsProducts; } 
 
       set {
 
-        if (mIdxProducts != value) {
-          mIdxProducts = value;
+        if (mIdxsProducts != value) {
+          mIdxsProducts = value;
           OnPropertyChanged(nameof(IdxProducts));
         }
 

@@ -4,13 +4,17 @@ namespace ConBook {
   internal class cContactsListUtils {
     //Klasa odpowiadająca za obsługę listy konktatków
 
-    private BindingList<cContact> mContacts;                  // lista przechowująca kontakty
+    private BindingList<cContact> mContactsList;                  // lista przechowująca kontakty
+    private int mLastContactIndex;                                // ostatnio przypisany indeks do kontaktu
 
-    public BindingList<cContact> Contacts { get { return mContacts; } set { mContacts = value; } }
+    public BindingList<cContact> ContactsList { get { return mContactsList; } set { mContactsList = value; } }
+    public int LastContactIndex { get { return mLastContactIndex; } set { mLastContactIndex = value; } }
 
     public cContactsListUtils() {
 
-      mContacts = new BindingList<cContact>();
+      mContactsList = new BindingList<cContact>();
+
+      mLastContactIndex = cIndexTracker.GetIndexValue("Contact");
 
     }
     
@@ -18,12 +22,12 @@ namespace ConBook {
       //funkcja usuwająca kontakt z listy
 
       DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt" +
-          $" {Contacts[xIndex].Name} {Contacts[xIndex].Surname} z listy?",
+          $" {ContactsList[xIndex].Name} {ContactsList[xIndex].Surname} z listy?",
           "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
       if (deletionQueryResult == DialogResult.Yes) {
 
-        Contacts.RemoveAt(xIndex);
+        ContactsList.RemoveAt(xIndex);
 
       }
 
@@ -32,15 +36,19 @@ namespace ConBook {
     public void AddContact(cContact xContact) {
       //funkcja dodająca kontakt do listy
 
-      xContact.Index = GetNewIndex();
-      Contacts.Add(xContact);
+      int pNewContactIndex = LastContactIndex + 1;
+      LastContactIndex = pNewContactIndex;
+      cIndexTracker.SetIndexValue("Contact", pNewContactIndex);
+
+      xContact.Index = pNewContactIndex;
+      ContactsList.Add(xContact);
 
     }
 
     public void EditContact(cContact xEditedContact, int xIndex) {
       //funkcja edytująca istniejący kontakt
 
-      Contacts[xIndex] = xEditedContact;
+      ContactsList[xIndex] = xEditedContact;
 
     }
 
@@ -49,14 +57,8 @@ namespace ConBook {
 
       cContact pEditedContact = new cContact(xNewName, xNewSurname, xNewPhone);
 
-      Contacts[xIndex] = pEditedContact;
+      ContactsList[xIndex] = pEditedContact;
 
     }
-
-    private int GetNewIndex() {
-      if (Contacts.Count == 0) return 0;
-      return Contacts.Max(contact => contact.Index) + 1;
-    }
-
   }
 }
