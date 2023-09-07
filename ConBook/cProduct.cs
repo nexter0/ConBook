@@ -4,11 +4,15 @@ using System.Runtime.CompilerServices;
 namespace ConBook {
   internal class cProduct : INotifyPropertyChanged {
 
+    private int mIndex;                                                 // indeks produktu                                             
+    private string mName;                                               // nazwa produktu
+    private string mSymbol;                                             // symbol produktu
+    private double mPrice;                                              // cena produktu
+
     public event PropertyChangedEventHandler PropertyChanged;           // zdarzenie zmiany właściwości Towaru (pozwalające na data binding)
 
-    private string mName;
-    private string mSymbol;
-    private double mPrice;
+    #region Properties
+    public int Index { get; set; }
 
     public string Name {
 
@@ -69,8 +73,9 @@ namespace ConBook {
       Price = 0.00;
 
     }
+    #endregion
 
-      protected void OnPropertyChanged(string propertyName) {
+    protected void OnPropertyChanged(string propertyName) {
       //funkcja wywołująca zdarzenie zmiany właściwości towaru
 
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -81,6 +86,13 @@ namespace ConBook {
       //funkcja sprawdzająca, czy produkt jest pusty
 
       return (Name == string.Empty) && (Symbol == string.Empty) && (Price == 0);
+
+    }
+
+    public static bool CheckIfSymbolExists(BindingList<cProduct> xProductsList, string xSymbol) {
+      //funkcja sprawdzająca czy w damej liście produktów istnieje prosukt z danym symbolem
+
+      return xProductsList.Any(pProduct => pProduct.Symbol == xSymbol);
 
     }
 

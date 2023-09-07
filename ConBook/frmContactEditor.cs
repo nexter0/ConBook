@@ -117,7 +117,6 @@ namespace ConBook {
       xContact.Phone = txtPhone.Text;
       xContact.Description = rtbDescription.Text;
       xContact.Notes = rtbNotes.Text;
-      //xContact.Address = rtbAddress.Text;
 
       if (xContact.IsEmpty())
         return false;

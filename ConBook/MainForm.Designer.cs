@@ -28,6 +28,7 @@
       btnProductsModule = new Button();
       lbSelectModule = new Label();
       label1 = new Label();
+      btnOrdersModule = new Button();
       SuspendLayout();
       // 
       // btnContactsModule
@@ -58,7 +59,7 @@
       // 
       lbSelectModule.AutoSize = true;
       lbSelectModule.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-      lbSelectModule.Location = new Point(114, 46);
+      lbSelectModule.Location = new Point(188, 46);
       lbSelectModule.Name = "lbSelectModule";
       lbSelectModule.Size = new Size(116, 21);
       lbSelectModule.TabIndex = 2;
@@ -68,17 +69,30 @@
       // 
       label1.AutoSize = true;
       label1.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
-      label1.Location = new Point(105, 9);
+      label1.Location = new Point(179, 9);
       label1.Name = "label1";
       label1.Size = new Size(125, 37);
       label1.TabIndex = 3;
       label1.Text = "ConBook";
       // 
+      // btnOrdersModule
+      // 
+      btnOrdersModule.Image = Properties.Resources.productsModuleIcon;
+      btnOrdersModule.Location = new Point(329, 110);
+      btnOrdersModule.Name = "btnOrdersModule";
+      btnOrdersModule.Size = new Size(130, 120);
+      btnOrdersModule.TabIndex = 4;
+      btnOrdersModule.Text = "Zamówienia";
+      btnOrdersModule.TextAlign = ContentAlignment.BottomCenter;
+      btnOrdersModule.UseVisualStyleBackColor = true;
+      btnOrdersModule.Click += btnOrdersModule_Click;
+      // 
       // MainForm
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
-      ClientSize = new Size(334, 261);
+      ClientSize = new Size(494, 261);
+      Controls.Add(btnOrdersModule);
       Controls.Add(label1);
       Controls.Add(lbSelectModule);
       Controls.Add(btnProductsModule);
@@ -100,5 +114,6 @@
     private Button btnProductsModule;
     private Label lbSelectModule;
     private Label label1;
+    private Button btnOrdersModule;
   }
 }

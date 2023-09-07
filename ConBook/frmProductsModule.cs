@@ -14,6 +14,8 @@
 
     }
 
+    #region Events
+
     private void btnAdd_Click(object sender, EventArgs e) {
 
       mProductListUtils.AddProduct();
@@ -24,7 +26,7 @@
 
     private void btnEdit_Click(object sender, EventArgs e) {
 
-      if (mProductListUtils.Products.Count > 0)
+      if (mProductListUtils.ProductsList.Count > 0)
         mProductListUtils.EditProduct(dgvProducts.SelectedRows[0].Index);
 
       AutoSave();
@@ -52,6 +54,32 @@
 
     }
 
+    private void tsmiOpen_Click(object sender, EventArgs e) {
+
+      OpenFile();
+
+    }
+
+    private void tsmiNew_Click(object sender, EventArgs e) {
+
+      ClearList();
+
+    }
+
+    private void tsmiSave_Click(object sender, EventArgs e) {
+
+      SaveFile();
+
+    }
+
+    private void tsmiSaveAs_Click(object sender, EventArgs e) {
+
+      SaveFileAs();
+
+    }
+
+    #endregion
+
     internal bool ShowMe() {
       //funkcja wywołująca formularz
 
@@ -64,14 +92,17 @@
       DataGridViewColumn pDgvColumnName = dgvProducts.Columns["Name"];
       DataGridViewColumn pDgvColumnSymbol = dgvProducts.Columns["Symbol"];
       DataGridViewColumn pDgvColumnPrice = dgvProducts.Columns["Price"];
+      DataGridViewColumn pDgvColumnIndex = dgvProducts.Columns["Index"];
 
       pDgvColumnName.HeaderText = "Nazwa";
       pDgvColumnSymbol.HeaderText = "Symbol";
       pDgvColumnPrice.HeaderText = "Cena";
+      pDgvColumnIndex.HeaderText = "Indeks";
 
       pDgvColumnName.Width = 457;
       pDgvColumnSymbol.Width = 158;
       pDgvColumnPrice.Width = 158;
+      pDgvColumnIndex.Width = 50;
 
     }
 
@@ -81,7 +112,7 @@
       if (mCurrentFile == null) {
         string pExt = "txt";
 
-        mProductListUtils.Serializer.SaveToNewTxtFile(DEFAULT_FILENAME + "." + pExt, mProductListUtils.Products);
+        cProductSerializer.SaveToNewTxtFile(DEFAULT_FILENAME + "." + pExt, mProductListUtils.ProductsList);
         mCurrentFile = DEFAULT_FILENAME + "." + pExt;
       } else {
         SaveFile();
@@ -94,13 +125,9 @@
       //funkcja obsługująca zapis do istniejącego pliku
 
       try {
-        if (mProductListUtils.Products.Count > 0) {
+        if (mProductListUtils.ProductsList.Count > 0) {
           if (mCurrentFile != null) {
-            if (Path.GetExtension(mCurrentFile) == ".xml") {
-              //mProductListUtils.Serializer.SaveToExistingXmlFile(mCurrentFile, mProductListUtils.Products);
-            } else {
-              mProductListUtils.Serializer.SaveToExistingTxtFile(mCurrentFile, mProductListUtils.Products);
-            }
+            cProductSerializer.SaveToExistingTxtFile(mCurrentFile, mProductListUtils.ProductsList);
           } else {
             SaveFileAs();
           }
@@ -128,7 +155,7 @@
     private void SaveFileAs() {
       //funkcja obsługująca zapis do nowego pliku
 
-      if (mProductListUtils.Products.Count > 0) {
+      if (mProductListUtils.ProductsList.Count > 0) {
         try {
           SaveFileDialog SaveFileDialog = new SaveFileDialog() {
             Filter = "Plik tekstowy (*.txt)|*.txt|Dokument XML (*.xml)|*.xml",
@@ -138,10 +165,8 @@
             string fileName = SaveFileDialog.FileName;
             string fileExtension = Path.GetExtension(fileName);
 
-            if (fileExtension == ".xml") {
-              //mProductListUtils.Serializer.SaveToNewXmlFile(fileName, mProductListUtils.Products, ref mCurrentFile);
-            } else if (fileExtension == ".txt") {
-              mProductListUtils.Serializer.SaveToNewTxtFile(fileName, mProductListUtils.Products, ref mCurrentFile);
+            if (fileExtension == ".txt") {
+              cProductSerializer.SaveToNewTxtFile(fileName, mProductListUtils.ProductsList, ref mCurrentFile);
             } else {
               MessageBox.Show("Nieobsługiwany format pliku.", "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -181,7 +206,7 @@
       //funkcja automatycznie wczytująca ostatnio edytowaną listę kontaktów
 
       string pPath = Directory.GetCurrentDirectory();
-      string? pFile = Directory.EnumerateFiles(pPath, "*.xml").FirstOrDefault();
+      string? pFile = null;
 
       if (File.Exists("recent_prod")) {
         using (StreamReader pStreamReader = new StreamReader("recent_prod")) {
@@ -193,11 +218,8 @@
 
           try {
             if (pFile != string.Empty && pFile != null) {
-              if (Path.GetExtension(pFile) == ".xml") {
-                //mProductListUtils.Products = mProductListUtils.Serializer.LoadXmlFile(pFile);
-              } else {
-                mProductListUtils.Products = mProductListUtils.Serializer.LoadTxtFile(pFile);
-              }
+              mProductListUtils.ProductsList = cProductSerializer.LoadTxtFile(pFile);
+
               mCurrentFile = pFile;
             }
           } catch (Exception ex) {
@@ -208,7 +230,7 @@
         }
       } else if (pFile != string.Empty && pFile != null) {
         try {
-          mProductListUtils.Serializer.LoadXmlFile(pFile);
+          cProductSerializer.LoadTxtFile(pFile);
           mCurrentFile = pFile;
         } catch (Exception ex) {
           MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pFile}", "Błąd wczytywania",
@@ -226,19 +248,16 @@
 
       try {
         OpenFileDialog OpenFileDialog = new OpenFileDialog() {
-          Filter = "Wszystkie pliki (*.*)|*.*|Plik tekstowy (*.txt)|*.txt|Dokument XML (*.xml)|*.xml",
+          Filter = "Wszystkie pliki (*.*)|*.*|Plik tekstowy (*.txt)|*.txt",
           Title = "Otwórz..."
         };
         if (OpenFileDialog.ShowDialog() == DialogResult.OK) {
           string pFileName = OpenFileDialog.FileName;
           string pFileExtension = Path.GetExtension(pFileName);
 
-          if (pFileExtension == ".xml") {
-            mProductListUtils.Products.Clear();
-            //mProductListUtils.Products = mProductListUtils.Serializer.LoadXmlFile(pFileName);
-          } else if (pFileExtension == ".txt") {
-            mProductListUtils.Products.Clear();
-            mProductListUtils.Products = mProductListUtils.Serializer.LoadTxtFile(pFileName);
+          if (pFileExtension == ".txt") {
+            mProductListUtils.ProductsList.Clear();
+            mProductListUtils.ProductsList = cProductSerializer.LoadTxtFile(pFileName);
           } else {
             MessageBox.Show("Nieobsługiwany format pliku.", "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
@@ -254,11 +273,31 @@
 
     }
 
+    private void ClearList() {
+      //funkcja tworząca nową listę
+
+      DialogResult pSaveQueryResult = MessageBox.Show("Niezapisane zmiany zostaną utracone. \nCzy chcesz zapisać teraz?",
+        "Zapisz zmiany", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+      switch (pSaveQueryResult) {
+        case DialogResult.Yes:
+          SaveFile();
+          mProductListUtils.ProductsList.Clear();
+          mCurrentFile = null;
+          break;
+        case DialogResult.No:
+          mProductListUtils.ProductsList.Clear();
+          mCurrentFile = null;
+          break;
+      }
+
+    }
+
     private void BindDataGridView() {
       //funkcja bindująca data grid view z listą kontaktów
 
       dgvProducts.DataSource = null;
-      dgvProducts.DataSource = mProductListUtils.Products;
+      dgvProducts.DataSource = mProductListUtils.ProductsList;
       ConfigureDataGridView();
 
     }

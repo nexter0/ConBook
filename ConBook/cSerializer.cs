@@ -12,71 +12,9 @@ namespace ConBook {
     protected const string END_TAG = ">$";
     protected const string SEPARATOR = "::";
 
-    #region XML Serializer
-    public void SaveToNewXmlFile(string xFileName, BindingList<cContact> xContactsList, ref string? xCurrentFilePath) {
-      // funkcja zapisująca do nowego pliku XML
-
-      XmlSerializer pSerializer = new XmlSerializer(typeof(BindingList<cContact>));
-
-      using (FileStream pFileStream = new FileStream(xFileName, FileMode.Create)) {
-        pSerializer.Serialize(pFileStream, xContactsList);
-
-        xCurrentFilePath ??= xFileName;
-
-      }
-
-    }
-
-    public void SaveToNewXmlFile(string xFileName, BindingList<cContact> xContactsList) {
-
-      string? pTemp = null;
-      SaveToNewXmlFile(xFileName, xContactsList, ref pTemp);
-
-    }
-
-
-    public void SaveToExistingXmlFile(string xFileName, BindingList<cContact> xContactsList) {
-      // funkcja zapisująca do istniejącego pliku XML
-
-      string pTempFileName = Path.GetTempFileName();
-
-      try {
-
-        SaveToNewXmlFile(pTempFileName, xContactsList);
-
-        File.Delete(xFileName);
-        File.Move(pTempFileName, xFileName);
-
-      } finally {
-
-        if (File.Exists(pTempFileName))
-          File.Delete(pTempFileName);
-
-      }
-
-    }
-
-    public BindingList<cContact> LoadXmlFile(string xFileName) {
-      // funkcja funkcja odczytująca dane z pliku XML
-
-      BindingList<cContact> pContacts = new BindingList<cContact>();
-
-      XmlSerializer pSerializer = new XmlSerializer(typeof(BindingList<cContact>));
-
-      using (FileStream pFileStream = new FileStream(xFileName, FileMode.Open)) {
-
-        BindingList<cContact> pLoadedContacts = (BindingList<cContact>)pSerializer.Deserialize(pFileStream);
-
-        return pLoadedContacts;
-
-      }
-
-    }
-    #endregion
-
     #region TXT Serializer
 
-    protected string RemoveTags(string xString) {
+    protected static string RemoveTags(string xString) {
       //funkcja usuwająca tagi z danych
 
       string pTagPattern = "\\$<.*?>\\$";
@@ -85,7 +23,7 @@ namespace ConBook {
 
     }
 
-    protected void SaveToNewTxtFile(string xFileName, List<string> xList, ref string? xCurrentFilePath) {
+    protected static void SaveToNewTxtFile(string xFileName, List<string> xList, ref string? xCurrentFilePath) {
       //funkcja zapisująca dane do nowego pliku tekstowego
       //xFileName - nazwa pliku do zapisu
       //xList - sformatowana lista do zapisu
@@ -103,7 +41,7 @@ namespace ConBook {
 
     }
 
-    protected void SaveToNewTxtFile(string xFileName, List<string> xList) {
+    protected static void SaveToNewTxtFile(string xFileName, List<string> xList) {
       //funkcja zapisująca dane do nowego pliku tekstowego
       //xFileName - nazwa pliku do zapisu
       //xList - lista kontaktów do zapisu
@@ -113,7 +51,7 @@ namespace ConBook {
 
     }
 
-    protected void SaveToExistingTxtFile(string xFileName, List<string> xList) {
+    protected static void SaveToExistingTxtFile(string xFileName, List<string> xList) {
       //funkcja zapisująca dane do istniejącego pliku tekstowego
       //xFileName - nazwa pliku do zapisu
       //xList - lista kontaktów do zapisu
@@ -137,7 +75,7 @@ namespace ConBook {
 
     }
 
-    protected List<string[]> LoadTxtFile(string xFileName) {
+    protected static List<string[]> LoadTxtFile(string xFileName) {
       //funkcja odczytująca dane z pliku tekstowego
       //xFileName - nazwa pliku do odczytu
 

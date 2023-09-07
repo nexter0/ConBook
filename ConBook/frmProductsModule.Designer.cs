@@ -30,7 +30,14 @@ namespace ConBook {
       btnEdit = new Button();
       btnDelete = new Button();
       btnAdd = new Button();
+      MenuStrip = new MenuStrip();
+      tsmiPlik = new ToolStripMenuItem();
+      tsmiNew = new ToolStripMenuItem();
+      tsmiOpen = new ToolStripMenuItem();
+      tsmiSave = new ToolStripMenuItem();
+      tsmiSaveAs = new ToolStripMenuItem();
       ((System.ComponentModel.ISupportInitialize)dgvProducts).BeginInit();
+      MenuStrip.SuspendLayout();
       SuspendLayout();
       // 
       // dgvProducts
@@ -55,14 +62,14 @@ namespace ConBook {
       dgvProducts.RowHeadersVisible = false;
       dgvProducts.RowTemplate.Height = 25;
       dgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      dgvProducts.Size = new Size(776, 376);
+      dgvProducts.Size = new Size(826, 376);
       dgvProducts.TabIndex = 9;
       // 
       // btnEdit
       // 
       btnEdit.Image = Properties.Resources.edit_file;
       btnEdit.ImageAlign = ContentAlignment.MiddleLeft;
-      btnEdit.Location = new Point(620, 27);
+      btnEdit.Location = new Point(672, 27);
       btnEdit.Name = "btnEdit";
       btnEdit.Size = new Size(80, 29);
       btnEdit.TabIndex = 15;
@@ -75,7 +82,7 @@ namespace ConBook {
       // 
       btnDelete.Image = Properties.Resources.bin;
       btnDelete.ImageAlign = ContentAlignment.MiddleLeft;
-      btnDelete.Location = new Point(706, 27);
+      btnDelete.Location = new Point(758, 27);
       btnDelete.Name = "btnDelete";
       btnDelete.Size = new Size(80, 29);
       btnDelete.TabIndex = 14;
@@ -88,7 +95,7 @@ namespace ConBook {
       // 
       btnAdd.Image = Properties.Resources.plus;
       btnAdd.ImageAlign = ContentAlignment.MiddleLeft;
-      btnAdd.Location = new Point(534, 27);
+      btnAdd.Location = new Point(586, 27);
       btnAdd.Name = "btnAdd";
       btnAdd.Size = new Size(80, 29);
       btnAdd.TabIndex = 13;
@@ -97,11 +104,56 @@ namespace ConBook {
       btnAdd.UseVisualStyleBackColor = true;
       btnAdd.Click += btnAdd_Click;
       // 
+      // MenuStrip
+      // 
+      MenuStrip.Items.AddRange(new ToolStripItem[] { tsmiPlik });
+      MenuStrip.Location = new Point(0, 0);
+      MenuStrip.Name = "MenuStrip";
+      MenuStrip.Size = new Size(850, 24);
+      MenuStrip.TabIndex = 16;
+      MenuStrip.Text = "msProducts";
+      // 
+      // tsmiPlik
+      // 
+      tsmiPlik.DropDownItems.AddRange(new ToolStripItem[] { tsmiNew, tsmiOpen, tsmiSave, tsmiSaveAs });
+      tsmiPlik.Name = "tsmiPlik";
+      tsmiPlik.Size = new Size(38, 20);
+      tsmiPlik.Text = "Plik";
+      // 
+      // tsmiNew
+      // 
+      tsmiNew.Name = "tsmiNew";
+      tsmiNew.Size = new Size(141, 22);
+      tsmiNew.Text = "Nowy";
+      tsmiNew.Click += tsmiNew_Click;
+      // 
+      // tsmiOpen
+      // 
+      tsmiOpen.Name = "tsmiOpen";
+      tsmiOpen.Size = new Size(141, 22);
+      tsmiOpen.Text = "Otwórz...";
+      tsmiOpen.Click += tsmiOpen_Click;
+      // 
+      // tsmiSave
+      // 
+      tsmiSave.Name = "tsmiSave";
+      tsmiSave.Size = new Size(141, 22);
+      tsmiSave.Text = "Zapisz";
+      tsmiSave.Click += tsmiSave_Click;
+      // 
+      // tsmiSaveAs
+      // 
+      tsmiSaveAs.Name = "tsmiSaveAs";
+      tsmiSaveAs.Size = new Size(141, 22);
+      tsmiSaveAs.Text = "Zapisz jako...";
+      tsmiSaveAs.Click += tsmiSaveAs_Click;
+      // 
       // frmProductsModule
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
-      ClientSize = new Size(800, 450);
+      ClientSize = new Size(850, 450);
+      Controls.Add(MenuStrip);
       Controls.Add(btnEdit);
       Controls.Add(btnDelete);
       Controls.Add(btnAdd);
@@ -113,7 +165,10 @@ namespace ConBook {
       FormClosing += frmProductsModule_FormClosing;
       Load += frmProductsModule_Load;
       ((System.ComponentModel.ISupportInitialize)dgvProducts).EndInit();
+      MenuStrip.ResumeLayout(false);
+      MenuStrip.PerformLayout();
       ResumeLayout(false);
+      PerformLayout();
     }
 
     #endregion
@@ -122,5 +177,11 @@ namespace ConBook {
     private Button btnEdit;
     private Button btnDelete;
     private Button btnAdd;
+    private MenuStrip MenuStrip;
+    private ToolStripMenuItem tsmiPlik;
+    private ToolStripMenuItem tsmiNew;
+    private ToolStripMenuItem tsmiOpen;
+    private ToolStripMenuItem tsmiSave;
+    private ToolStripMenuItem tsmiSaveAs;
   }
 }

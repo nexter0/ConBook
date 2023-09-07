@@ -4,16 +4,13 @@ namespace ConBook {
   internal class cContactsListUtils {
     //Klasa odpowiadająca za obsługę listy konktatków
 
-    private BindingList<cContact> mContacts;                  // Lista przechowująca kontakty
-    private cContactSerializer mSerializer;                   // klasa do zapisu i wczytywania listy kontaktów
+    private BindingList<cContact> mContacts;                  // lista przechowująca kontakty
 
     public BindingList<cContact> Contacts { get { return mContacts; } set { mContacts = value; } }
-    public cContactSerializer Serializer { get { return mSerializer; } }
 
     public cContactsListUtils() {
 
       mContacts = new BindingList<cContact>();
-      mSerializer = new cContactSerializer();
 
     }
     
@@ -35,16 +32,8 @@ namespace ConBook {
     public void AddContact(cContact xContact) {
       //funkcja dodająca kontakt do listy
 
+      xContact.Index = GetNewIndex();
       Contacts.Add(xContact);
-
-    }
-
-    public void AddContact(string xName, string xSurname, string xPhone) {
-      //funkcja dodająca kontakt do listy
-
-      cContact pNewContact = new cContact(xName, xSurname, xPhone);
-
-      Contacts.Add(pNewContact);
 
     }
 
@@ -62,6 +51,11 @@ namespace ConBook {
 
       Contacts[xIndex] = pEditedContact;
 
+    }
+
+    private int GetNewIndex() {
+      if (Contacts.Count == 0) return 0;
+      return Contacts.Max(contact => contact.Index) + 1;
     }
 
   }

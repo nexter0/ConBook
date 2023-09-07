@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
 namespace ConBook {
   public partial class frmProductEditor : Form {
 
     bool mIsCanceled;
-    private enum mValidationResultEnum { OK, FIELD_EMPTY, VALUE_ERROR, MARKERS_ERROR }
+    private enum mValidationResultEnum { OK, FIELD_EMPTY, VALUE_ERROR, MARKERS_ERROR, SYMBOL_ERROR }
+    private BindingList<cProduct> mProductsList;
 
 
     public frmProductEditor() {
@@ -20,17 +22,21 @@ namespace ConBook {
     private void btnCancel_Click(object sender, EventArgs e) {
 
       mIsCanceled = true;
+      this.Close();
 
     }
 
-    internal bool ShowMe(cProduct xProduct) {
+    internal bool ShowMe(cProduct xProduct, BindingList<cProduct> xProductsList) {
       //funkcja wywołująca formularz 
 
       mIsCanceled = false;
+      mProductsList = xProductsList;
 
       InitializeTextBoxes(xProduct);
       CustomizeWidow(xProduct.IsEmpty());
+
       this.ShowDialog();
+
       if (mIsCanceled)
         return false;
 
@@ -41,12 +47,15 @@ namespace ConBook {
       } catch (Exception ex) {
         MessageBox.Show($"Podczas edycji kontaktu wystąpił błąd:\n{ex.Message}", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
-      if (xProduct.IsEmpty())
-        return false;
 
-      return true;
+        if (xProduct.IsEmpty())
+          return false;
 
+        return true;
+      
     }
+
+
 
     private void CustomizeWidow(bool xIsEmptyContact) {
       //funkcja ustawiająca właściwości okna w zależności od trybu edycji / dodawania
@@ -101,11 +110,11 @@ namespace ConBook {
       } catch (Exception ex) {
         return mValidationResultEnum.VALUE_ERROR;
       }
-
-
       if (Regex.IsMatch(txtName.Text, pPatternMarkers)) { return mValidationResultEnum.MARKERS_ERROR; };
       if (Regex.IsMatch(txtSymbol.Text, pPatternMarkers)) { return mValidationResultEnum.MARKERS_ERROR; };
       if (Regex.IsMatch(txtPrice.Text, pPatternMarkers)) { return mValidationResultEnum.MARKERS_ERROR; };
+
+      if (cProduct.CheckIfSymbolExists(mProductsList, txtSymbol.Text)) { return mValidationResultEnum.SYMBOL_ERROR; };
 
       return mValidationResultEnum.OK;
 
@@ -125,6 +134,7 @@ namespace ConBook {
           case mValidationResultEnum.FIELD_EMPTY: { pMessage += "Pola Nazwa, Symbol, Cena są wymagane."; break; }
           case mValidationResultEnum.VALUE_ERROR: { pMessage += "Nieprawidłowa wartość w polu Cena."; break; }
           case mValidationResultEnum.MARKERS_ERROR: { pMessage += "Niedozwolona kombinacja znaków ('::', '$<', '>$')."; break; }
+          case mValidationResultEnum.SYMBOL_ERROR: { pMessage += $"Produkt o symbolu: {txtSymbol.Text} istnieje."; break; }
 
         }
 

@@ -23,78 +23,64 @@
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
-      DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-      MenuStrip = new MenuStrip();
+      DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+      msContacts = new MenuStrip();
       tsmiPlik = new ToolStripMenuItem();
       tsmiNew = new ToolStripMenuItem();
       tsmiOpen = new ToolStripMenuItem();
       tsmiSave = new ToolStripMenuItem();
-      tsmiSaveAs = new ToolStripMenuItem();
       toolStripSeparator1 = new ToolStripSeparator();
-      tsmiAbout = new ToolStripMenuItem();
       dgvContacts = new DataGridView();
       btnAdd = new Button();
       btnDelete = new Button();
       btnEdit = new Button();
-      MenuStrip.SuspendLayout();
+      zapiszJakoToolStripMenuItem = new ToolStripMenuItem();
+      msContacts.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)dgvContacts).BeginInit();
       SuspendLayout();
       // 
-      // MenuStrip
+      // msContacts
       // 
-      MenuStrip.Items.AddRange(new ToolStripItem[] { tsmiPlik });
-      MenuStrip.Location = new Point(0, 0);
-      MenuStrip.Name = "MenuStrip";
-      MenuStrip.Size = new Size(604, 24);
-      MenuStrip.TabIndex = 7;
-      MenuStrip.Text = "menuStrip1";
+      msContacts.Items.AddRange(new ToolStripItem[] { tsmiPlik });
+      msContacts.Location = new Point(0, 0);
+      msContacts.Name = "msContacts";
+      msContacts.Size = new Size(657, 24);
+      msContacts.TabIndex = 7;
+      msContacts.Text = "menuStrip1";
       // 
       // tsmiPlik
       // 
-      tsmiPlik.DropDownItems.AddRange(new ToolStripItem[] { tsmiNew, tsmiOpen, tsmiSave, tsmiSaveAs, toolStripSeparator1, tsmiAbout });
+      tsmiPlik.DropDownItems.AddRange(new ToolStripItem[] { tsmiNew, tsmiOpen, tsmiSave, toolStripSeparator1, zapiszJakoToolStripMenuItem });
       tsmiPlik.Name = "tsmiPlik";
       tsmiPlik.Size = new Size(38, 20);
       tsmiPlik.Text = "Plik";
+      tsmiPlik.Click += tsmiPlik_Click;
       // 
       // tsmiNew
       // 
       tsmiNew.Name = "tsmiNew";
-      tsmiNew.Size = new Size(141, 22);
+      tsmiNew.Size = new Size(180, 22);
       tsmiNew.Text = "Nowy";
       tsmiNew.Click += tsmiNew_Click;
       // 
       // tsmiOpen
       // 
       tsmiOpen.Name = "tsmiOpen";
-      tsmiOpen.Size = new Size(141, 22);
+      tsmiOpen.Size = new Size(180, 22);
       tsmiOpen.Text = "Otwórz...";
       tsmiOpen.Click += tsmiOpen_Click;
       // 
       // tsmiSave
       // 
       tsmiSave.Name = "tsmiSave";
-      tsmiSave.Size = new Size(141, 22);
+      tsmiSave.Size = new Size(180, 22);
       tsmiSave.Text = "Zapisz";
       tsmiSave.Click += tsmiSave_Click;
-      // 
-      // tsmiSaveAs
-      // 
-      tsmiSaveAs.Name = "tsmiSaveAs";
-      tsmiSaveAs.Size = new Size(141, 22);
-      tsmiSaveAs.Text = "Zapisz jako...";
-      tsmiSaveAs.Click += tsmiSaveAs_Click;
       // 
       // toolStripSeparator1
       // 
       toolStripSeparator1.Name = "toolStripSeparator1";
-      toolStripSeparator1.Size = new Size(138, 6);
-      // 
-      // tsmiAbout
-      // 
-      tsmiAbout.Name = "tsmiAbout";
-      tsmiAbout.Size = new Size(141, 22);
-      tsmiAbout.Text = "O programie";
-      tsmiAbout.Click += tsmiAbout_Click;
+      toolStripSeparator1.Size = new Size(177, 6);
       // 
       // dgvContacts
       // 
@@ -103,14 +89,14 @@
       dgvContacts.AllowUserToResizeColumns = false;
       dgvContacts.AllowUserToResizeRows = false;
       dgvContacts.BackgroundColor = Color.WhiteSmoke;
-      dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewCellStyle1.BackColor = SystemColors.Control;
-      dataGridViewCellStyle1.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-      dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-      dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-      dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-      dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-      dgvContacts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+      dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle2.BackColor = SystemColors.Control;
+      dataGridViewCellStyle2.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+      dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+      dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+      dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+      dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+      dgvContacts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
       dgvContacts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       dgvContacts.Location = new Point(12, 62);
       dgvContacts.Name = "dgvContacts";
@@ -118,7 +104,7 @@
       dgvContacts.RowHeadersVisible = false;
       dgvContacts.RowTemplate.Height = 25;
       dgvContacts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      dgvContacts.Size = new Size(580, 467);
+      dgvContacts.Size = new Size(633, 467);
       dgvContacts.TabIndex = 9;
       dgvContacts.CellDoubleClick += dgvContacts_CellDoubleClick;
       dgvContacts.ColumnHeaderMouseClick += dgvContacts_ColumnHeaderMouseClick;
@@ -127,7 +113,7 @@
       // 
       btnAdd.Image = Properties.Resources.plus;
       btnAdd.ImageAlign = ContentAlignment.MiddleLeft;
-      btnAdd.Location = new Point(340, 27);
+      btnAdd.Location = new Point(393, 27);
       btnAdd.Name = "btnAdd";
       btnAdd.Size = new Size(80, 29);
       btnAdd.TabIndex = 10;
@@ -140,7 +126,7 @@
       // 
       btnDelete.Image = Properties.Resources.bin;
       btnDelete.ImageAlign = ContentAlignment.MiddleLeft;
-      btnDelete.Location = new Point(512, 27);
+      btnDelete.Location = new Point(565, 27);
       btnDelete.Name = "btnDelete";
       btnDelete.Size = new Size(80, 29);
       btnDelete.TabIndex = 11;
@@ -153,7 +139,7 @@
       // 
       btnEdit.Image = Properties.Resources.edit_file;
       btnEdit.ImageAlign = ContentAlignment.MiddleLeft;
-      btnEdit.Location = new Point(426, 27);
+      btnEdit.Location = new Point(479, 27);
       btnEdit.Name = "btnEdit";
       btnEdit.Size = new Size(80, 29);
       btnEdit.TabIndex = 12;
@@ -162,18 +148,24 @@
       btnEdit.UseVisualStyleBackColor = true;
       btnEdit.Click += btnEdit_Click;
       // 
+      // zapiszJakoToolStripMenuItem
+      // 
+      zapiszJakoToolStripMenuItem.Name = "zapiszJakoToolStripMenuItem";
+      zapiszJakoToolStripMenuItem.Size = new Size(180, 22);
+      zapiszJakoToolStripMenuItem.Text = "Zapisz jako...";
+      // 
       // frmContactsModule
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
-      ClientSize = new Size(604, 541);
+      ClientSize = new Size(657, 541);
       Controls.Add(btnEdit);
       Controls.Add(btnDelete);
       Controls.Add(btnAdd);
       Controls.Add(dgvContacts);
-      Controls.Add(MenuStrip);
+      Controls.Add(msContacts);
       FormBorderStyle = FormBorderStyle.FixedSingle;
-      MainMenuStrip = MenuStrip;
+      MainMenuStrip = msContacts;
       MaximizeBox = false;
       MinimizeBox = false;
       Name = "frmContactsModule";
@@ -181,26 +173,24 @@
       Text = "ConBook - Kontakty";
       FormClosed += frmContactsModule_FormClosed;
       Load += frmContactsModule_Load;
-      MenuStrip.ResumeLayout(false);
-      MenuStrip.PerformLayout();
+      msContacts.ResumeLayout(false);
+      msContacts.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)dgvContacts).EndInit();
       ResumeLayout(false);
       PerformLayout();
     }
 
     #endregion
-    private MenuStrip MenuStrip;
+    private MenuStrip msContacts;
     private ToolStripMenuItem tsmiPlik;
     private ToolStripMenuItem tsmiNew;
     private ToolStripMenuItem tsmiOpen;
     private ToolStripMenuItem tsmiSave;
-    private ToolStripMenuItem tsmiSaveAs;
     private DataGridView dgvContacts;
     private ToolStripSeparator toolStripSeparator1;
-    private ToolStripMenuItem tsmiAbout;
     private Button btnAdd;
     private Button btnDelete;
     private Button btnEdit;
-
+    private ToolStripMenuItem zapiszJakoToolStripMenuItem;
   }
 }

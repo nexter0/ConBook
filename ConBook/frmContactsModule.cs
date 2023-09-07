@@ -10,11 +10,12 @@ namespace ConBook {
     private FileTypesEnum mDefaultFileType;                      // domyślny typ pliku autozapisu
 
     private enum SortTypeEnum {                                  // numerator sposobu sortowania listy kontaktów
-      ByName = 0,
-      bySurname = 1
+      ByIndex = 0,
+      ByName = 1,
+      BySurname = 2
     }
 
-    private const string DEFAULT_FILENAME = "contact_list";      // domyślna nazwa pliku do autozapisu
+    private const string DEFAULT_FILENAME = "contact_list";      // domyślna nazwa pliku autozapisu
 
     public frmContactsModule() {
       InitializeComponent();
@@ -28,7 +29,7 @@ namespace ConBook {
 
     }
 
-    #region Zdarzenia
+    #region Events
 
     private void frmContactsModule_Load(object sender, EventArgs e) {
 
@@ -108,7 +109,7 @@ namespace ConBook {
 
     #endregion
 
-    #region Metody
+    #region Methods
 
     internal bool ShowMe() {
       //funkcja wywołująca formularz
@@ -166,13 +167,20 @@ namespace ConBook {
       DataGridViewColumn pDgvColumnSurname = dgvContacts.Columns["Surname"];
       DataGridViewColumn pDgvColumnName = dgvContacts.Columns["Name"];
       DataGridViewColumn pDgvColumnPhone = dgvContacts.Columns["Phone"];
+      DataGridViewColumn pDgvColumnIndex = dgvContacts.Columns["Index"];
+      DataGridViewColumn pDgvColumnDesc = dgvContacts.Columns["Description"];
+      DataGridViewColumn pDgvColumnNotes = dgvContacts.Columns["Notes"];
 
+      pDgvColumnDesc.Visible = false;
+      pDgvColumnNotes.Visible = false;
+      pDgvColumnIndex.HeaderText = "Indeks";
       pDgvColumnName.HeaderText = "Imię";
       pDgvColumnSurname.HeaderText = "Nazwisko";
       pDgvColumnPhone.HeaderText = "Telefon";
       pDgvColumnSurname.Width = 215;
       pDgvColumnName.Width = 215;
-      pDgvColumnPhone.Width = 147;
+      pDgvColumnPhone.Width = 150;
+      pDgvColumnIndex.Width = 50;
 
       if (mContactsListUtils.Contacts.Count == 0) {
         btnEdit.Enabled = false;
@@ -232,7 +240,7 @@ namespace ConBook {
       //funkcja automatycznie wczytująca ostatnio edytowaną listę kontaktów
 
       string pPath = Directory.GetCurrentDirectory();
-      string? pFile = Directory.EnumerateFiles(pPath, "*.xml").FirstOrDefault();
+      string? pFile = Directory.EnumerateFiles(pPath, "*.txt").FirstOrDefault();
 
       if (File.Exists("recent")) {
         using (StreamReader pStreamReader = new StreamReader("recent")) {
@@ -241,14 +249,10 @@ namespace ConBook {
           if (File.Exists(pFileTmp) && pFileTmp != string.Empty && pFileTmp != null) {
             pFile = pFileTmp;
           }
-
           try {
             if (pFile != string.Empty && pFile != null) {
-              if (Path.GetExtension(pFile) == ".xml") {
-                mContactsListUtils.Contacts = mContactsListUtils.Serializer.LoadXmlFile(pFile);
-              } else {
-                mContactsListUtils.Contacts = mContactsListUtils.Serializer.LoadTxtFile(pFile);
-              }
+              mContactsListUtils.Contacts = cContactSerializer.LoadTxtFile(pFile);
+
               mCurrentFile = pFile;
             }
           } catch (Exception ex) {
@@ -259,7 +263,7 @@ namespace ConBook {
         }
       } else if (pFile != string.Empty && pFile != null) {
         try {
-          mContactsListUtils.Serializer.LoadXmlFile(pFile);
+          cContactSerializer.LoadTxtFile(pFile);
           mCurrentFile = pFile;
         } catch (Exception ex) {
           MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pFile}", "Błąd wczytywania",
@@ -282,12 +286,9 @@ namespace ConBook {
           string pFileName = OpenFileDialog.FileName;
           string pFileExtension = Path.GetExtension(pFileName);
 
-          if (pFileExtension == ".xml") {
+          if (pFileExtension == ".txt") {
             mContactsListUtils.Contacts.Clear();
-            mContactsListUtils.Contacts = mContactsListUtils.Serializer.LoadXmlFile(pFileName);
-          } else if (pFileExtension == ".txt") {
-            mContactsListUtils.Contacts.Clear();
-            mContactsListUtils.Contacts = mContactsListUtils.Serializer.LoadTxtFile(pFileName);
+            mContactsListUtils.Contacts = cContactSerializer.LoadTxtFile(pFileName);
           } else {
             MessageBox.Show("Nieobsługiwany format pliku.", "Błąd wczytywania", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
@@ -315,10 +316,8 @@ namespace ConBook {
             string fileName = SaveFileDialog.FileName;
             string fileExtension = Path.GetExtension(fileName);
 
-            if (fileExtension == ".xml") {
-              mContactsListUtils.Serializer.SaveToNewXmlFile(fileName, mContactsListUtils.Contacts, ref mCurrentFile);
-            } else if (fileExtension == ".txt") {
-              mContactsListUtils.Serializer.SaveToNewTxtFile(fileName, mContactsListUtils.Contacts, ref mCurrentFile);
+            if (fileExtension == ".txt") {
+              cContactSerializer.SaveToNewTxtFile(fileName, mContactsListUtils.Contacts, ref mCurrentFile);
             } else {
               MessageBox.Show("Nieobsługiwany format pliku.", "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -349,11 +348,7 @@ namespace ConBook {
       try {
         if (mContactsListUtils.Contacts.Count > 0) {
           if (mCurrentFile != null) {
-            if (Path.GetExtension(mCurrentFile) == ".xml") {
-              mContactsListUtils.Serializer.SaveToExistingXmlFile(mCurrentFile, mContactsListUtils.Contacts);
-            } else {
-              mContactsListUtils.Serializer.SaveToExistingTxtFile(mCurrentFile, mContactsListUtils.Contacts);
-            }
+            cContactSerializer.SaveToExistingTxtFile(mCurrentFile, mContactsListUtils.Contacts);
           } else {
             SaveFileAs();
           }
@@ -384,7 +379,7 @@ namespace ConBook {
       if (mCurrentFile == null) {
         string pExt = mDefaultFileType.ToString().ToLower();
 
-        mContactsListUtils.Serializer.SaveToNewTxtFile(DEFAULT_FILENAME + "." + pExt, mContactsListUtils.Contacts);
+        cContactSerializer.SaveToNewTxtFile(DEFAULT_FILENAME + "." + pExt, mContactsListUtils.Contacts);
         mCurrentFile = DEFAULT_FILENAME + "." + pExt;
       } else {
         SaveFile();
@@ -405,10 +400,19 @@ namespace ConBook {
 
           RefreshDataGridView();
         }
-      } else if (xCntSortType == SortTypeEnum.bySurname) {
+      } else if (xCntSortType == SortTypeEnum.BySurname) {
         if (mContactsListUtils.Contacts.Count > 0) {
           List<cContact> pTempContactList = new List<cContact>(mContactsListUtils.Contacts);
           pTempContactList.Sort();
+          mContactsListUtils.Contacts = new BindingList<cContact>(pTempContactList);
+
+          RefreshDataGridView();
+        }
+      } else if (xCntSortType == SortTypeEnum.ByIndex) {
+        if (mContactsListUtils.Contacts.Count > 0) {
+          List<cContact> pTempContactList = new List<cContact>(mContactsListUtils.Contacts);
+
+          pTempContactList.Sort(new cContact.IndexComparer());
           mContactsListUtils.Contacts = new BindingList<cContact>(pTempContactList);
 
           RefreshDataGridView();
@@ -417,6 +421,9 @@ namespace ConBook {
 
     }
 
+    private void tsmiPlik_Click(object sender, EventArgs e) {
+
+    }
   }
   #endregion
 

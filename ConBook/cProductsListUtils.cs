@@ -4,21 +4,13 @@ namespace ConBook {
   internal class cProductListUtils {
     //klasa odpowiadająca za obsługę listy produktów
 
-    private BindingList<cProduct> mProducts;            // lista produktów
-    private frmProductEditor mEditor;                   // formularz dodawania / edycji produktów
-    private cProductSerializer mSerializer;             // klasa do zapisu i wczytywania listy produktów
+    private BindingList<cProduct> mProductsList;                    // lista produktów
 
-
-
-    public BindingList<cProduct> Products { get; set; }
-    public cProductSerializer Serializer { get; set; }
+    public BindingList<cProduct> ProductsList { get; set; }
 
     public cProductListUtils() {
 
-      Products = new BindingList<cProduct>();
-      Serializer = new cProductSerializer();
-
-      mEditor = new frmProductEditor();
+      ProductsList = new BindingList<cProduct>();
 
     }
 
@@ -26,11 +18,13 @@ namespace ConBook {
       //funkcja dodająca produkt do listy
 
       cProduct pProduct = new cProduct();
+      frmProductEditor pProductEditor = new frmProductEditor();
 
-      if (!mEditor.ShowMe(pProduct))
+      if (!pProductEditor.ShowMe(pProduct, ProductsList)) {
         return;
-
-      Products.Add(pProduct);
+      }
+      pProduct.Index = GetNewIndex();
+      ProductsList.Add(pProduct);
 
     }
 
@@ -38,11 +32,11 @@ namespace ConBook {
       //funkcja usuwająca produkt z listy
 
       DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt" +
-          $" {Products[xIndex].Name} ({Products[xIndex].Symbol}) z listy?",
+          $" {ProductsList[xIndex].Name} ({ProductsList[xIndex].Symbol}) z listy?",
           "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
       if (deletionQueryResult == DialogResult.Yes) {
-        Products.RemoveAt(xIndex);
+        ProductsList.RemoveAt(xIndex);
       }
 
     }
@@ -50,8 +44,15 @@ namespace ConBook {
     internal void EditProduct(int xIndex) {
       //funkcja edytująca kontakt
 
-      mEditor.ShowMe(Products[xIndex]);
+      frmProductEditor pProductEditor = new frmProductEditor();
 
+      pProductEditor.ShowMe(ProductsList[xIndex], ProductsList);
+
+    }
+
+    private int GetNewIndex() {
+      if (ProductsList.Count == 0) return 0;
+      return ProductsList.Max(contact => contact.Index) + 1;
     }
 
   }

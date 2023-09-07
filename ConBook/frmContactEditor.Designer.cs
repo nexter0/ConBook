@@ -166,7 +166,7 @@
       Name = "frmContactEditor";
       ShowInTaskbar = false;
       StartPosition = FormStartPosition.CenterParent;
-      Text = "Dodaj / edytuj kontakt";
+      Text = "ConBook";
       ResumeLayout(false);
       PerformLayout();
     }
