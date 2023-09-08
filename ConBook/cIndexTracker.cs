@@ -10,8 +10,6 @@ namespace ConBook {
       //xTag - znacznik indeksu
 
       if (!File.Exists(TRACKER_FILE_PATH)) {
-        MessageBox.Show("Plik tracker.idx nie został utworzony", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
         return 0;
       }
       else {

@@ -37,6 +37,7 @@
       // 
       // dtpCreationDate
       // 
+      dtpCreationDate.Enabled = false;
       dtpCreationDate.Location = new Point(174, 24);
       dtpCreationDate.Name = "dtpCreationDate";
       dtpCreationDate.Size = new Size(200, 23);
