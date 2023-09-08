@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 
 namespace ConBook {
-  internal class cContactSerializer : cSerializer {
+  internal class cContactsSerializer : cSerializer {
 
     public const string DEFAULT_SAVE_FILE_PATH = "contact_list.txt";
 
@@ -21,7 +21,7 @@ namespace ConBook {
     }
 
     private static cContact GetContactFromFormattedData(string[] xSplittedContactData) {
-      //funkcja tworząca kontakt na podstawie sformatowanych danych z pliku
+      //funkcja zwracająca kontakt na podstawie sformatowanych danych z pliku
       //xSplittedContactData - tablica zawierająca rodzielone, sformatowane dane kontaktu
 
       cContact pContact = new cContact();
@@ -38,22 +38,28 @@ namespace ConBook {
       return pContact;
     }
 
-    private static BindingList<cContact> GetContactListFromFormatedData(string xFileName = DEFAULT_SAVE_FILE_PATH) {
-      //funkcja tworząca listę kontaktów na podstawie sformatowanych danych z pliku
+    private static BindingList<cContact> GetContactsListFromFile(string xFileName) {
+      //funkcja zwracająca listę kontaktów na podstawie sformatowanych danych z pliku
       //xFileName - nazwa pliku do wczytania
 
       List<string[]> pFormattedDataList = cSerializer.LoadTxtFile(xFileName);
-      BindingList<cContact> pContactList = new BindingList<cContact>();
+      BindingList<cContact> pContactsList = new BindingList<cContact>();
     
       foreach (string[] pFormattedData in pFormattedDataList) {
-        pContactList.Add(GetContactFromFormattedData(pFormattedData));
+        pContactsList.Add(GetContactFromFormattedData(pFormattedData));
       }
 
-      return pContactList;
+      return pContactsList;
+    }
+
+    private static BindingList<cContact> GetContactsListFromFile() {
+
+      return GetContactsListFromFile(DEFAULT_SAVE_FILE_PATH);
+
     }
 
     private static List<string> GetFormattedDataList(BindingList<cContact> xContactList) {
-      //funkcja tworząca sformatowane dane do zapisu na podstawie listy produktów
+      //funkcja tworząca sformatowane dane do zapisu na podstawie kolekcji produktów
       //xContactList - lista kontaktów do sformatowania
 
       List<string> pFormattedDataList = new List<string>();
@@ -66,7 +72,7 @@ namespace ConBook {
     }
 
     public static void SaveToNewTxtFile(string xFileName, BindingList<cContact> xContactsList) {
-      //funkcja zapisująca listę kontaktów do nowego pliku
+      //funkcja zapisująca kolekcję kontaktów do nowego pliku
       //xFileName - nazwa pliku do wczytania
       //xContactsList - lista kontaktów do zapisania
 
@@ -77,7 +83,7 @@ namespace ConBook {
     }
 
     public static void SaveToNewTxtFile(string xFileName, BindingList<cContact> xContactsList, ref string? xCurrentFilePath) {
-      //funkcja zapisująca listę kontaktów do nowego pliku
+      //funkcja zapisująca kolekcję kontaktów do nowego pliku
       //xFileName - nazwa pliku do wczytania
       //xContactsList - lista kontaktów do zapisania
       //xCurrentFilePath - ścieżka aktualnie otwartego pliku
@@ -87,7 +93,7 @@ namespace ConBook {
     }
 
     public static void SaveToExistingTxtFile(string xFileName, BindingList<cContact> xContactsList) {
-      //funkcja zapisująca listę produktów do istniejącego pliku
+      //funkcja zapisująca kolekcję produktów do istniejącego pliku
       //xFileName - nazwa pliku do wczytania
       //xContactsList - lista kontaktów do zapisania
 
@@ -95,11 +101,18 @@ namespace ConBook {
 
     }
 
-    public static new BindingList<cContact> LoadTxtFile(string xFileName = DEFAULT_SAVE_FILE_PATH) {
-      //funkcja wczytująca listę kontaktów z pliku
+    private static new BindingList<cContact> LoadTxtFile(string xFileName) {
+      //funkcja wczytująca kolekcję kontaktów z pliku
       //xFileName - nazwa pliku do wczytania
 
-      return GetContactListFromFormatedData(xFileName);
+      return GetContactsListFromFile(xFileName);
+
+    }
+
+    public static BindingList<cContact> GetContactsList() {
+      //funkcja zwracająca kolekcję kontaktów z pliku
+
+      return LoadTxtFile(DEFAULT_SAVE_FILE_PATH);
 
     }
 

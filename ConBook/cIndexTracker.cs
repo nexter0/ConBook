@@ -3,11 +3,22 @@
 namespace ConBook {
   internal static class cIndexTracker {
 
+    internal enum IndexTypeEnum {
+      Contact = 1,
+      Product = 2
+    }
+
     private const string TRACKER_FILE_PATH = "tracker.idx";
 
-    public static int GetIndexValue(string xTag) {
+    public static int GetIndexValue(IndexTypeEnum xCntIndexType) {
       //funkcja zwracająca wartość zapisanego indeksu
-      //xTag - znacznik indeksu
+      //xCntIndexType - numerator typu ideksu
+
+      string pTag = string.Empty;
+      switch (xCntIndexType) {
+        case IndexTypeEnum.Contact: { pTag = "Contact"; break; }
+        case IndexTypeEnum.Product: { pTag = "Product"; break; }
+      }
 
       if (!File.Exists(TRACKER_FILE_PATH)) {
         return 0;
@@ -18,8 +29,8 @@ namespace ConBook {
             string pLine;
 
             while ((pLine = pReader.ReadLine()) != null) {
-              if (pLine.Contains(xTag)) {
-                return int.Parse(pLine.Replace(xTag + ": ", string.Empty));
+              if (pLine.Contains(pTag)) {
+                return int.Parse(pLine.Replace(pTag + ": ", string.Empty));
               }
             }
           }
@@ -31,16 +42,22 @@ namespace ConBook {
 
     }
 
-    public static bool SetIndexValue(string xTag, int xValue) {
+    public static bool SetIndexValue(IndexTypeEnum xCntIndexType, int xValue) {
       //funkcja zapisująca nową wartość indeksu do pliku
-      //xTag - znacznik indeksu
+      //xCntIndexType - numerator typu ideksu
       //xValue - nowa wartość indeksu
+
+      string pTag = string.Empty;
+      switch (xCntIndexType) {
+        case IndexTypeEnum.Contact: { pTag = "Contact"; break; }
+        case IndexTypeEnum.Product: { pTag = "Product"; break; }
+      }
 
       if (!File.Exists(TRACKER_FILE_PATH)) {
 
         using (StreamWriter pWriter = new StreamWriter(TRACKER_FILE_PATH)) {
 
-          pWriter.WriteLine(xTag + ": " + xValue);
+          pWriter.WriteLine(pTag + ": " + xValue);
 
         }
       } else {
@@ -53,15 +70,15 @@ namespace ConBook {
 
             using (StreamWriter pWriter = new StreamWriter(pTempFilePath)) {
               while ((pLine = pReader.ReadLine()) != null) {
-                if (pLine.Contains(xTag)) {
-                  pWriter.WriteLine(xTag + ": " + xValue);
+                if (pLine.Contains(pTag)) {
+                  pWriter.WriteLine(pTag + ": " + xValue);
                   pTagWasFound = true;
                 } else
                   pWriter.WriteLine(pLine);
               }
 
               if (!pTagWasFound)
-                pWriter.WriteLine(xTag + ": " + xValue);
+                pWriter.WriteLine(pTag + ": " + xValue);
             }
           }
 

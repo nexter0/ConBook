@@ -57,10 +57,10 @@ namespace ConBook {
 
 
 
-    private void CustomizeWidow(bool xIsEmptyContact) {
+    private void CustomizeWidow(bool xIsEmptyProduct) {
       //funkcja ustawiająca właściwości okna w zależności od trybu edycji / dodawania
 
-      if (!xIsEmptyContact) {
+      if (!xIsEmptyProduct) {
 
         btnSubmit.Text = "Edytuj";
         this.Text = "Edytuj produkt";

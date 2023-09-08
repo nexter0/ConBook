@@ -3,8 +3,6 @@
 
     private cProductListUtils mProductListUtils;
 
-    private const string DEFAULT_FILE_PATH = cProductSerializer.DEFAULT_SAVE_FILE_PATH;
-
     public frmProductsModule() {
       InitializeComponent();
 
@@ -20,7 +18,7 @@
 
       mProductListUtils.AddProduct();
 
-      SaveList();
+      SaveProducts();
 
     }
 
@@ -29,7 +27,7 @@
       if (mProductListUtils.ProductsList.Count > 0)
         mProductListUtils.EditProduct(dgvProducts.SelectedRows[0].Index);
 
-      SaveList();
+      SaveProducts();
 
     }
 
@@ -37,19 +35,19 @@
 
       mProductListUtils.DeleteProduct(dgvProducts.SelectedRows[0].Index);
 
-      SaveList();
+      SaveProducts();
 
     }
 
     private void frmProductsModule_Load(object sender, EventArgs e) {
 
-      LoadList();
+      LoadProducts();
 
     }
 
     private void frmProductsModule_FormClosing(object sender, FormClosingEventArgs e) {
 
-      SaveList();
+      SaveProducts();
 
     }
     #endregion
@@ -80,11 +78,13 @@
 
     }
 
-    private void SaveList() {
-      // funkcja do automatycznego zapisu listy
+    private void SaveProducts() {
+      // funkcja do automatycznego zapisu kolekcji produktów
 
-      if (!File.Exists(DEFAULT_FILE_PATH)) {
-        cProductSerializer.SaveToNewTxtFile(DEFAULT_FILE_PATH, mProductListUtils.ProductsList);
+      string pDefaultFilePath = cProductsSerializer.DEFAULT_SAVE_FILE_PATH;
+
+      if (!File.Exists(pDefaultFilePath)) {
+        cProductsSerializer.SaveToNewTxtFile(pDefaultFilePath, mProductListUtils.ProductsList);
       } else {
         SaveToFile();
       }
@@ -95,21 +95,21 @@
     private void SaveToFile() {
       //funkcja obsługująca zapis do istniejącego pliku
 
+      string pDefaultFilePath = cProductsSerializer.DEFAULT_SAVE_FILE_PATH;
+
       try {
         if (mProductListUtils.ProductsList.Count > 0) {
-          if (File.Exists(DEFAULT_FILE_PATH))
-            cProductSerializer.SaveToExistingTxtFile(DEFAULT_FILE_PATH, mProductListUtils.ProductsList);
+          if (File.Exists(pDefaultFilePath))
+            cProductsSerializer.SaveToExistingTxtFile(pDefaultFilePath, mProductListUtils.ProductsList);
         }
-      } 
-      catch (Exception ex) {
+      } catch (Exception ex) {
         if (ex.InnerException != null) {
           Exception pInnerException = ex.InnerException;
           string pMessage = "Błąd: \n" + pInnerException.Message + "\n"
               + "InnerException StackTrace: \n" + pInnerException.StackTrace;
 
           MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        } 
-        else {
+        } else {
           string pMessage = "Błąd: \n" + ex.Message + "\n"
               + "StackTrace: \n" + ex.StackTrace;
 
@@ -120,15 +120,17 @@
 
     }
 
-    private void LoadList() {
-      //funkcja wczytująca listę produktów
+    private void LoadProducts() {
+      //funkcja wczytująca kolekcję produktów z pliku
+
+      string pDefaultFilePath = cProductsSerializer.DEFAULT_SAVE_FILE_PATH;
 
       try {
-        if (File.Exists(DEFAULT_FILE_PATH)) {
-          mProductListUtils.ProductsList = cProductSerializer.LoadTxtFile(DEFAULT_FILE_PATH);
+        if (File.Exists(pDefaultFilePath)) {
+          mProductListUtils.ProductsList = cProductsSerializer.GetProductsList();
         }
       } catch (Exception ex) {
-        MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {DEFAULT_FILE_PATH}", "Błąd wczytywania",
+        MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pDefaultFilePath}", "Błąd wczytywania",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
 
       }
@@ -138,7 +140,7 @@
     }
 
     private void BindDataGridView() {
-      //funkcja bindująca data grid view z listą kontaktów
+      //funkcja bindująca data grid view z kolekcją produktów
 
       dgvProducts.DataSource = null;
       dgvProducts.DataSource = mProductListUtils.ProductsList;

@@ -90,7 +90,7 @@ namespace ConBook {
     }
 
     public static bool CheckIfSymbolExists(BindingList<cProduct> xProductsList, string xSymbol) {
-      //funkcja sprawdzająca czy w damej liście produktów istnieje prosukt z danym symbolem
+      //funkcja sprawdzająca czy w liście produktów istnieje produkt z danym symbolem
 
       return xProductsList.Any(pProduct => pProduct.Symbol == xSymbol);
 

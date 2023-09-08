@@ -3,9 +3,6 @@
 namespace ConBook {
   public partial class frmContactsModule : Form {
 
-    private const string DEFAULT_FILE_PATH =
-      cContactSerializer.DEFAULT_SAVE_FILE_PATH;                 // domyślna nazwa pliku autozapisu
-
     private cContactsListUtils mContactsListUtils;               // klasa cContactsListUtils - do operacji na kontaktach
 
 
@@ -28,7 +25,7 @@ namespace ConBook {
 
     private void frmContactsModule_Load(object sender, EventArgs e) {
 
-      LoadList();
+      LoadContacts();
 
       RefreshDataGridView();
 
@@ -86,7 +83,7 @@ namespace ConBook {
 
       RefreshDataGridView();
 
-      SaveList();
+      SaveContacts();
     }
 
     public void AddContact() {
@@ -102,7 +99,7 @@ namespace ConBook {
 
       RefreshDataGridView();
 
-      SaveList();
+      SaveContacts();
 
     }
 
@@ -115,7 +112,7 @@ namespace ConBook {
       if (pContactEditor.ShowMe(pContact))
         RefreshDataGridView();
 
-      SaveList();
+      SaveContacts();
 
     }
 
@@ -146,8 +143,7 @@ namespace ConBook {
       if (mContactsListUtils.ContactsList.Count == 0) {
         btnEdit.Enabled = false;
         btnDelete.Enabled = false;
-      } 
-      else {
+      } else {
         btnEdit.Enabled = true;
         btnDelete.Enabled = true;
       }
@@ -156,11 +152,13 @@ namespace ConBook {
 
     }
 
-    private void SaveList() {
+    private void SaveContacts() {
       // funkcja do automatycznego zapisu listy
 
-      if (!File.Exists(DEFAULT_FILE_PATH)) {
-        cContactSerializer.SaveToNewTxtFile(DEFAULT_FILE_PATH, mContactsListUtils.ContactsList);
+      string pDefaultFilePath = cContactsSerializer.DEFAULT_SAVE_FILE_PATH;
+
+      if (!File.Exists(pDefaultFilePath)) {
+        cContactsSerializer.SaveToNewTxtFile(pDefaultFilePath, mContactsListUtils.ContactsList);
       } else {
         SaveToFile();
       }
@@ -171,10 +169,12 @@ namespace ConBook {
     private void SaveToFile() {
       //funkcja obsługująca zapis do istniejącego pliku
 
+      string pDefaultFilePath = cContactsSerializer.DEFAULT_SAVE_FILE_PATH;
+
       try {
         if (mContactsListUtils.ContactsList.Count > 0) {
-          if (File.Exists(DEFAULT_FILE_PATH))
-            cContactSerializer.SaveToExistingTxtFile(DEFAULT_FILE_PATH, mContactsListUtils.ContactsList);
+          if (File.Exists(pDefaultFilePath))
+            cContactsSerializer.SaveToExistingTxtFile(pDefaultFilePath, mContactsListUtils.ContactsList);
         }
       } catch (Exception ex) {
         if (ex.InnerException != null) {
@@ -194,12 +194,14 @@ namespace ConBook {
 
     }
 
-    private void LoadList() {
+    private void LoadContacts() {
       //funkcja wczytująca listę produktów
 
+      string pDefaultFilePath = cProductsSerializer.DEFAULT_SAVE_FILE_PATH;
+
       try {
-        if (File.Exists(DEFAULT_FILE_PATH)) {
-          mContactsListUtils.ContactsList = cContactSerializer.LoadTxtFile(DEFAULT_FILE_PATH);
+        if (File.Exists(pDefaultFilePath)) {
+          mContactsListUtils.ContactsList = cContactsSerializer.GetContactsList();
         }
       } catch (Exception ex) {
         MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {DEFAULT_FILE_PATH}", "Błąd wczytywania",
@@ -210,7 +212,7 @@ namespace ConBook {
       RefreshDataGridView();
 
     }
- 
+
 
     private void SortList(SortTypeEnum xCntSortType) {
       //funkcja sortująca listę kontaktów
@@ -225,8 +227,7 @@ namespace ConBook {
 
           RefreshDataGridView();
         }
-      } 
-      else if (xCntSortType == SortTypeEnum.BySurname) {
+      } else if (xCntSortType == SortTypeEnum.BySurname) {
         if (mContactsListUtils.ContactsList.Count > 0) {
           List<cContact> pTempContactList = new List<cContact>(mContactsListUtils.ContactsList);
           pTempContactList.Sort();
@@ -234,8 +235,7 @@ namespace ConBook {
 
           RefreshDataGridView();
         }
-      } 
-      else if (xCntSortType == SortTypeEnum.ByIndex) {
+      } else if (xCntSortType == SortTypeEnum.ByIndex) {
         if (mContactsListUtils.ContactsList.Count > 0) {
           List<cContact> pTempContactList = new List<cContact>(mContactsListUtils.ContactsList);
 

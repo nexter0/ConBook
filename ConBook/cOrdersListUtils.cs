@@ -19,8 +19,8 @@ namespace ConBook {
       cOrder pOrder = new cOrder();
       frmOrderEditor pOrderEditor = new frmOrderEditor();
 
-      BindingList<cContact> pContactsList = cContactSerializer.LoadTxtFile();
-      BindingList<cProduct> pProductsList = cProductSerializer.LoadTxtFile();
+      BindingList<cContact> pContactsList = cContactsSerializer.GetContactsList();
+      BindingList<cProduct> pProductsList = cProductsSerializer.GetProductsList();
 
       if (pOrderEditor.ShowMe(pOrder, pProductsList, pContactsList))
         OrdersList.Add(pOrder);

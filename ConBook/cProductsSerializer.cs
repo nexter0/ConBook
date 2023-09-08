@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 
 namespace ConBook {
-  internal class cProductSerializer : cSerializer {
+  internal class cProductsSerializer : cSerializer {
 
     public const string DEFAULT_SAVE_FILE_PATH = "product_list.txt";
 
-    private static string GetFormattedContactString(cProduct xProduct) {
+    private static string GetFormattedProductString(cProduct xProduct) {
       //funkcja zwracająca produkt w sformatowanej postaci (gotowej do zapisu do pliku)
       //xProduct - produkt do sformatowania
 
@@ -18,8 +18,8 @@ namespace ConBook {
 
     }
 
-    private static cProduct GetContactFromFormattedData(string[] xSplittedProductData) {
-      //funkcja tworząca produkt na podstawie sformatowanych danych z pliku
+    private static cProduct GetProductFromFormattedData(string[] xSplittedProductData) {
+      //funkcja zwracająca produkt na podstawie tablicy sformatowanych danych
       //xSplittedProductData - tablica zawierająca rodzielone, sformatowane dane produktu
 
       cProduct pProduct = new cProduct();
@@ -34,36 +34,45 @@ namespace ConBook {
       return pProduct;
     }
 
-    private static BindingList<cProduct> GetProductListFromFormatedData(string xFileName = DEFAULT_SAVE_FILE_PATH) {
-      //funkcja tworząca listę produktow na podstawie sformatowanych danych z pliku
+    private static BindingList<cProduct> GetProductListFromFile(string xFileName) {
+      //funkcja zwracająca kolekcję produktow na podstawie sformatowanych danych z pliku
       //xFileName - nazwa pliku do wczytania
 
 
       List<string[]> pFormattedDataList = cSerializer.LoadTxtFile(xFileName);
-      BindingList<cProduct> pProductList = new BindingList<cProduct>();
+      BindingList<cProduct> pProductsList = new BindingList<cProduct>();
 
       foreach (string[] pFormattedData in pFormattedDataList) {
-        pProductList.Add(GetContactFromFormattedData(pFormattedData));
+        cProduct pProduct = GetProductFromFormattedData(pFormattedData);
+        pProductsList.Add(pProduct);
       }
 
-      return pProductList;
+      return pProductsList;
+    }
+
+    private static BindingList<cProduct> GetProductListFromFile() {
+
+      return GetProductListFromFile(DEFAULT_SAVE_FILE_PATH);
+
+
     }
 
     private static List<string> GetFormattedDataList(BindingList<cProduct> xProductsList) {
-      //funkcja tworząca sformatowane dane do zapisu na podstawie listy produktów
+      //funkcja tworząca sformatowane dane do zapisu na podstawie kolekcji produktów
       //xProductsList - lista produktów do sformatowania
 
       List<string> pFormattedDataList = new List<string>();
 
       foreach (cProduct pProduct in xProductsList) {
-        pFormattedDataList.Add(GetFormattedContactString(pProduct));
+        string pFormattedProductString = GetFormattedProductString(pProduct);
+        pFormattedDataList.Add(pFormattedProductString);
       }
 
       return pFormattedDataList;
     }
 
     public static void SaveToNewTxtFile(string xFileName, BindingList<cProduct> xProductsList) {
-      //funkcja zapisująca listę produktów do nowego pliku
+      //funkcja zapisująca kolekcję produktów do nowego pliku
       //xFileName - nazwa pliku do wczytania
       //xProductsList - lista produktów do zapisania
 
@@ -74,7 +83,7 @@ namespace ConBook {
     }
 
     public static void SaveToNewTxtFile(string xFileName, BindingList<cProduct> xProductsList, ref string? xCurrentFilePath) {
-      //funkcja zapisująca listę kontaktów do nowego pliku
+      //funkcja zapisująca kolekcję prouktów do nowego pliku
       //xFileName - nazwa pliku do wczytania
       //xProductsList - lista produktów do zapisania
       //xCurrentFilePath - ścieżka aktualnie otwartego pliku
@@ -92,11 +101,18 @@ namespace ConBook {
 
     }
 
-    public static new BindingList<cProduct> LoadTxtFile(string xFileName = DEFAULT_SAVE_FILE_PATH) {
+    private static new BindingList<cProduct> LoadTxtFile(string xFileName) {
       //funkcja wczytująca listę produktów z pliku
       //xFileName - nazwa pliku do wczytania
 
-      return GetProductListFromFormatedData(xFileName);
+      return GetProductListFromFile(xFileName);
+
+    }
+
+    public static new BindingList<cProduct> GetProductsList() {
+      //funkcja zwracajca kolekcję produktów
+
+      return LoadTxtFile(DEFAULT_SAVE_FILE_PATH);
 
     }
 
