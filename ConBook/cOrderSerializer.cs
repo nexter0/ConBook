@@ -6,9 +6,9 @@ namespace ConBook {
     public const string DEFAULT_SAVE_FILE_PATH = "orders_list.txt";
 
     private const string INDEX_TAG = $"{BEGIN_TAG}IDX{END_TAG}";
-    private const string NUMBER_TAG = $"{BEGIN_TAG}IDX{END_TAG}";
-    private const string CONTACTS_TAG = $"{BEGIN_TAG}IDX{END_TAG}";
-    private const string PRODUCTS_TAG = $"{BEGIN_TAG}IDX{END_TAG}";
+    private const string NUMBER_TAG = $"{BEGIN_TAG}NUMBER{END_TAG}";
+    private const string CONTACTS_TAG = $"{BEGIN_TAG}CONTACTS{END_TAG}";
+    private const string PRODUCTS_TAG = $"{BEGIN_TAG}PRODUCTS{END_TAG}";
 
 
     private static string GetFormattedOrderString(cOrder xOrder) {

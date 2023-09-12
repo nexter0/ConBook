@@ -56,6 +56,7 @@
       dgvOrders.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
       dgvOrders.Size = new Size(626, 391);
       dgvOrders.TabIndex = 10;
+      dgvOrders.CellFormatting += dgvOrders_CellFormatting;
       // 
       // btnEdit
       // 
