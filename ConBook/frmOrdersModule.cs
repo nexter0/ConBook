@@ -56,7 +56,7 @@ namespace ConBook {
 
 
         if (pContact != null) {
-          e.Value = pContact.Name[0] +". " + pContact.Surname;
+          e.Value = pContact.Name[0] + ". " + pContact.Surname;
         }
       }
 
@@ -159,6 +159,17 @@ namespace ConBook {
       }
 
       BindDataGridView();
+
+    }
+
+    private void dgvOrders_CellDoubleClick(object sender, DataGridViewCellEventArgs e) {
+
+      frmOrderDetails pFrmOrderDetails = new frmOrderDetails();
+
+      DataGridViewRow pSelectedRow = dgvOrders.SelectedRows[0];
+      cOrder pSelectedOrder = (cOrder)pSelectedRow.DataBoundItem;
+
+      pFrmOrderDetails.ShowMe(pSelectedOrder);
 
     }
   }
