@@ -5,7 +5,8 @@ namespace ConBook {
 
     internal enum IndexTypeEnum {
       Contact = 1,
-      Product = 2
+      Product = 2,
+      Order = 3
     }
 
     private const string TRACKER_FILE_PATH = "tracker.idx";
@@ -14,11 +15,7 @@ namespace ConBook {
       //funkcja zwracająca wartość zapisanego indeksu
       //xCntIndexType - numerator typu ideksu
 
-      string pTag = string.Empty;
-      switch (xCntIndexType) {
-        case IndexTypeEnum.Contact: { pTag = "Contact"; break; }
-        case IndexTypeEnum.Product: { pTag = "Product"; break; }
-      }
+      string pTag = xCntIndexType.ToString();
 
       if (!File.Exists(TRACKER_FILE_PATH)) {
         return 0;
@@ -47,11 +44,7 @@ namespace ConBook {
       //xCntIndexType - numerator typu ideksu
       //xValue - nowa wartość indeksu
 
-      string pTag = string.Empty;
-      switch (xCntIndexType) {
-        case IndexTypeEnum.Contact: { pTag = "Contact"; break; }
-        case IndexTypeEnum.Product: { pTag = "Product"; break; }
-      }
+      string pTag = xCntIndexType.ToString();
 
       if (!File.Exists(TRACKER_FILE_PATH)) {
 

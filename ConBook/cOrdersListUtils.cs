@@ -27,5 +27,30 @@ namespace ConBook {
 
     }
 
+    internal void EditOrder(int xIndex) {
+      //funkcja edytująca kontakt
+
+      frmOrderEditor pOrderEditor = new frmOrderEditor();
+
+      BindingList<cContact> pContactsList = cContactsSerializer.GetContactsList();
+      BindingList<cProduct> pProductsList = cProductsSerializer.GetProductsList();
+
+      pOrderEditor.ShowMe(OrdersList[xIndex], pProductsList, pContactsList);
+
+    }
+
+    internal void DeleteOrder(int xIndex) {
+      //funkcja usuwająca produkt z listy
+
+      DialogResult deletionQueryResult = MessageBox.Show($"Usunąć zamówienie numer" +
+          $" {OrdersList[xIndex].Number} z listy?",
+          "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+      if (deletionQueryResult == DialogResult.Yes) {
+        OrdersList.RemoveAt(xIndex);
+      }
+
+    }
+
   }
 }

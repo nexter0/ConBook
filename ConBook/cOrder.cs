@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 
 namespace ConBook {
-  internal class cOrder {
+  internal class cOrder : INotifyPropertyChanged {
 
     private DateTime mCreationDate;                                    // data utworzenia zamówienia
     private int mIdxContact;                                           // indeks klienta zlecającego
@@ -26,7 +26,7 @@ namespace ConBook {
       } 
     }
 
-    public string OrderNumber { 
+    public string Number { 
       
       get {  return mNumber; } 
       
@@ -34,7 +34,7 @@ namespace ConBook {
 
         if (mNumber != value) {
           mNumber = value;
-          OnPropertyChanged(nameof(OrderNumber));
+          OnPropertyChanged(nameof(Number));
         }
 
       }
@@ -67,7 +67,7 @@ namespace ConBook {
       } 
 
     }
-    public List<int> IdxProducts { 
+    public List<int> IdxsProducts { 
 
       get {  return mIdxsProducts; } 
 
@@ -75,7 +75,7 @@ namespace ConBook {
 
         if (mIdxsProducts != value) {
           mIdxsProducts = value;
-          OnPropertyChanged(nameof(IdxProducts));
+          OnPropertyChanged(nameof(IdxsProducts));
         }
 
       } 
@@ -85,19 +85,19 @@ namespace ConBook {
 
     public cOrder() { 
     
-      OrderNumber = string.Empty;
+      Number = string.Empty;
       CreationDate = DateTime.Now;
       IdxContact = -1;
-      IdxProducts = new List<int>();
+      IdxsProducts = new List<int>();
 
     }
 
     public cOrder(string xNumber, DateTime xCreationDate, int xIdxContact, List<int> xIdxProducts) {
 
-      OrderNumber = xNumber;
+      Number = xNumber;
       CreationDate = xCreationDate;
       IdxContact = xIdxContact;
-      IdxProducts = xIdxProducts;
+      IdxsProducts = xIdxProducts;
 
     }
 

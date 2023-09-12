@@ -5,15 +5,21 @@ namespace ConBook {
 
     public const string DEFAULT_SAVE_FILE_PATH = "product_list.txt";
 
+
+    private const string INDEX_TAG = $"{BEGIN_TAG}IDX{END_TAG}";
+    private const string NAME_TAG = $"{BEGIN_TAG}NAME{END_TAG}";
+    private const string SYMBOL_TAG = $"{BEGIN_TAG}SYMBOL{END_TAG}";
+    private const string PRICE_TAG = $"{BEGIN_TAG}PRICE{END_TAG}";
+
     private static string GetFormattedProductString(cProduct xProduct) {
       //funkcja zwracająca produkt w sformatowanej postaci (gotowej do zapisu do pliku)
       //xProduct - produkt do sformatowania
 
       return $"{BEGIN_MARKER}\n" +
-        $"{BEGIN_TAG}IDX{END_TAG}{xProduct.Index}{SEPARATOR}" +
-        $"{BEGIN_TAG}NAME{END_TAG}{xProduct.Name}{SEPARATOR}" +
-        $"{BEGIN_TAG}SYMBOL{END_TAG}{xProduct.Symbol}{SEPARATOR}" +
-        $"{BEGIN_TAG}PRICE{END_TAG}{xProduct.Price}{SEPARATOR}\n" +
+        $"{INDEX_TAG}{xProduct.Index}{SEPARATOR}" +
+        $"{NAME_TAG}{xProduct.Name}{SEPARATOR}" +
+        $"{SYMBOL_TAG}{xProduct.Symbol}{SEPARATOR}" +
+        $"{PRICE_TAG}{xProduct.Price}{SEPARATOR}\n" +
         $"{END_MARKER}";
 
     }
@@ -25,16 +31,16 @@ namespace ConBook {
       cProduct pProduct = new cProduct();
 
       foreach (string xData in xSplittedProductData) {
-        if (xData.Contains($"{BEGIN_TAG}IDX{END_TAG}")) { pProduct.Index = int.Parse(RemoveTags(xData)); continue; }
-        if (xData.Contains($"{BEGIN_TAG}NAME{END_TAG}")) { pProduct.Name = RemoveTags(xData); continue; }
-        if (xData.Contains($"{BEGIN_TAG}SYMBOL{END_TAG}")) { pProduct.Symbol = RemoveTags(xData); continue; }
-        if (xData.Contains($"{BEGIN_TAG}PRICE{END_TAG}")) { pProduct.Price = double.Parse(RemoveTags(xData)); continue; }
+        if (xData.Contains($"{INDEX_TAG}")) { pProduct.Index = int.Parse(RemoveTags(xData)); continue; }
+        if (xData.Contains($"{NAME_TAG}")) { pProduct.Name = RemoveTags(xData); continue; }
+        if (xData.Contains($"{SYMBOL_TAG}")) { pProduct.Symbol = RemoveTags(xData); continue; }
+        if (xData.Contains($"{PRICE_TAG}")) { pProduct.Price = double.Parse(RemoveTags(xData)); continue; }
       }
 
       return pProduct;
     }
 
-    private static BindingList<cProduct> GetProductListFromFile(string xFileName) {
+    private static BindingList<cProduct> GetProductsListFromFile(string xFileName) {
       //funkcja zwracająca kolekcję produktow na podstawie sformatowanych danych z pliku
       //xFileName - nazwa pliku do wczytania
 
@@ -50,9 +56,9 @@ namespace ConBook {
       return pProductsList;
     }
 
-    private static BindingList<cProduct> GetProductListFromFile() {
+    private static BindingList<cProduct> GetProductsListFromFile() {
 
-      return GetProductListFromFile(DEFAULT_SAVE_FILE_PATH);
+      return GetProductsListFromFile(DEFAULT_SAVE_FILE_PATH);
 
 
     }
@@ -105,7 +111,7 @@ namespace ConBook {
       //funkcja wczytująca listę produktów z pliku
       //xFileName - nazwa pliku do wczytania
 
-      return GetProductListFromFile(xFileName);
+      return GetProductsListFromFile(xFileName);
 
     }
 

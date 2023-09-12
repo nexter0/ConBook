@@ -33,7 +33,8 @@
 
     private void btnDelete_Click(object sender, EventArgs e) {
 
-      mProductListUtils.DeleteProduct(dgvProducts.SelectedRows[0].Index);
+      if (mProductListUtils.ProductsList.Count > 0)
+        mProductListUtils.DeleteProduct(dgvProducts.SelectedRows[0].Index);
 
       SaveProducts();
 

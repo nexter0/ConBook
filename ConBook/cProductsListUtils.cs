@@ -14,7 +14,7 @@ namespace ConBook {
 
       ProductsList = new BindingList<cProduct>();
 
-      mLastProductIndex = cIndexTracker.GetIndexValue("Product");
+      mLastProductIndex = cIndexTracker.GetIndexValue(cIndexTracker.IndexTypeEnum.Product);
 
     }
 
@@ -30,7 +30,7 @@ namespace ConBook {
 
       int pNewProductIndex = LastProductIndex + 1;
       LastProductIndex = pNewProductIndex;
-      cIndexTracker.SetIndexValue("Product", pNewProductIndex);
+      cIndexTracker.SetIndexValue(cIndexTracker.IndexTypeEnum.Product, pNewProductIndex);
 
       pProduct.Index = pNewProductIndex;
       ProductsList.Add(pProduct);

@@ -94,6 +94,7 @@
       btnCancel.TabIndex = 9;
       btnCancel.Text = "Anuluj";
       btnCancel.UseVisualStyleBackColor = true;
+      btnCancel.Click += btnCancel_Click;
       // 
       // btnSubmit
       // 

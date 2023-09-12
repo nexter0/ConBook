@@ -5,17 +5,25 @@ namespace ConBook {
 
     public const string DEFAULT_SAVE_FILE_PATH = "contact_list.txt";
 
+    private const string INDEX_TAG = $"{BEGIN_TAG}IDX{END_TAG}";
+    private const string NAME_TAG = $"{BEGIN_TAG}NAME{END_TAG}";
+    private const string SURNAME_TAG = $"{BEGIN_TAG}SURNAME{END_TAG}";
+    private const string PHONE_TAG = $"{BEGIN_TAG}PHONE{END_TAG}";
+    private const string NOTES_TAG = $"{BEGIN_TAG}NOTES{END_TAG}";
+    private const string DESCRIPTION_TAG = $"{BEGIN_TAG}DESCRIPTION{END_TAG}";
+
+
     private static string GetFormattedContactString(cContact xContact) {
       //funkcja zwracająca kontakt w sformatowanej postaci (gotowej do zapisu do pliku)
       //xContact - kontakt do sformatowania
 
       return $"{BEGIN_MARKER}\n" +
-        $"{BEGIN_TAG}IDX{END_TAG}{xContact.Index}{SEPARATOR}" +
-        $"{BEGIN_TAG}NAME{END_TAG}{xContact.Name}{SEPARATOR}" +
-        $"{BEGIN_TAG}SURNAME{END_TAG}{xContact.Surname}{SEPARATOR}" +
-        $"{BEGIN_TAG}PHONE{END_TAG}{xContact.Phone}{SEPARATOR}" +
-        $"{BEGIN_TAG}NOTES{END_TAG}{xContact.Notes}{SEPARATOR}" +
-        $"{BEGIN_TAG}DESCRIPTION{END_TAG}{xContact.Description}\n" +
+        $"{INDEX_TAG}{xContact.Index}{SEPARATOR}" +
+        $"{NAME_TAG}{xContact.Name}{SEPARATOR}" +
+        $"{SURNAME_TAG}{xContact.Surname}{SEPARATOR}" +
+        $"{PHONE_TAG}{xContact.Phone}{SEPARATOR}" +
+        $"{NOTES_TAG}{xContact.Notes}{SEPARATOR}" +
+        $"{DESCRIPTION_TAG}{xContact.Description}\n" +
         $"{END_MARKER}";
 
     }
@@ -27,12 +35,12 @@ namespace ConBook {
       cContact pContact = new cContact();
 
       foreach (string xData in xSplittedContactData) {
-        if (xData.Contains($"{BEGIN_TAG}IDX{END_TAG}")) { pContact.Index = int.Parse(RemoveTags(xData)); continue; }
-        if (xData.Contains($"{BEGIN_TAG}NAME{END_TAG}")) { pContact.Name = RemoveTags(xData); continue; }
-        if (xData.Contains($"{BEGIN_TAG}SURNAME{END_TAG}")) { pContact.Surname = RemoveTags(xData); continue; }
-        if (xData.Contains($"{BEGIN_TAG}PHONE{END_TAG}")) { pContact.Phone = RemoveTags(xData); continue; }
-        if (xData.Contains($"{BEGIN_TAG}DESCRIPTION{END_TAG}")) { pContact.Description = RemoveTags(xData); continue; }
-        if (xData.Contains($"{BEGIN_TAG}NOTES{END_TAG}")) { pContact.Notes = RemoveTags(xData); continue; }
+        if (xData.Contains($"{INDEX_TAG}")) { pContact.Index = int.Parse(RemoveTags(xData)); continue; }
+        if (xData.Contains($"{NAME_TAG}")) { pContact.Name = RemoveTags(xData); continue; }
+        if (xData.Contains($"{SURNAME_TAG}")) { pContact.Surname = RemoveTags(xData); continue; }
+        if (xData.Contains($"{PHONE_TAG}")) { pContact.Phone = RemoveTags(xData); continue; }
+        if (xData.Contains($"{DESCRIPTION_TAG}")) { pContact.Description = RemoveTags(xData); continue; }
+        if (xData.Contains($"{NOTES_TAG}")) { pContact.Notes = RemoveTags(xData); continue; }
       }
 
       return pContact;

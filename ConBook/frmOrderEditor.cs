@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Xml.Linq;
 
 namespace ConBook {
   public partial class frmOrderEditor : Form {
@@ -14,6 +13,7 @@ namespace ConBook {
       //funkcja wywołująca formularz
 
       List<int> pSelectedProductsIndexes = new List<int>();
+      bool pIsOrderEmpty = xOrder.IdxContact == -1;
 
       clbProductsSelection.DataSource = xProductsList;
       clbProductsSelection.DisplayMember = "Name";
@@ -25,6 +25,7 @@ namespace ConBook {
 
 
       InitializeTextBoxes(xOrder);
+      CustomizeWidow(pIsOrderEmpty);
 
       this.ShowDialog();
 
@@ -36,7 +37,7 @@ namespace ConBook {
         return false;
       }
 
-      xOrder.OrderNumber = txtOrderNumber.Text;
+      xOrder.Number = txtOrderNumber.Text;
       xOrder.CreationDate = dtpCreationDate.Value;
       xOrder.IdxContact = clbContactsSelection.CheckedItems.Cast<cContact>().FirstOrDefault().Index;
 
@@ -46,16 +47,41 @@ namespace ConBook {
         }
       }
 
+      xOrder.IdxsProducts = pSelectedProductsIndexes;
+
       return true;
+
+    }
+
+    private void CustomizeWidow(bool xIsEmptyProduct) {
+      //funkcja ustawiająca właściwości okna w zależności od trybu edycji / dodawania
+
+      if (!xIsEmptyProduct) {
+
+        btnSubmit.Text = "Edytuj";
+        this.Text = "Edytuj zamówienie";
+        this.Icon = Properties.Resources.editIcon;
+
+      } else {
+
+        btnSubmit.Text = "Dodaj";
+        this.Text = "Dodaj zamówienie";
+        this.Icon = Properties.Resources.plusIcon;
+
+      }
 
     }
 
     private void InitializeTextBoxes(cOrder? xOrder) {
       //funkcja czyszcząca lub uzupełniająca pola tekstowa
 
-      if (xOrder != null) {
-        txtOrderNumber.Text = xOrder.OrderNumber;
+      if (xOrder != null && xOrder.IdxContact != -1) {
+        txtOrderNumber.Text = xOrder.Number;
         dtpCreationDate.Value = xOrder.CreationDate;
+        clbContactsSelection.SetItemChecked(xOrder.IdxContact - 1, true);
+        foreach (int pIndex in xOrder.IdxsProducts) {
+          clbProductsSelection.SetItemChecked(pIndex - 1, true);
+        }
       } else {
         txtOrderNumber.Text = string.Empty;
         dtpCreationDate.Value = DateTime.Now;
@@ -81,6 +107,11 @@ namespace ConBook {
 
       this.Close();
 
+    }
+
+    private void btnCancel_Click(object sender, EventArgs e) {
+      mIsCanceled = true;
+      this.Close();
     }
   }
 }

@@ -204,7 +204,7 @@ namespace ConBook {
           mContactsListUtils.ContactsList = cContactsSerializer.GetContactsList();
         }
       } catch (Exception ex) {
-        MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {DEFAULT_FILE_PATH}", "Błąd wczytywania",
+        MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pDefaultFilePath}", "Błąd wczytywania",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
 
       }

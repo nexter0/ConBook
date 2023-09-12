@@ -38,7 +38,7 @@
     private void ConfigureDataGridView() {
       //funkcja kofigurująca DataGridView
 
-      DataGridViewColumn pDgvColumnNumber = dgvOrders.Columns["OrderNumber"];
+      DataGridViewColumn pDgvColumnNumber = dgvOrders.Columns["Number"];
       DataGridViewColumn pDgvColumnDate = dgvOrders.Columns["CreationDate"];
       DataGridViewColumn pDgvColumnIndex = dgvOrders.Columns["Index"];
       DataGridViewColumn pDgvColumnClient = dgvOrders.Columns["IdxContact"];
@@ -63,9 +63,15 @@
 
     private void btnEdit_Click(object sender, EventArgs e) {
 
+      if (mOrdersListUtils.OrdersList.Count > 0)
+        mOrdersListUtils.EditOrder(dgvOrders.SelectedRows[0].Index);
+
     }
 
     private void btnDelete_Click(object sender, EventArgs e) {
+
+      if (mOrdersListUtils.OrdersList.Count > 0)
+        mOrdersListUtils.DeleteOrder(dgvOrders.SelectedRows[0].Index);
 
     }
   }
