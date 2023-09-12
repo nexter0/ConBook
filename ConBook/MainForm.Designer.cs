@@ -60,40 +60,40 @@
       // tsmiNew
       // 
       tsmiNew.Name = "tsmiNew";
-      tsmiNew.Size = new Size(180, 22);
+      tsmiNew.Size = new Size(141, 22);
       tsmiNew.Text = "Nowy";
       tsmiNew.Click += tsmiNew_Click;
       // 
       // tsmiOpen
       // 
       tsmiOpen.Name = "tsmiOpen";
-      tsmiOpen.Size = new Size(180, 22);
+      tsmiOpen.Size = new Size(141, 22);
       tsmiOpen.Text = "Otwórz...";
       tsmiOpen.Click += tsmiOpen_Click;
       // 
       // tsmiSave
       // 
       tsmiSave.Name = "tsmiSave";
-      tsmiSave.Size = new Size(180, 22);
+      tsmiSave.Size = new Size(141, 22);
       tsmiSave.Text = "Zapisz";
       tsmiSave.Click += tsmiSave_Click;
       // 
       // tsmiSaveAs
       // 
       tsmiSaveAs.Name = "tsmiSaveAs";
-      tsmiSaveAs.Size = new Size(180, 22);
+      tsmiSaveAs.Size = new Size(141, 22);
       tsmiSaveAs.Text = "Zapisz jako...";
       tsmiSaveAs.Click += tsmiSaveAs_Click;
       // 
       // toolStripSeparator1
       // 
       toolStripSeparator1.Name = "toolStripSeparator1";
-      toolStripSeparator1.Size = new Size(177, 6);
+      toolStripSeparator1.Size = new Size(138, 6);
       // 
       // tsmiAbout
       // 
       tsmiAbout.Name = "tsmiAbout";
-      tsmiAbout.Size = new Size(180, 22);
+      tsmiAbout.Size = new Size(141, 22);
       tsmiAbout.Text = "O programie";
       tsmiAbout.Click += tsmiAbout_Click;
       // 
@@ -121,6 +121,7 @@
       dgvContacts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
       dgvContacts.Size = new Size(580, 467);
       dgvContacts.TabIndex = 9;
+      dgvContacts.CellDoubleClick += dgvContacts_CellDoubleClick;
       dgvContacts.ColumnHeaderMouseClick += dgvContacts_ColumnHeaderMouseClick;
       // 
       // btnAdd
