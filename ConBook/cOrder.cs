@@ -5,7 +5,7 @@ namespace ConBook {
 
     private DateTime mCreationDate;                                    // data utworzenia zamówienia
     private int mIdxContact;                                           // indeks klienta zlecającego
-    private List<int> mIdxsProducts;                                   // indeksy produktów w zamówieniu
+    private BindingList<cOrderedProduct> mOrderedProductsList;                                   // indeksy produktów w zamówieniu
     private int mIndex;                                                // indeks zamówienia
     private string mNumber;                                            // numer zamówienia
 
@@ -67,15 +67,15 @@ namespace ConBook {
       } 
 
     }
-    public List<int> IdxsProducts { 
+    public BindingList<cOrderedProduct> OrderedProductsList { 
 
-      get {  return mIdxsProducts; } 
+      get {  return mOrderedProductsList; } 
 
       set {
 
-        if (mIdxsProducts != value) {
-          mIdxsProducts = value;
-          OnPropertyChanged(nameof(IdxsProducts));
+        if (mOrderedProductsList != value) {
+          mOrderedProductsList = value;
+          OnPropertyChanged(nameof(OrderedProductsList));
         }
 
       } 
@@ -88,16 +88,16 @@ namespace ConBook {
       Number = string.Empty;
       CreationDate = DateTime.Now;
       IdxContact = -1;
-      IdxsProducts = new List<int>();
+      OrderedProductsList = new BindingList<cOrderedProduct>();
 
     }
 
-    public cOrder(string xNumber, DateTime xCreationDate, int xIdxContact, List<int> xIdxProducts) {
+    public cOrder(string xNumber, DateTime xCreationDate, int xIdxContact, BindingList<cOrderedProduct> xIdxProducts) {
 
       Number = xNumber;
       CreationDate = xCreationDate;
       IdxContact = xIdxContact;
-      IdxsProducts = xIdxProducts;
+      OrderedProductsList = xIdxProducts;
 
     }
 
@@ -107,7 +107,6 @@ namespace ConBook {
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     }
-
 
   }
 }

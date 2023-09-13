@@ -16,7 +16,7 @@ namespace ConBook {
 
     private void frmOrdersModule_Load(object sender, EventArgs e) {
 
-      LoadOrders();
+      //LoadOrders();
 
     }
 
@@ -24,7 +24,7 @@ namespace ConBook {
 
       mOrdersListUtils.AddOrder();
 
-      SaveOrders();
+      //SaveOrders();
 
     }
 
@@ -33,7 +33,7 @@ namespace ConBook {
       if (mOrdersListUtils.OrdersList.Count > 0)
         mOrdersListUtils.EditOrder(dgvOrders.SelectedRows[0].Index);
 
-      SaveOrders();
+      //SaveOrders();
 
     }
 
@@ -42,7 +42,7 @@ namespace ConBook {
       if (mOrdersListUtils.OrdersList.Count > 0)
         mOrdersListUtils.DeleteOrder(dgvOrders.SelectedRows[0].Index);
 
-      SaveOrders();
+      //SaveOrders();
 
     }
 
@@ -104,10 +104,10 @@ namespace ConBook {
     private void SaveOrders() {
       // funkcja do automatycznego zapisu kolekcji produktów
 
-      string pDefaultFilePath = cOrderSerializer.DEFAULT_SAVE_FILE_PATH;
+      string pDefaultFilePath = cOrderSSerializer.DEFAULT_SAVE_FILE_PATH;
 
       if (!File.Exists(pDefaultFilePath)) {
-        cOrderSerializer.SaveToNewTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
+        cOrderSSerializer.SaveToNewTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
       } else {
         SaveToFile();
       }
@@ -118,12 +118,12 @@ namespace ConBook {
     private void SaveToFile() {
       //funkcja obsługująca zapis do istniejącego pliku
 
-      string pDefaultFilePath = cOrderSerializer.DEFAULT_SAVE_FILE_PATH;
+      string pDefaultFilePath = cOrderSSerializer.DEFAULT_SAVE_FILE_PATH;
 
       try {
         if (mOrdersListUtils.OrdersList.Count > 0) {
           if (File.Exists(pDefaultFilePath))
-            cOrderSerializer.SaveToExistingTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
+            cOrderSSerializer.SaveToExistingTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
         }
       } catch (Exception ex) {
         if (ex.InnerException != null) {
@@ -146,11 +146,11 @@ namespace ConBook {
     private void LoadOrders() {
       //funkcja wczytująca kolekcję produktów z pliku
 
-      string pDefaultFilePath = cOrderSerializer.DEFAULT_SAVE_FILE_PATH;
+      string pDefaultFilePath = cOrderSSerializer.DEFAULT_SAVE_FILE_PATH;
 
       try {
         if (File.Exists(pDefaultFilePath)) {
-          mOrdersListUtils.OrdersList = cOrderSerializer.GetOrdersList();
+          mOrdersListUtils.OrdersList = cOrderSSerializer.GetOrdersList();
         }
       } catch (Exception ex) {
         MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pDefaultFilePath}", "Błąd wczytywania",

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 
 namespace ConBook {
-  internal class cOrderSerializer : cSerializer {
+  internal class cOrderSSerializer : cSerializer {
 
     public const string DEFAULT_SAVE_FILE_PATH = "orders_list.txt";
 
@@ -15,7 +15,7 @@ namespace ConBook {
       //funkcja zwracająca zamówienie w sformatowanej postaci (gotowej do zapisu do pliku)
       //xOrder - zamówienie do sformatowania
 
-      string pOrdersIndexesString = string.Join(",", xOrder.IdxsProducts);
+      string pOrdersIndexesString = string.Join(",", xOrder.OrderedProductsList);
 
       return $"{BEGIN_MARKER}\n" +
         $"{INDEX_TAG}{xOrder.Index}{SEPARATOR}" +
@@ -36,7 +36,7 @@ namespace ConBook {
         if (xData.Contains($"{INDEX_TAG}")) { pOrder.Index = int.Parse(RemoveTags(xData)); continue; }
         if (xData.Contains($"{NUMBER_TAG}")) { pOrder.Number = RemoveTags(xData); continue; }
         if (xData.Contains($"{CONTACTS_TAG}")) { pOrder.IdxContact = int.Parse(RemoveTags(xData)); continue; }
-        if (xData.Contains($"{PRODUCTS_TAG}")) { pOrder.IdxsProducts = ConvertStringIndexesToList(RemoveTags(xData)); continue; }
+        //if (xData.Contains($"{PRODUCTS_TAG}")) { pOrder.OrderedProductsList = ConvertStringIndexesToList(RemoveTags(xData)); continue; }
       }
 
       return pOrder;

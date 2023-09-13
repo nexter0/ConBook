@@ -98,4 +98,95 @@ namespace ConBook {
 
   }
 
+  internal class cOrderedProduct : INotifyPropertyChanged {
+
+    private int? mIndex;
+    private int? mAmount;
+    private double? mSellPrice;
+    private double? mTotalPrice;
+
+    public event PropertyChangedEventHandler PropertyChanged;          // zdarzenie zmiany właściwości Zamówienia (pozwalające na data binding)
+
+    public int? Index {
+
+      get { return mIndex; }
+
+      set {
+
+        if (mIndex != value) {
+          mIndex = value;
+          OnPropertyChanged(nameof(Index));
+        }
+
+      }
+    }
+
+    public int? Amount {
+
+      get { return mAmount; }
+
+      set {
+
+        if (mAmount != value) {
+          mAmount = value;
+          OnPropertyChanged(nameof(Amount));
+        }
+
+        UpdateTotalPrice();
+      }
+    }
+
+    public double? SellPrice {
+
+      get { return mSellPrice; }
+
+      set {
+
+        if (mSellPrice != value) {
+          mSellPrice = value;
+          OnPropertyChanged(nameof(SellPrice));
+        }
+
+        UpdateTotalPrice();
+      }
+    }
+
+    public double? TotalPrice {
+
+      get { return mTotalPrice; }
+    }
+
+    public cOrderedProduct(int? xIndex, int? xAmount, double? xSellPrice) {
+
+      Index = xIndex;
+      Amount = xAmount;
+      SellPrice = xSellPrice;
+      UpdateTotalPrice();
+
+    }
+
+    public cOrderedProduct() {
+
+      new cOrderedProduct(null, null, null);
+
+    }
+
+    protected void OnPropertyChanged(string propertyName) {
+      //funkcja wywołująca zdarzenie zmiany właściwości towaru
+
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+    }
+
+    private void UpdateTotalPrice() {
+      //funkcja aktualizująca property TotalPrice
+
+      if (Amount != null && SellPrice != null)
+        mTotalPrice = Math.Round((double)(Amount * SellPrice), 2);
+      else
+        mTotalPrice = 0;
+    }
+
+  }
+
 }

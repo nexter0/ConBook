@@ -23,16 +23,24 @@
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
+      DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
       dtpCreationDate = new DateTimePicker();
       txtOrderNumber = new TextBox();
-      clbProductsSelection = new CheckedListBox();
       label1 = new Label();
       label2 = new Label();
       label3 = new Label();
       btnCancel = new Button();
       btnSubmit = new Button();
-      clbContactsSelection = new CheckedListBox();
       label4 = new Label();
+      cbxClients = new ComboBox();
+      cbxProducts = new ComboBox();
+      mtxtPrice = new TextBox();
+      mtxtAmount = new TextBox();
+      label5 = new Label();
+      label6 = new Label();
+      btnAddProduct = new Button();
+      dgvSelectedProducts = new DataGridView();
+      ((System.ComponentModel.ISupportInitialize)dgvSelectedProducts).BeginInit();
       SuspendLayout();
       // 
       // dtpCreationDate
@@ -49,15 +57,6 @@
       txtOrderNumber.Name = "txtOrderNumber";
       txtOrderNumber.Size = new Size(156, 23);
       txtOrderNumber.TabIndex = 1;
-      // 
-      // clbProductsSelection
-      // 
-      clbProductsSelection.CheckOnClick = true;
-      clbProductsSelection.FormattingEnabled = true;
-      clbProductsSelection.Location = new Point(11, 65);
-      clbProductsSelection.Name = "clbProductsSelection";
-      clbProductsSelection.Size = new Size(362, 256);
-      clbProductsSelection.TabIndex = 2;
       // 
       // label1
       // 
@@ -82,13 +81,13 @@
       label3.AutoSize = true;
       label3.Location = new Point(11, 50);
       label3.Name = "label3";
-      label3.Size = new Size(44, 15);
+      label3.Size = new Size(55, 15);
       label3.TabIndex = 5;
-      label3.Text = "Towary";
+      label3.Text = "Produkty";
       // 
       // btnCancel
       // 
-      btnCancel.Location = new Point(458, 327);
+      btnCancel.Location = new Point(498, 554);
       btnCancel.Name = "btnCancel";
       btnCancel.Size = new Size(75, 23);
       btnCancel.TabIndex = 9;
@@ -98,22 +97,13 @@
       // 
       // btnSubmit
       // 
-      btnSubmit.Location = new Point(377, 327);
+      btnSubmit.Location = new Point(417, 554);
       btnSubmit.Name = "btnSubmit";
       btnSubmit.Size = new Size(75, 23);
       btnSubmit.TabIndex = 8;
       btnSubmit.Text = "Dodaj";
       btnSubmit.UseVisualStyleBackColor = true;
       btnSubmit.Click += btnSubmit_Click;
-      // 
-      // clbContactsSelection
-      // 
-      clbContactsSelection.CheckOnClick = true;
-      clbContactsSelection.FormattingEnabled = true;
-      clbContactsSelection.Location = new Point(379, 65);
-      clbContactsSelection.Name = "clbContactsSelection";
-      clbContactsSelection.Size = new Size(154, 256);
-      clbContactsSelection.TabIndex = 10;
       // 
       // label4
       // 
@@ -124,26 +114,118 @@
       label4.TabIndex = 11;
       label4.Text = "Klient";
       // 
+      // cbxClients
+      // 
+      cbxClients.FormattingEnabled = true;
+      cbxClients.Location = new Point(379, 65);
+      cbxClients.Name = "cbxClients";
+      cbxClients.Size = new Size(175, 23);
+      cbxClients.TabIndex = 12;
+      // 
+      // cbxProducts
+      // 
+      cbxProducts.FormattingEnabled = true;
+      cbxProducts.Location = new Point(12, 68);
+      cbxProducts.Name = "cbxProducts";
+      cbxProducts.Size = new Size(323, 23);
+      cbxProducts.TabIndex = 13;
+      cbxProducts.SelectedIndexChanged += cbxProducts_SelectedIndexChanged;
+      // 
+      // mtxtPrice
+      // 
+      mtxtPrice.Location = new Point(118, 112);
+      mtxtPrice.Name = "mtxtPrice";
+      mtxtPrice.Size = new Size(100, 23);
+      mtxtPrice.TabIndex = 14;
+      // 
+      // mtxtAmount
+      // 
+      mtxtAmount.Location = new Point(12, 112);
+      mtxtAmount.Name = "mtxtAmount";
+      mtxtAmount.Size = new Size(100, 23);
+      mtxtAmount.TabIndex = 15;
+      mtxtAmount.Validating += mtxtAmount_Validating;
+      // 
+      // label5
+      // 
+      label5.AutoSize = true;
+      label5.Location = new Point(118, 94);
+      label5.Name = "label5";
+      label5.Size = new Size(88, 15);
+      label5.TabIndex = 16;
+      label5.Text = "Cena sprzedaży";
+      // 
+      // label6
+      // 
+      label6.AutoSize = true;
+      label6.Location = new Point(11, 94);
+      label6.Name = "label6";
+      label6.Size = new Size(31, 15);
+      label6.TabIndex = 17;
+      label6.Text = "Ilość";
+      // 
+      // btnAddProduct
+      // 
+      btnAddProduct.Location = new Point(236, 112);
+      btnAddProduct.Name = "btnAddProduct";
+      btnAddProduct.Size = new Size(99, 23);
+      btnAddProduct.TabIndex = 18;
+      btnAddProduct.Text = "Dodaj produkt";
+      btnAddProduct.UseVisualStyleBackColor = true;
+      btnAddProduct.Click += btnAddProduct_Click;
+      // 
+      // dgvSelectedProducts
+      // 
+      dgvSelectedProducts.AllowUserToAddRows = false;
+      dgvSelectedProducts.AllowUserToDeleteRows = false;
+      dgvSelectedProducts.AllowUserToResizeColumns = false;
+      dgvSelectedProducts.AllowUserToResizeRows = false;
+      dgvSelectedProducts.BackgroundColor = Color.WhiteSmoke;
+      dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle1.BackColor = SystemColors.Control;
+      dataGridViewCellStyle1.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+      dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+      dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+      dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+      dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+      dgvSelectedProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+      dgvSelectedProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      dgvSelectedProducts.Location = new Point(11, 141);
+      dgvSelectedProducts.Name = "dgvSelectedProducts";
+      dgvSelectedProducts.ReadOnly = true;
+      dgvSelectedProducts.RowHeadersVisible = false;
+      dgvSelectedProducts.RowTemplate.Height = 25;
+      dgvSelectedProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+      dgvSelectedProducts.Size = new Size(536, 185);
+      dgvSelectedProducts.TabIndex = 19;
+      dgvSelectedProducts.CellFormatting += dgvSelectedProducts_CellFormatting;
+      // 
       // frmOrderEditor
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
-      ClientSize = new Size(545, 357);
+      ClientSize = new Size(995, 624);
+      Controls.Add(dgvSelectedProducts);
+      Controls.Add(btnAddProduct);
+      Controls.Add(label6);
+      Controls.Add(label5);
+      Controls.Add(mtxtAmount);
+      Controls.Add(mtxtPrice);
+      Controls.Add(cbxProducts);
+      Controls.Add(cbxClients);
       Controls.Add(label4);
-      Controls.Add(clbContactsSelection);
       Controls.Add(btnCancel);
       Controls.Add(btnSubmit);
       Controls.Add(label3);
       Controls.Add(label2);
       Controls.Add(label1);
-      Controls.Add(clbProductsSelection);
       Controls.Add(txtOrderNumber);
       Controls.Add(dtpCreationDate);
       FormBorderStyle = FormBorderStyle.FixedSingle;
       Name = "frmOrderEditor";
       StartPosition = FormStartPosition.CenterParent;
       Text = "frmOrderEditor";
-      Load += frmOrderEditor_Load;
+      ((System.ComponentModel.ISupportInitialize)dgvSelectedProducts).EndInit();
       ResumeLayout(false);
       PerformLayout();
     }
@@ -152,13 +234,19 @@
 
     private DateTimePicker dtpCreationDate;
     private TextBox txtOrderNumber;
-    private CheckedListBox clbProductsSelection;
     private Label label1;
     private Label label2;
     private Label label3;
     private Button btnCancel;
     private Button btnSubmit;
-    private CheckedListBox clbContactsSelection;
     private Label label4;
+    private ComboBox cbxClients;
+    private ComboBox cbxProducts;
+    private TextBox mtxtPrice;
+    private TextBox mtxtAmount;
+    private Label label5;
+    private Label label6;
+    private Button btnAddProduct;
+    private DataGridView dgvSelectedProducts;
   }
 }

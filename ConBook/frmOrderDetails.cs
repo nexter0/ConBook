@@ -28,10 +28,10 @@ namespace ConBook {
       cContact pContact = pFullContactsList.FirstOrDefault(c => c.Index == xOrder.IdxContact);
       BindingList<cProduct> pProductsList = new BindingList<cProduct>();
 
-      foreach (int pProductIndex in xOrder.IdxsProducts) {
-        cProduct pProduct = pFullProductsList.FirstOrDefault(p => p.Index == pProductIndex);
-        pProductsList.Add(pProduct);
-      }
+      //foreach (int pProductIndex in xOrder.OrderedProductsList) {
+      //  cProduct pProduct = pFullProductsList.FirstOrDefault(p => p.Index == pProductIndex);
+      //  pProductsList.Add(pProduct);
+      //}
 
       double pTotalPrice = pProductsList.Sum(p => p.Price);
 

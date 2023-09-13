@@ -202,7 +202,7 @@ namespace ConBook {
       // 
       label1.AutoSize = true;
       label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-      label1.Location = new Point(215, 9);
+      label1.Location = new Point(5, 9);
       label1.Name = "label1";
       label1.Size = new Size(172, 15);
       label1.TabIndex = 2;
@@ -212,7 +212,7 @@ namespace ConBook {
       // 
       lbOrderNumber.AutoSize = true;
       lbOrderNumber.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-      lbOrderNumber.Location = new Point(234, 24);
+      lbOrderNumber.Location = new Point(5, 24);
       lbOrderNumber.Name = "lbOrderNumber";
       lbOrderNumber.Size = new Size(133, 19);
       lbOrderNumber.TabIndex = 3;
