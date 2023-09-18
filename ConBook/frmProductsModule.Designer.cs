@@ -51,6 +51,7 @@ namespace ConBook {
       dgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
       dgvProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       dgvProducts.Location = new Point(12, 49);
+      dgvProducts.MultiSelect = false;
       dgvProducts.Name = "dgvProducts";
       dgvProducts.ReadOnly = true;
       dgvProducts.RowHeadersVisible = false;

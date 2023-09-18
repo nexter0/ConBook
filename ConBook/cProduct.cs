@@ -100,14 +100,14 @@ namespace ConBook {
 
   internal class cOrderedProduct : INotifyPropertyChanged {
 
-    private int? mIndex;
-    private int? mAmount;
-    private double? mSellPrice;
-    private double? mTotalPrice;
+    private int mIndex;
+    private int mAmount;
+    private double mPrice_Sold;
+    private double mPrice_Total;
 
     public event PropertyChangedEventHandler PropertyChanged;          // zdarzenie zmiany właściwości Zamówienia (pozwalające na data binding)
 
-    public int? Index {
+    public int Index {
 
       get { return mIndex; }
 
@@ -121,7 +121,7 @@ namespace ConBook {
       }
     }
 
-    public int? Amount {
+    public int Amount {
 
       get { return mAmount; }
 
@@ -136,38 +136,38 @@ namespace ConBook {
       }
     }
 
-    public double? SellPrice {
+    public double Price_Sold {
 
-      get { return mSellPrice; }
+      get { return mPrice_Sold; }
 
       set {
 
-        if (mSellPrice != value) {
-          mSellPrice = value;
-          OnPropertyChanged(nameof(SellPrice));
+        if (mPrice_Sold != value) {
+          mPrice_Sold = value;
+          OnPropertyChanged(nameof(Price_Sold));
         }
 
         UpdateTotalPrice();
       }
     }
 
-    public double? TotalPrice {
+    public double Price_Total {
 
-      get { return mTotalPrice; }
+      get { return mPrice_Total; }
     }
 
-    public cOrderedProduct(int? xIndex, int? xAmount, double? xSellPrice) {
+    public cOrderedProduct(int xIndex, int xAmount, double xSellPrice) {
 
       Index = xIndex;
       Amount = xAmount;
-      SellPrice = xSellPrice;
+      Price_Sold = xSellPrice;
       UpdateTotalPrice();
 
     }
 
     public cOrderedProduct() {
 
-      new cOrderedProduct(null, null, null);
+      new cOrderedProduct(-1, -1, -1);
 
     }
 
@@ -181,10 +181,10 @@ namespace ConBook {
     private void UpdateTotalPrice() {
       //funkcja aktualizująca property TotalPrice
 
-      if (Amount != null && SellPrice != null)
-        mTotalPrice = Math.Round((double)(Amount * SellPrice), 2);
+      if (Amount != null && Price_Sold != null)
+        mPrice_Total = Math.Round((double)(Amount * Price_Sold), 2);
       else
-        mTotalPrice = 0;
+        mPrice_Total = 0;
     }
 
   }

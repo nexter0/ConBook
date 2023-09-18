@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Text.RegularExpressions;
 
 namespace ConBook {
@@ -7,32 +8,51 @@ namespace ConBook {
     BindingList<cOrderedProduct> mOrderedProductsList;                  // lista wybranych przez użytkownika produktów
     BindingList<cProduct>? mProductsList;                               // pełna lista produktów
 
+    private enum EmptyTextBoxValidatonResult { OK, NUMBER_EMPTY, AMOUNT_EMPTY, PRICE_EMPTY };
+
     bool mIsCanceled;
+    bool mIsApplied;
 
     public frmOrderEditor() {
 
       InitializeComponent();
 
       mOrderedProductsList = new BindingList<cOrderedProduct>();
+      mIsCanceled = false;
+      mIsApplied = false;
 
     }
 
     private void btnSubmit_Click(object sender, EventArgs e) {
 
-      this.Close();
+      DialogResult cntValidationResult = ValidateOrder();
+
+      if (cntValidationResult == DialogResult.Yes) {
+        mIsCanceled = true;
+        this.Close();
+      } else if (cntValidationResult == DialogResult.Ignore) {
+        this.Close();
+        mIsApplied = true;
+      }
 
     }
 
     private void btnCancel_Click(object sender, EventArgs e) {
+
       mIsCanceled = true;
       this.Close();
+
     }
 
     private void btnAddProduct_Click(object sender, EventArgs e) {
 
-      cOrderedProduct pOrderedProduct = GetOrderedProduct();
+      AddOrderedProduct();
 
-      mOrderedProductsList.Add(pOrderedProduct);
+    }
+
+    private void btnDeleteProduct_Click(object sender, EventArgs e) {
+
+      DeleteOrderedProduct();
 
     }
 
@@ -46,7 +66,7 @@ namespace ConBook {
 
     private void dgvSelectedProducts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
 
-      if (e.RowIndex >= 0 && e.ColumnIndex == dgvSelectedProducts.Columns["Index"].Index) {
+      if (e.RowIndex >= 0 && e.ColumnIndex == dgvOrderedProducts.Columns["Index"].Index) {
         int productIndex = (int)e.Value;
 
         cProduct pProduct = mProductsList.FirstOrDefault(p => p.Index == productIndex);
@@ -65,12 +85,14 @@ namespace ConBook {
 
       string pInput = pTextBox.Text;
 
+      if (pInput == string.Empty) {
+        MessageBox.Show("Należy podać ilość.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        e.Cancel = true;
+      }
 
       if (Regex.IsMatch(pInput, @"\D")) {
-
-        MessageBox.Show("Niewłaściwy format danych w polu Ilość");
+        MessageBox.Show("Niewłaściwy format danych w polu Ilość", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         e.Cancel = true;
-
       }
 
     }
@@ -88,13 +110,13 @@ namespace ConBook {
       cbxClients.DataSource = xContactList;
       cbxClients.DisplayMember = "ToString";
 
-      InitializeDataGridView();
       InitializeTextBoxes(xOrder);
+      InitializeDataGridView();
       CustomizeWidow(pIsOrderEmpty);
 
       this.ShowDialog();
 
-      if (mIsCanceled)
+      if (mIsCanceled || !mIsApplied)
         return false;
 
       cContact pContact = cbxClients.SelectedItem as cContact;
@@ -134,8 +156,8 @@ namespace ConBook {
         txtOrderNumber.Text = xOrder.Number;
         dtpCreationDate.Value = xOrder.CreationDate;
         mOrderedProductsList = xOrder.OrderedProductsList;
-        dgvSelectedProducts.DataSource = null;
-        dgvSelectedProducts.DataSource = mOrderedProductsList;
+        dgvOrderedProducts.DataSource = null;
+        dgvOrderedProducts.DataSource = mOrderedProductsList;
 
       } else {
         txtOrderNumber.Text = string.Empty;
@@ -160,23 +182,81 @@ namespace ConBook {
 
     }
 
-    private void InitializeDataGridView() {
-      //funkcja inicjalizująca DataGridView
+    private void AddOrderedProduct() {
+      //funkcja dodająca produkt do listy wybranych produktów
 
-      dgvSelectedProducts.DataSource = mOrderedProductsList;
+      if (mtxtAmount.Text == string.Empty)
+        MessageBox.Show("Należy podać ilość.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+      else if (mtxtPrice.Text == string.Empty)
+        MessageBox.Show("Należy podać cenę sprzedaży.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-      dgvSelectedProducts.Columns["Index"].HeaderText = "Nazwa";
-      dgvSelectedProducts.Columns["Amount"].HeaderText = "Ilość";
-      dgvSelectedProducts.Columns["SellPrice"].HeaderText = "Cena sprzedaży";
-      dgvSelectedProducts.Columns["TotalPrice"].HeaderText = "Cena łączna";
+      cOrderedProduct pOrderedProduct = GetOrderedProduct();
 
-      dgvSelectedProducts.Columns["Index"].Width = 243;
-      dgvSelectedProducts.Columns["Amount"].Width = 50;
-      dgvSelectedProducts.Columns["SellPrice"].Width = 120;
-      dgvSelectedProducts.Columns["TotalPrice"].Width = 120;
+      if (CheckIfIndexExists(mOrderedProductsList, pOrderedProduct.Index)) {
+        MessageBox.Show("Dany produkt został już dodany do listy produktów.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+      } else {
+
+        mOrderedProductsList.Add(pOrderedProduct);
+      }
 
     }
 
-    
+    private void DeleteOrderedProduct() {
+      //funkcja usuwająca produkt z listy wybranych produktów
+
+      int pListIndex = dgvOrderedProducts.SelectedRows[0].Index;
+      int pProductIndex = mOrderedProductsList[pListIndex].Index - 1;
+
+      DialogResult deletionQueryResult = MessageBox.Show($"Usunąć produkt" +
+          $" {mProductsList[pProductIndex].Name} z listy?",
+          "Usuń produkt z listy wybranych", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+      if (deletionQueryResult == DialogResult.Yes) {
+
+        mOrderedProductsList.RemoveAt(pListIndex);
+
+      }
+
+    }
+
+    private void InitializeDataGridView() {
+      //funkcja inicjalizująca DataGridView
+
+      dgvOrderedProducts.DataSource = mOrderedProductsList;
+
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Index)].HeaderText = "Nazwa";
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Amount)].HeaderText = "Ilość";
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Sold)].HeaderText = "Cena sprzedaży";
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Total)].HeaderText = "Cena łączna";
+
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Index)].Width = 243;
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Amount)].Width = 50;
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Sold)].Width = 120;
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Total)].Width = 120;
+
+    }
+
+
+    private bool CheckIfIndexExists(BindingList<cOrderedProduct> xOrderedProductsList, int xIndex) {
+      //funkcja sprawdzająca czy w liście wybranych produktów istnieje produkt z danym indeksem
+
+      return xOrderedProductsList.Any(pProduct => pProduct.Index == xIndex);
+
+    }
+
+    private DialogResult ValidateOrder() {
+      //funkcja sprawdzająca, czy wszystkie dane zostały wpisane
+      //funkcja zwraca DialogResult.YesNo, czy formularz powinien zostać zamknięy
+
+      if (txtOrderNumber.Text == string.Empty) {
+        return MessageBox.Show("Nie wprowadzono numeru zamówienia. Zamówienie nie zostanie utworzone.\nCzy na pewno zamknąć to okno?", "Błąd tworzenia zamówienia", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+      }
+      if (mOrderedProductsList.Count == 0) {
+        return MessageBox.Show("Lista wybranych produktów jest pusta. Zamówienie nie zostanie utworzone.\nCzy na pewno zamknąć to okno?", "Błąd tworzenia zamówienia", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+      }
+
+      return DialogResult.Ignore;
+    }
+
   }
 }

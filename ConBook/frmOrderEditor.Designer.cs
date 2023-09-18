@@ -39,8 +39,9 @@
       label5 = new Label();
       label6 = new Label();
       btnAddProduct = new Button();
-      dgvSelectedProducts = new DataGridView();
-      ((System.ComponentModel.ISupportInitialize)dgvSelectedProducts).BeginInit();
+      dgvOrderedProducts = new DataGridView();
+      btnDeleteProduct = new Button();
+      ((System.ComponentModel.ISupportInitialize)dgvOrderedProducts).BeginInit();
       SuspendLayout();
       // 
       // dtpCreationDate
@@ -87,7 +88,7 @@
       // 
       // btnCancel
       // 
-      btnCancel.Location = new Point(498, 554);
+      btnCancel.Location = new Point(472, 332);
       btnCancel.Name = "btnCancel";
       btnCancel.Size = new Size(75, 23);
       btnCancel.TabIndex = 9;
@@ -97,7 +98,7 @@
       // 
       // btnSubmit
       // 
-      btnSubmit.Location = new Point(417, 554);
+      btnSubmit.Location = new Point(391, 332);
       btnSubmit.Name = "btnSubmit";
       btnSubmit.Size = new Size(75, 23);
       btnSubmit.TabIndex = 8;
@@ -108,7 +109,7 @@
       // label4
       // 
       label4.AutoSize = true;
-      label4.Location = new Point(379, 47);
+      label4.Location = new Point(341, 50);
       label4.Name = "label4";
       label4.Size = new Size(37, 15);
       label4.TabIndex = 11;
@@ -117,7 +118,7 @@
       // cbxClients
       // 
       cbxClients.FormattingEnabled = true;
-      cbxClients.Location = new Point(379, 65);
+      cbxClients.Location = new Point(341, 68);
       cbxClients.Name = "cbxClients";
       cbxClients.Size = new Size(175, 23);
       cbxClients.TabIndex = 12;
@@ -176,11 +177,11 @@
       // 
       // dgvSelectedProducts
       // 
-      dgvSelectedProducts.AllowUserToAddRows = false;
-      dgvSelectedProducts.AllowUserToDeleteRows = false;
-      dgvSelectedProducts.AllowUserToResizeColumns = false;
-      dgvSelectedProducts.AllowUserToResizeRows = false;
-      dgvSelectedProducts.BackgroundColor = Color.WhiteSmoke;
+      dgvOrderedProducts.AllowUserToAddRows = false;
+      dgvOrderedProducts.AllowUserToDeleteRows = false;
+      dgvOrderedProducts.AllowUserToResizeColumns = false;
+      dgvOrderedProducts.AllowUserToResizeRows = false;
+      dgvOrderedProducts.BackgroundColor = Color.WhiteSmoke;
       dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
       dataGridViewCellStyle1.BackColor = SystemColors.Control;
       dataGridViewCellStyle1.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
@@ -188,24 +189,36 @@
       dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
       dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
       dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-      dgvSelectedProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-      dgvSelectedProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      dgvSelectedProducts.Location = new Point(11, 141);
-      dgvSelectedProducts.Name = "dgvSelectedProducts";
-      dgvSelectedProducts.ReadOnly = true;
-      dgvSelectedProducts.RowHeadersVisible = false;
-      dgvSelectedProducts.RowTemplate.Height = 25;
-      dgvSelectedProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      dgvSelectedProducts.Size = new Size(536, 185);
-      dgvSelectedProducts.TabIndex = 19;
-      dgvSelectedProducts.CellFormatting += dgvSelectedProducts_CellFormatting;
+      dgvOrderedProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+      dgvOrderedProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      dgvOrderedProducts.Location = new Point(11, 141);
+      dgvOrderedProducts.MultiSelect = false;
+      dgvOrderedProducts.Name = "dgvSelectedProducts";
+      dgvOrderedProducts.ReadOnly = true;
+      dgvOrderedProducts.RowHeadersVisible = false;
+      dgvOrderedProducts.RowTemplate.Height = 25;
+      dgvOrderedProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+      dgvOrderedProducts.Size = new Size(536, 185);
+      dgvOrderedProducts.TabIndex = 19;
+      dgvOrderedProducts.CellFormatting += dgvSelectedProducts_CellFormatting;
+      // 
+      // btnDeleteProduct
+      // 
+      btnDeleteProduct.Location = new Point(341, 112);
+      btnDeleteProduct.Name = "btnDeleteProduct";
+      btnDeleteProduct.Size = new Size(99, 23);
+      btnDeleteProduct.TabIndex = 20;
+      btnDeleteProduct.Text = "Usuń produkt";
+      btnDeleteProduct.UseVisualStyleBackColor = true;
+      btnDeleteProduct.Click += btnDeleteProduct_Click;
       // 
       // frmOrderEditor
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
-      ClientSize = new Size(995, 624);
-      Controls.Add(dgvSelectedProducts);
+      ClientSize = new Size(558, 362);
+      Controls.Add(btnDeleteProduct);
+      Controls.Add(dgvOrderedProducts);
       Controls.Add(btnAddProduct);
       Controls.Add(label6);
       Controls.Add(label5);
@@ -225,7 +238,7 @@
       Name = "frmOrderEditor";
       StartPosition = FormStartPosition.CenterParent;
       Text = "frmOrderEditor";
-      ((System.ComponentModel.ISupportInitialize)dgvSelectedProducts).EndInit();
+      ((System.ComponentModel.ISupportInitialize)dgvOrderedProducts).EndInit();
       ResumeLayout(false);
       PerformLayout();
     }
@@ -247,6 +260,7 @@
     private Label label5;
     private Label label6;
     private Button btnAddProduct;
-    private DataGridView dgvSelectedProducts;
+    private DataGridView dgvOrderedProducts;
+    private Button btnDeleteProduct;
   }
 }

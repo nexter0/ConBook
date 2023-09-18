@@ -49,6 +49,7 @@
       dgvOrders.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
       dgvOrders.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       dgvOrders.Location = new Point(12, 47);
+      dgvOrders.MultiSelect = false;
       dgvOrders.Name = "dgvOrders";
       dgvOrders.ReadOnly = true;
       dgvOrders.RowHeadersVisible = false;

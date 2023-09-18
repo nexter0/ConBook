@@ -16,7 +16,7 @@ namespace ConBook {
 
     private void frmOrdersModule_Load(object sender, EventArgs e) {
 
-      //LoadOrders();
+      LoadOrders();
 
     }
 
@@ -24,7 +24,7 @@ namespace ConBook {
 
       mOrdersListUtils.AddOrder();
 
-      //SaveOrders();
+      SaveOrders();
 
     }
 
@@ -33,7 +33,7 @@ namespace ConBook {
       if (mOrdersListUtils.OrdersList.Count > 0)
         mOrdersListUtils.EditOrder(dgvOrders.SelectedRows[0].Index);
 
-      //SaveOrders();
+      SaveOrders();
 
     }
 
@@ -42,7 +42,7 @@ namespace ConBook {
       if (mOrdersListUtils.OrdersList.Count > 0)
         mOrdersListUtils.DeleteOrder(dgvOrders.SelectedRows[0].Index);
 
-      //SaveOrders();
+      SaveOrders();
 
     }
 
@@ -66,6 +66,7 @@ namespace ConBook {
     internal bool ShowMe() {
       //funkcja wywołująca formularz
 
+      BindDataGridView();
       this.ShowDialog();
 
       return true;

@@ -7,23 +7,93 @@ namespace ConBook {
 
     private const string INDEX_TAG = $"{BEGIN_TAG}IDX{END_TAG}";
     private const string NUMBER_TAG = $"{BEGIN_TAG}NUMBER{END_TAG}";
-    private const string CONTACTS_TAG = $"{BEGIN_TAG}CONTACTS{END_TAG}";
+    private const string CONTACT_TAG = $"{BEGIN_TAG}CONTACT{END_TAG}";
     private const string PRODUCTS_TAG = $"{BEGIN_TAG}PRODUCTS{END_TAG}";
-
+    private const string PRODUCT_INDEX_TAG = $"{BEGIN_TAG}PRD_IDX{END_TAG}";
+    private const string PRODUCT_AMOUNT_TAG = $"{BEGIN_TAG}PRD_AMNT{END_TAG}";
+    private const string PRODUCT_SELLPRICE_TAG = $"{BEGIN_TAG}PRD_PRC{END_TAG}";
+    private const string PRD_INNER_SEPARATOR = ";;";
+    private const string PRD_OUTER_SEPARATOR = "||";
 
     private static string GetFormattedOrderString(cOrder xOrder) {
       //funkcja zwracająca zamówienie w sformatowanej postaci (gotowej do zapisu do pliku)
       //xOrder - zamówienie do sformatowania
 
-      string pOrdersIndexesString = string.Join(",", xOrder.OrderedProductsList);
+      string pFormattedOderedProductsListString = OrderedProductsListToString(xOrder.OrderedProductsList);
 
       return $"{BEGIN_MARKER}\n" +
         $"{INDEX_TAG}{xOrder.Index}{SEPARATOR}" +
         $"{NUMBER_TAG}{xOrder.Number}{SEPARATOR}" +
-        $"{CONTACTS_TAG}{xOrder.IdxContact}{SEPARATOR}" +
-        $"{PRODUCTS_TAG}{pOrdersIndexesString}{SEPARATOR}\n" +
+        $"{CONTACT_TAG}{xOrder.IdxContact}{SEPARATOR}" +
+        $"{PRODUCTS_TAG}{pFormattedOderedProductsListString}{SEPARATOR}\n" +
         $"{END_MARKER}";
 
+    }
+
+    private static string GetFormattedOrderedProductString(cOrderedProduct xOrderedProduct) {
+      //funkcja zwracająca zamówiony produkt w sformatowanej postaci (gotowej do zapisu do pliku)
+      //xOrderedProduct - zamówiony produkt do sformatowania
+
+      return $" {PRODUCT_INDEX_TAG}{xOrderedProduct.Index}{PRD_INNER_SEPARATOR}" +
+        $"{PRODUCT_AMOUNT_TAG}{xOrderedProduct.Amount}{PRD_INNER_SEPARATOR}" +
+        $"{PRODUCT_SELLPRICE_TAG}{xOrderedProduct.Price_Sold}{PRD_OUTER_SEPARATOR}";
+
+    }
+
+    private static string OrderedProductsListToString(BindingList<cOrderedProduct> xOrderedProductsList) {
+      //funkcja zwracająca listę zamówionych produktów w sformatowanej postaci (gotowej do zapisu do pliku)
+      //xOrderedProductsList - lista zamówionych produktów
+
+      string pResult = string.Empty;
+
+      foreach (cOrderedProduct pOrderedProduct in xOrderedProductsList) {
+        pResult += GetFormattedOrderedProductString(pOrderedProduct);
+      }
+
+      return pResult;
+
+    }
+
+    private static BindingList<cOrderedProduct> GetOrderedProductsListFromData(string xData) {
+      //funkcja zwracająca listę zamówionych produktów wna podstawie sformatowanych danych z pliku
+      //xData - 
+
+      List<string> pSplittedDataList;
+      BindingList<cOrderedProduct> pOrderedProductsList = new BindingList<cOrderedProduct>();
+      cOrderedProduct pOrderedProduct = new cOrderedProduct(); ;
+
+      xData = xData.Replace("$<PRODUCTS>$ ", string.Empty);
+      xData = xData.Replace("::", string.Empty);
+      xData = xData.Replace(">*", string.Empty);
+
+      pSplittedDataList = xData.Split(PRD_OUTER_SEPARATOR).ToList();
+
+      foreach (string pData in pSplittedDataList) {
+
+        if (pData == string.Empty)
+          continue;
+
+        pOrderedProduct = new cOrderedProduct();
+
+        List<string> pSplittedSingleProductDataList;
+        pSplittedSingleProductDataList = pData.Split(PRD_INNER_SEPARATOR).ToList();
+
+
+        foreach (string pSingleProductData in pSplittedSingleProductDataList) {
+
+          if (pSingleProductData == string.Empty)
+            continue;
+
+          if (pSingleProductData.Contains($"{PRODUCT_INDEX_TAG}")) { pOrderedProduct.Index = int.Parse(RemoveTags(pSingleProductData)); continue; }
+          if (pSingleProductData.Contains($"{PRODUCT_AMOUNT_TAG}")) { pOrderedProduct.Amount = int.Parse(RemoveTags(pSingleProductData)); continue; }
+          if (pSingleProductData.Contains($"{PRODUCT_SELLPRICE_TAG}")) { pOrderedProduct.Price_Sold = double.Parse(RemoveTags(pSingleProductData)); continue; }
+
+        }
+        if (pOrderedProduct != null)
+          pOrderedProductsList.Add(pOrderedProduct);
+      }
+
+      return pOrderedProductsList;
     }
 
     private static cOrder GetOrderFromFormattedData(string[] xSplittedOrderData) {
@@ -32,25 +102,16 @@ namespace ConBook {
 
       cOrder pOrder = new cOrder();
 
-      foreach (string xData in xSplittedOrderData) {
-        if (xData.Contains($"{INDEX_TAG}")) { pOrder.Index = int.Parse(RemoveTags(xData)); continue; }
-        if (xData.Contains($"{NUMBER_TAG}")) { pOrder.Number = RemoveTags(xData); continue; }
-        if (xData.Contains($"{CONTACTS_TAG}")) { pOrder.IdxContact = int.Parse(RemoveTags(xData)); continue; }
-        //if (xData.Contains($"{PRODUCTS_TAG}")) { pOrder.OrderedProductsList = ConvertStringIndexesToList(RemoveTags(xData)); continue; }
+      foreach (string pData in xSplittedOrderData) {
+        if (pData == string.Empty)
+          continue;
+        if (pData.Contains($"{INDEX_TAG}")) { pOrder.Index = int.Parse(RemoveTags(pData)); continue; }
+        if (pData.Contains($"{NUMBER_TAG}")) { pOrder.Number = RemoveTags(pData); continue; }
+        if (pData.Contains($"{CONTACT_TAG}")) { pOrder.IdxContact = int.Parse(RemoveTags(pData)); continue; }
+        if (pData.Contains($"{PRODUCTS_TAG}")) { pOrder.OrderedProductsList = GetOrderedProductsListFromData(pData); continue; }
       }
 
       return pOrder;
-    }
-
-    private static List<int> ConvertStringIndexesToList(string xStringIndexes) {
-
-      string[] pSplittedIndexesArray = xStringIndexes.Split(',');
-      int[] pConvertedIndexesArray = Array.ConvertAll(pSplittedIndexesArray, s => int.Parse(s));
-
-      List<int> pConvertedIndexesList = new List<int>(pConvertedIndexesArray);
-
-      return pConvertedIndexesList;
-
     }
 
     private static BindingList<cOrder> GetOrdersListFromFile(string xFileName) {
