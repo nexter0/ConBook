@@ -114,6 +114,7 @@ namespace ConBook {
       dgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
       dgvProducts.Size = new Size(536, 185);
       dgvProducts.TabIndex = 10;
+      dgvProducts.CellFormatting += dgvProducts_CellFormatting;
       // 
       // lbDateCreated
       // 

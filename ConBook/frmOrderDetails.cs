@@ -3,11 +3,18 @@ using System.Diagnostics.Contracts;
 
 namespace ConBook {
   public partial class frmOrderDetails : Form {
+
+    BindingList<cContact> mFullContactsList;
+    BindingList<cProduct> mFullProductsList;
+
     public frmOrderDetails() {
       InitializeComponent();
     }
 
     internal bool ShowMe(cOrder xOrder) {
+
+      mFullContactsList = cContactsSerializer.GetContactsList();
+      mFullProductsList = cProductsSerializer.GetProductsList();
 
       ResetLabels();
       SetLabels(xOrder);
@@ -22,20 +29,11 @@ namespace ConBook {
 
     private void SetLabels(cOrder xOrder) {
 
-      BindingList<cContact> pFullContactsList = cContactsSerializer.GetContactsList();
-      BindingList<cProduct> pFullProductsList = cProductsSerializer.GetProductsList();
+      cContact pContact = mFullContactsList.FirstOrDefault(c => c.Index == xOrder.IdxContact);
 
-      cContact pContact = pFullContactsList.FirstOrDefault(c => c.Index == xOrder.IdxContact);
-      BindingList<cProduct> pProductsList = new BindingList<cProduct>();
+      double pTotalPrice = xOrder.OrderedProductsList.Sum(p => p.Price_Total);
 
-      //foreach (int pProductIndex in xOrder.OrderedProductsList) {
-      //  cProduct pProduct = pFullProductsList.FirstOrDefault(p => p.Index == pProductIndex);
-      //  pProductsList.Add(pProduct);
-      //}
-
-      double pTotalPrice = pProductsList.Sum(p => p.Price);
-
-      dgvProducts.DataSource = pProductsList;
+      dgvProducts.DataSource = xOrder.OrderedProductsList;
 
       lbOrderNumber.Text = xOrder.Number;
       lbDateCreated.Text = xOrder.CreationDate.ToString();
@@ -60,21 +58,40 @@ namespace ConBook {
       //funkcja kofigurująca DataGridView
 
       DataGridViewColumn pDgvColumnIndex = dgvProducts.Columns["Index"];
-      DataGridViewColumn pDgvColumnName = dgvProducts.Columns["Name"];
-      DataGridViewColumn pDgvColumnSymbol = dgvProducts.Columns["Symbol"];
-      DataGridViewColumn pDgvColumnPrice = dgvProducts.Columns["Price"];
+      DataGridViewColumn pDgvColumnAmount = dgvProducts.Columns["Amount"];
+      DataGridViewColumn pDgvColumnSellPrice = dgvProducts.Columns["Price_Sold"];
+      DataGridViewColumn pDgvColumnTotalPrice = dgvProducts.Columns["Price_Total"];
 
       pDgvColumnIndex.HeaderText = "Indeks";
-      pDgvColumnName.HeaderText = "Nazwa";
-      pDgvColumnSymbol.HeaderText = "Symbol";
-      pDgvColumnPrice.HeaderText = "Cena";
+      pDgvColumnAmount.HeaderText = "Ilość";
+      pDgvColumnSellPrice.HeaderText = "Cena sprzedaży (za szt.)";
+      pDgvColumnTotalPrice.HeaderText = "Cena łączna";
 
-      pDgvColumnIndex.Width = 50;
-      pDgvColumnName.Width = 263;
-      pDgvColumnSymbol.Width = 100;
-      pDgvColumnPrice.Width = 120;
+      pDgvColumnIndex.Width = 263;
+      pDgvColumnAmount.Width = 50;
+      pDgvColumnSellPrice.Width = 100;
+      pDgvColumnTotalPrice.Width = 120;
 
     }
 
+    private void dgvProducts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
+
+      if (e.RowIndex >= 0 && e.ColumnIndex == dgvProducts.Columns["Index"].Index) {
+        int productIndex = (int)e.Value;
+
+        cProduct pProduct = mFullProductsList.FirstOrDefault(p => p.Index == productIndex);
+
+
+        if (pProduct != null) {
+          e.Value = pProduct.Name;
+        }
+      }
+      if (e.RowIndex >= 0 && e.ColumnIndex == dgvProducts.Columns["Price_Total"].Index) {
+        string pTotalPriceCellValue = e.Value.ToString();
+        if (!pTotalPriceCellValue.Contains(","))
+          e.Value = e.Value + ",00";
+      }
+
+    }
   }
 }

@@ -41,6 +41,7 @@
       btnAddProduct = new Button();
       dgvOrderedProducts = new DataGridView();
       btnDeleteProduct = new Button();
+      label7 = new Label();
       ((System.ComponentModel.ISupportInitialize)dgvOrderedProducts).BeginInit();
       SuspendLayout();
       // 
@@ -167,7 +168,7 @@
       // 
       // btnAddProduct
       // 
-      btnAddProduct.Location = new Point(236, 112);
+      btnAddProduct.Location = new Point(342, 112);
       btnAddProduct.Name = "btnAddProduct";
       btnAddProduct.Size = new Size(99, 23);
       btnAddProduct.TabIndex = 18;
@@ -175,7 +176,7 @@
       btnAddProduct.UseVisualStyleBackColor = true;
       btnAddProduct.Click += btnAddProduct_Click;
       // 
-      // dgvSelectedProducts
+      // dgvOrderedProducts
       // 
       dgvOrderedProducts.AllowUserToAddRows = false;
       dgvOrderedProducts.AllowUserToDeleteRows = false;
@@ -193,7 +194,7 @@
       dgvOrderedProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       dgvOrderedProducts.Location = new Point(11, 141);
       dgvOrderedProducts.MultiSelect = false;
-      dgvOrderedProducts.Name = "dgvSelectedProducts";
+      dgvOrderedProducts.Name = "dgvOrderedProducts";
       dgvOrderedProducts.ReadOnly = true;
       dgvOrderedProducts.RowHeadersVisible = false;
       dgvOrderedProducts.RowTemplate.Height = 25;
@@ -204,7 +205,7 @@
       // 
       // btnDeleteProduct
       // 
-      btnDeleteProduct.Location = new Point(341, 112);
+      btnDeleteProduct.Location = new Point(447, 112);
       btnDeleteProduct.Name = "btnDeleteProduct";
       btnDeleteProduct.Size = new Size(99, 23);
       btnDeleteProduct.TabIndex = 20;
@@ -212,11 +213,21 @@
       btnDeleteProduct.UseVisualStyleBackColor = true;
       btnDeleteProduct.Click += btnDeleteProduct_Click;
       // 
+      // label7
+      // 
+      label7.AutoSize = true;
+      label7.Location = new Point(224, 120);
+      label7.Name = "label7";
+      label7.Size = new Size(32, 15);
+      label7.TabIndex = 21;
+      label7.Text = "/ szt.";
+      // 
       // frmOrderEditor
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
       ClientSize = new Size(558, 362);
+      Controls.Add(label7);
       Controls.Add(btnDeleteProduct);
       Controls.Add(dgvOrderedProducts);
       Controls.Add(btnAddProduct);
@@ -262,5 +273,6 @@
     private Button btnAddProduct;
     private DataGridView dgvOrderedProducts;
     private Button btnDeleteProduct;
+    private Label label7;
   }
 }

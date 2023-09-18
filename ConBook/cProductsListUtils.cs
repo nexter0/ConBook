@@ -5,7 +5,7 @@ namespace ConBook {
     //klasa odpowiadająca za obsługę listy produktów
 
     private BindingList<cProduct> mProductsList;                    // lista produktów
-    private int mLastProductIndex;
+    private int mLastProductIndex;                                  // ostatnio wykorzystany indeks produktu
 
     public BindingList<cProduct> ProductsList { get; set; }
     public int LastProductIndex { get { return mLastProductIndex; } set { mLastProductIndex = value; } }
@@ -58,11 +58,5 @@ namespace ConBook {
       pProductEditor.ShowMe(ProductsList[xIndex], ProductsList);
 
     }
-
-    private int GetNewIndex() {
-      if (ProductsList.Count == 0) return 0;
-      return ProductsList.Max(contact => contact.Index) + 1;
-    }
-
   }
 }
