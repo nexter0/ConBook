@@ -153,7 +153,7 @@ namespace ConBook {
 
       if (!xIsEmptyProduct) {
 
-        btnSubmit.Text = "Edytuj";
+        btnSubmit.Text = "Zapisz";
         this.Text = "Edytuj zamówienie";
         this.Icon = Properties.Resources.editIcon;
 
@@ -179,10 +179,13 @@ namespace ConBook {
         cbxClients.SelectedValue = pContact.Index;
         dgvOrderedProducts.DataSource = null;
         dgvOrderedProducts.DataSource = mOrderedProductsList;
+        mtxtAmount.Text = "1";
+        UpdateTotalSum();
 
       } else {
         txtOrderNumber.Text = string.Empty;
         dtpCreationDate.Value = DateTime.Now;
+        mtxtAmount.Text = "1";
       }
 
     }
@@ -213,12 +216,7 @@ namespace ConBook {
 
       cOrderedProduct pOrderedProduct = GetOrderedProduct();
 
-      if (CheckIfIndexExists(mOrderedProductsList, pOrderedProduct.Index)) {
-        MessageBox.Show("Dany produkt został już dodany do listy produktów.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-      } else {
-
-        mOrderedProductsList.Add(pOrderedProduct);
-      }
+      mOrderedProductsList.Add(pOrderedProduct);
 
     }
 
@@ -248,7 +246,9 @@ namespace ConBook {
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Index)].HeaderText = "Nazwa";
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Amount)].HeaderText = "Ilość";
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Sold)].HeaderText = "Cena sprzedaży";
-      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Total)].HeaderText = "Cena łączna";
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Total)].HeaderText = "Wartość";
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Sold)].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Total)].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Index)].Width = 243;
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Amount)].Width = 50;

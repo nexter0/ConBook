@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
 using System.Windows.Forms;
 
 namespace ConBook {
@@ -24,6 +25,7 @@ namespace ConBook {
 
       mOrdersListUtils.AddOrder();
 
+      UpdateAdditionalColumns();
       SaveOrders();
 
     }
@@ -33,6 +35,7 @@ namespace ConBook {
       if (mOrdersListUtils.OrdersList.Count > 0)
         mOrdersListUtils.EditOrder(dgvOrders.SelectedRows[0].Index);
 
+      UpdateAdditionalColumns();
       SaveOrders();
 
     }
@@ -42,6 +45,7 @@ namespace ConBook {
       if (mOrdersListUtils.OrdersList.Count > 0)
         mOrdersListUtils.DeleteOrder(dgvOrders.SelectedRows[0].Index);
 
+      UpdateAdditionalColumns();
       SaveOrders();
 
     }
@@ -67,6 +71,17 @@ namespace ConBook {
           e.Value = pContact.Name[0] + ". " + pContact.Surname;
         }
       }
+      FormatAdditionalCells(dgvOrders[e.ColumnIndex, e.RowIndex]);
+    }
+
+    private void dgvOrders_CellDoubleClick(object sender, DataGridViewCellEventArgs e) {
+
+      frmOrderDetails pFrmOrderDetails = new frmOrderDetails();
+
+      DataGridViewRow pSelectedRow = dgvOrders.SelectedRows[0];
+      cOrder pSelectedOrder = (cOrder)pSelectedRow.DataBoundItem;
+
+      pFrmOrderDetails.ShowMe(pSelectedOrder);
 
     }
 
@@ -74,6 +89,7 @@ namespace ConBook {
     internal bool ShowMe() {
       //funkcja wywołująca formularz
 
+      AddDataGridViewCols();
       BindDataGridView();
       this.ShowDialog();
 
@@ -86,11 +102,11 @@ namespace ConBook {
 
       dgvOrders.DataSource = null;
       dgvOrders.DataSource = mOrdersListUtils.OrdersList;
-      ConfigureDataGridView();
+      ConfigureDefaultDataGridViewCols();
 
     }
 
-    private void ConfigureDataGridView() {
+    private void ConfigureDefaultDataGridViewCols() {
       //funkcja kofigurująca DataGridView
 
       DataGridViewColumn pDgvColumnNumber = dgvOrders.Columns["Number"];
@@ -107,6 +123,83 @@ namespace ConBook {
       pDgvColumnDate.Width = 250;
       pDgvColumnIndex.Width = 50;
       pDgvColumnClient.Width = 153;
+      pDgvColumnIndex.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+      dgvOrders.Columns["TotalPrice"].DisplayIndex = dgvOrders.ColumnCount - 1;
+      dgvOrders.Columns["TotalAmount"].DisplayIndex = dgvOrders.ColumnCount - 2;
+    }
+
+    private void AddDataGridViewCols() {
+      //funkcja dodająca dodatkowe kolumny do DataGridView
+
+      DataGridViewTextBoxColumn pDgvColumnTotalPrice = new DataGridViewTextBoxColumn() {
+        Name = "TotalPrice",
+        HeaderText = "Wartość zamówienia",
+        ReadOnly = true,
+      };
+
+      DataGridViewTextBoxColumn pDgvColumnTotalAmount = new DataGridViewTextBoxColumn() {
+        Name = "TotalAmount",
+        HeaderText = "Liczba produktów",
+        ReadOnly = true,
+      };
+
+      dgvOrders.Columns.Add(pDgvColumnTotalPrice);
+      dgvOrders.Columns.Add(pDgvColumnTotalAmount);
+
+      pDgvColumnTotalPrice.Width = 118;
+      pDgvColumnTotalAmount.Width = 80;
+      pDgvColumnTotalPrice.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+      pDgvColumnTotalAmount.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+    }
+
+    private void FormatAdditionalCells(DataGridViewCell xCell) {
+      //funkcja formatująca komórki w dodatkowo dodanych kolumnach
+
+      var pFormattedCellOrderIndex = dgvOrders.Rows[xCell.RowIndex].Cells["Index"];
+      cOrder pOrder = mOrdersListUtils.OrdersList.FirstOrDefault(o => o.Index == (int)pFormattedCellOrderIndex.Value);
+
+      if (xCell.RowIndex >= 0 && xCell.ColumnIndex == dgvOrders.Columns["TotalPrice"].Index) {
+
+        xCell.Value = GetTotalProductsPrice(pOrder).ToString("C");
+
+      } else if (xCell.RowIndex >= 0 && xCell.ColumnIndex == dgvOrders.Columns["TotalAmount"].Index) {
+
+        xCell.Value = GetTotalProductsAmount(pOrder);
+      }
+
+    }
+
+    private void UpdateAdditionalColumns() {
+      //funkcja aktualizująca dodatkowo dodane kolumny
+
+      foreach (DataGridViewRow pRow in dgvOrders.Rows) {
+        FormatAdditionalCells(pRow.Cells["TotalPrice"]);
+        FormatAdditionalCells(pRow.Cells["TotalAmount"]);
+      }
+
+    }
+
+    private int GetTotalProductsAmount(cOrder xOrder) {
+
+      int pSum = 0;
+      foreach (cOrderedProduct pProduct in xOrder.OrderedProductsList) {
+        pSum += pProduct.Amount;
+      }
+
+      return pSum;
+
+    }
+
+    private double GetTotalProductsPrice(cOrder xOrder) {
+
+      double pSum = 0;
+      foreach (cOrderedProduct pProduct in xOrder.OrderedProductsList) {
+        pSum += pProduct.Price_Total;
+      }
+
+      return pSum;
 
     }
 
@@ -146,7 +239,6 @@ namespace ConBook {
 
           MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-
       }
 
     }
@@ -167,17 +259,6 @@ namespace ConBook {
       }
 
       BindDataGridView();
-
-    }
-
-    private void dgvOrders_CellDoubleClick(object sender, DataGridViewCellEventArgs e) {
-
-      frmOrderDetails pFrmOrderDetails = new frmOrderDetails();
-
-      DataGridViewRow pSelectedRow = dgvOrders.SelectedRows[0];
-      cOrder pSelectedOrder = (cOrder)pSelectedRow.DataBoundItem;
-
-      pFrmOrderDetails.ShowMe(pSelectedOrder);
 
     }
 

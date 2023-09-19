@@ -23,7 +23,7 @@
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
-      DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
       dtpCreationDate = new DateTimePicker();
       txtOrderNumber = new TextBox();
       label1 = new Label();
@@ -120,6 +120,7 @@
       // 
       // cbxClients
       // 
+      cbxClients.DropDownStyle = ComboBoxStyle.DropDownList;
       cbxClients.FormattingEnabled = true;
       cbxClients.Location = new Point(341, 68);
       cbxClients.Name = "cbxClients";
@@ -128,6 +129,7 @@
       // 
       // cbxProducts
       // 
+      cbxProducts.DropDownStyle = ComboBoxStyle.DropDownList;
       cbxProducts.FormattingEnabled = true;
       cbxProducts.Location = new Point(12, 68);
       cbxProducts.Name = "cbxProducts";
@@ -141,6 +143,7 @@
       mtxtPrice.Name = "mtxtPrice";
       mtxtPrice.Size = new Size(100, 23);
       mtxtPrice.TabIndex = 14;
+      mtxtPrice.TextAlign = HorizontalAlignment.Right;
       // 
       // mtxtAmount
       // 
@@ -148,6 +151,7 @@
       mtxtAmount.Name = "mtxtAmount";
       mtxtAmount.Size = new Size(100, 23);
       mtxtAmount.TabIndex = 15;
+      mtxtAmount.TextAlign = HorizontalAlignment.Right;
       mtxtAmount.Validating += mtxtAmount_Validating;
       // 
       // label5
@@ -185,14 +189,14 @@
       dgvOrderedProducts.AllowUserToResizeColumns = false;
       dgvOrderedProducts.AllowUserToResizeRows = false;
       dgvOrderedProducts.BackgroundColor = Color.WhiteSmoke;
-      dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewCellStyle1.BackColor = SystemColors.Control;
-      dataGridViewCellStyle1.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-      dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-      dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-      dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-      dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-      dgvOrderedProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+      dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle2.BackColor = SystemColors.Control;
+      dataGridViewCellStyle2.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+      dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+      dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+      dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+      dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+      dgvOrderedProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
       dgvOrderedProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       dgvOrderedProducts.Location = new Point(11, 141);
       dgvOrderedProducts.MultiSelect = false;

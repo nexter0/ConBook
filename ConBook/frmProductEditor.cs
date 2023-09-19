@@ -71,7 +71,7 @@ namespace ConBook {
 
       if (!xIsEmptyProduct) {
 
-        btnSubmit.Text = "Edytuj";
+        btnSubmit.Text = "Zapisz";
         this.Text = "Edytuj produkt";
         this.Icon = Properties.Resources.editIcon;
 

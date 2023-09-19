@@ -55,7 +55,7 @@
       dgvOrders.RowHeadersVisible = false;
       dgvOrders.RowTemplate.Height = 25;
       dgvOrders.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-      dgvOrders.Size = new Size(626, 391);
+      dgvOrders.Size = new Size(824, 391);
       dgvOrders.TabIndex = 10;
       dgvOrders.CellDoubleClick += dgvOrders_CellDoubleClick;
       dgvOrders.CellFormatting += dgvOrders_CellFormatting;
@@ -64,7 +64,7 @@
       // 
       btnEdit.Image = Properties.Resources.edit_file;
       btnEdit.ImageAlign = ContentAlignment.MiddleLeft;
-      btnEdit.Location = new Point(470, 12);
+      btnEdit.Location = new Point(670, 12);
       btnEdit.Name = "btnEdit";
       btnEdit.Size = new Size(80, 29);
       btnEdit.TabIndex = 15;
@@ -77,7 +77,7 @@
       // 
       btnDelete.Image = Properties.Resources.bin;
       btnDelete.ImageAlign = ContentAlignment.MiddleLeft;
-      btnDelete.Location = new Point(556, 12);
+      btnDelete.Location = new Point(756, 12);
       btnDelete.Name = "btnDelete";
       btnDelete.Size = new Size(80, 29);
       btnDelete.TabIndex = 14;
@@ -90,7 +90,7 @@
       // 
       btnAdd.Image = Properties.Resources.plus;
       btnAdd.ImageAlign = ContentAlignment.MiddleLeft;
-      btnAdd.Location = new Point(384, 12);
+      btnAdd.Location = new Point(584, 12);
       btnAdd.Name = "btnAdd";
       btnAdd.Size = new Size(80, 29);
       btnAdd.TabIndex = 13;
@@ -113,7 +113,7 @@
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
-      ClientSize = new Size(650, 450);
+      ClientSize = new Size(848, 450);
       Controls.Add(label1);
       Controls.Add(btnEdit);
       Controls.Add(btnDelete);

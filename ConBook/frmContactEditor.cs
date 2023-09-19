@@ -90,7 +90,7 @@ namespace ConBook {
       //funkcja ustawiająca właściwości okna w zależności od trybu edycji / dodawania
 
       if (!xIsEmptyContact) {
-        btnSubmit.Text = "Edytuj";
+        btnSubmit.Text = "Zapisz";
         this.Text = "Edytuj kontakt";
         this.Icon = Properties.Resources.editIcon;
       } else {
