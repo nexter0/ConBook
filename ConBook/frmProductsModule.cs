@@ -51,6 +51,15 @@
       SaveProducts();
 
     }
+
+    private void frmProductsModule_KeyUp(object sender, KeyEventArgs e) {
+
+      if (e.KeyCode == Keys.Escape) {
+        this.Close();
+      }
+
+    }
+
     #endregion
 
     internal bool ShowMe() {
@@ -148,5 +157,6 @@
       ConfigureDataGridView();
 
     }
+
   }
 }

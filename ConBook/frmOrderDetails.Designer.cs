@@ -229,8 +229,11 @@ namespace ConBook {
       Controls.Add(label1);
       Controls.Add(panel2);
       Controls.Add(panel1);
+      KeyPreview = true;
       Name = "frmOrderDetails";
-      Text = "frmOrderDetails";
+      StartPosition = FormStartPosition.CenterParent;
+      Text = "Szczegóły zamówienia";
+      KeyUp += frmOrderDetails_KeyUp;
       panel1.ResumeLayout(false);
       panel1.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)dgvProducts).EndInit();

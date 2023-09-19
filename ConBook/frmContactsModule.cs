@@ -63,6 +63,14 @@ namespace ConBook {
 
     }
 
+    private void frmContactsModule_KeyUp(object sender, KeyEventArgs e) {
+
+      if (e.KeyCode == Keys.Escape) {
+        this.Close();
+      }
+
+    }
+
     #endregion
 
     #region Methods

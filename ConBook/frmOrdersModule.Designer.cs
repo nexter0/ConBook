@@ -120,9 +120,11 @@
       Controls.Add(btnAdd);
       Controls.Add(dgvOrders);
       FormBorderStyle = FormBorderStyle.FixedSingle;
+      KeyPreview = true;
       Name = "frmOrdersModule";
       Text = "ConBook - Zamówienia";
       Load += frmOrdersModule_Load;
+      KeyUp += frmOrdersModule_KeyUp;
       ((System.ComponentModel.ISupportInitialize)dgvOrders).EndInit();
       ResumeLayout(false);
       PerformLayout();

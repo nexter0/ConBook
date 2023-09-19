@@ -120,11 +120,13 @@ namespace ConBook {
       Controls.Add(btnAdd);
       Controls.Add(dgvProducts);
       FormBorderStyle = FormBorderStyle.FixedSingle;
+      KeyPreview = true;
       Name = "frmProductsModule";
       StartPosition = FormStartPosition.CenterParent;
       Text = "ConBook - Produkty";
       FormClosing += frmProductsModule_FormClosing;
       Load += frmProductsModule_Load;
+      KeyUp += frmProductsModule_KeyUp;
       ((System.ComponentModel.ISupportInitialize)dgvProducts).EndInit();
       ResumeLayout(false);
       PerformLayout();

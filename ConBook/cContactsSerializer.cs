@@ -2,16 +2,18 @@
 
 namespace ConBook {
   internal class cContactsSerializer : cSerializer {
+    //klasa odpowiadająca za zapis listy konktatków
 
-    public const string DEFAULT_SAVE_FILE_PATH = "contact_list.txt";
+    #region Constants
+    public const string DEFAULT_SAVE_FILE_PATH = "contacts_list.txt";
 
+    private const string DESCRIPTION_TAG = $"{BEGIN_TAG}DESCRIPTION{END_TAG}";
     private const string INDEX_TAG = $"{BEGIN_TAG}IDX{END_TAG}";
     private const string NAME_TAG = $"{BEGIN_TAG}NAME{END_TAG}";
-    private const string SURNAME_TAG = $"{BEGIN_TAG}SURNAME{END_TAG}";
-    private const string PHONE_TAG = $"{BEGIN_TAG}PHONE{END_TAG}";
     private const string NOTES_TAG = $"{BEGIN_TAG}NOTES{END_TAG}";
-    private const string DESCRIPTION_TAG = $"{BEGIN_TAG}DESCRIPTION{END_TAG}";
-
+    private const string PHONE_TAG = $"{BEGIN_TAG}PHONE{END_TAG}";
+    private const string SURNAME_TAG = $"{BEGIN_TAG}SURNAME{END_TAG}";
+    #endregion
 
     private static string GetFormattedContactString(cContact xContact) {
       //funkcja zwracająca kontakt w sformatowanej postaci (gotowej do zapisu do pliku)
@@ -58,12 +60,6 @@ namespace ConBook {
       }
 
       return pContactsList;
-    }
-
-    private static BindingList<cContact> GetContactsListFromFile() {
-
-      return GetContactsListFromFile(DEFAULT_SAVE_FILE_PATH);
-
     }
 
     private static List<string> GetFormattedDataList(BindingList<cContact> xContactList) {

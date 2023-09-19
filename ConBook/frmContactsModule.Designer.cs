@@ -23,7 +23,7 @@
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
-      DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
       dgvContacts = new DataGridView();
       btnAdd = new Button();
       btnDelete = new Button();
@@ -39,14 +39,14 @@
       dgvContacts.AllowUserToResizeColumns = false;
       dgvContacts.AllowUserToResizeRows = false;
       dgvContacts.BackgroundColor = Color.WhiteSmoke;
-      dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewCellStyle1.BackColor = SystemColors.Control;
-      dataGridViewCellStyle1.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-      dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-      dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-      dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-      dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-      dgvContacts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+      dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle2.BackColor = SystemColors.Control;
+      dataGridViewCellStyle2.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+      dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+      dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+      dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+      dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+      dgvContacts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
       dgvContacts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       dgvContacts.Location = new Point(12, 47);
       dgvContacts.Name = "dgvContacts";
@@ -119,12 +119,14 @@
       Controls.Add(btnAdd);
       Controls.Add(dgvContacts);
       FormBorderStyle = FormBorderStyle.FixedSingle;
+      KeyPreview = true;
       MaximizeBox = false;
       MinimizeBox = false;
       Name = "frmContactsModule";
       StartPosition = FormStartPosition.CenterParent;
       Text = "ConBook - Kontakty";
       Load += frmContactsModule_Load;
+      KeyUp += frmContactsModule_KeyUp;
       ((System.ComponentModel.ISupportInitialize)dgvContacts).EndInit();
       ResumeLayout(false);
       PerformLayout();

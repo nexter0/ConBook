@@ -11,6 +11,14 @@ namespace ConBook {
       InitializeComponent();
     }
 
+    private void frmOrderDetails_KeyUp(object sender, KeyEventArgs e) {
+
+      if (e.KeyCode == Keys.Escape) {
+        this.Close();
+      }
+
+    }
+
     internal bool ShowMe(cOrder xOrder) {
 
       mFullContactsList = cContactsSerializer.GetContactsList();
@@ -62,7 +70,7 @@ namespace ConBook {
       DataGridViewColumn pDgvColumnSellPrice = dgvProducts.Columns["Price_Sold"];
       DataGridViewColumn pDgvColumnTotalPrice = dgvProducts.Columns["Price_Total"];
 
-      pDgvColumnIndex.HeaderText = "Indeks";
+      pDgvColumnIndex.HeaderText = "Nazwa";
       pDgvColumnAmount.HeaderText = "Ilość";
       pDgvColumnSellPrice.HeaderText = "Cena sprzedaży (za szt.)";
       pDgvColumnTotalPrice.HeaderText = "Cena łączna";

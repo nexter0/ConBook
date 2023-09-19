@@ -2,14 +2,16 @@
 
 namespace ConBook {
   internal class cProductsSerializer : cSerializer {
+    //klasa odpowiadająca za zapis i wczytanie listy listy produktów
 
-    public const string DEFAULT_SAVE_FILE_PATH = "product_list.txt";
-
+    #region Constants
+    public const string DEFAULT_SAVE_FILE_PATH = "products_list.txt";
 
     private const string INDEX_TAG = $"{BEGIN_TAG}IDX{END_TAG}";
     private const string NAME_TAG = $"{BEGIN_TAG}NAME{END_TAG}";
-    private const string SYMBOL_TAG = $"{BEGIN_TAG}SYMBOL{END_TAG}";
     private const string PRICE_TAG = $"{BEGIN_TAG}PRICE{END_TAG}";
+    private const string SYMBOL_TAG = $"{BEGIN_TAG}SYMBOL{END_TAG}";
+    #endregion
 
     private static string GetFormattedProductString(cProduct xProduct) {
       //funkcja zwracająca produkt w sformatowanej postaci (gotowej do zapisu do pliku)
@@ -38,6 +40,7 @@ namespace ConBook {
       }
 
       return pProduct;
+
     }
 
     private static BindingList<cProduct> GetProductsListFromFile(string xFileName) {
@@ -54,12 +57,6 @@ namespace ConBook {
       }
 
       return pProductsList;
-    }
-
-    private static BindingList<cProduct> GetProductsListFromFile() {
-
-      return GetProductsListFromFile(DEFAULT_SAVE_FILE_PATH);
-
 
     }
 
@@ -75,6 +72,7 @@ namespace ConBook {
       }
 
       return pFormattedDataList;
+
     }
 
     public static void SaveToNewTxtFile(string xFileName, BindingList<cProduct> xProductsList) {

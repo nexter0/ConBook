@@ -8,8 +8,6 @@
     private string mPhone;                              // nr telefonu
     private string mSurname;                            // nazwisko
 
-
-
     #region Properties
     public int Index { get; set; }
     public string Name { get; set; }
@@ -17,6 +15,11 @@
     public string Phone { get; set; }
     public string Description { get; set; }
     public string Notes { get; set; }
+    public string DisplayText {
+
+      get { return ToString(); }
+
+    }
 
     #endregion
 

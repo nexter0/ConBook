@@ -37,6 +37,15 @@ namespace ConBook {
 
     }
 
+    private void frmOrderDetails_KeyUp(object sender, KeyEventArgs e) {
+
+      if (e.KeyCode == Keys.Escape) {
+        mIsCanceled = true;
+        this.Close();
+      }
+
+    }
+
     private void btnCancel_Click(object sender, EventArgs e) {
 
       mIsCanceled = true;
@@ -47,6 +56,7 @@ namespace ConBook {
     private void btnAddProduct_Click(object sender, EventArgs e) {
 
       AddOrderedProduct();
+      UpdateTotalSum();
 
     }
 
@@ -76,6 +86,12 @@ namespace ConBook {
           e.Value = pProduct.Name;
         }
       }
+      if (e.RowIndex >= 0 && (e.ColumnIndex == dgvOrderedProducts.Columns["Price_Sold"].Index || e.ColumnIndex == dgvOrderedProducts.Columns["Price_Total"].Index)) {
+        string pTotalPriceCellValue = e.Value.ToString();
+        if (!pTotalPriceCellValue.Contains(","))
+          e.Value = e.Value + ",00";
+      }
+
 
     }
 
@@ -108,9 +124,11 @@ namespace ConBook {
       cbxProducts.DataSource = xProductsList;
       cbxProducts.DisplayMember = "Name";
       cbxClients.DataSource = xContactList;
-      cbxClients.DisplayMember = "ToString";
+      cbxClients.ValueMember = "Index";
+      cbxClients.DisplayMember = "DisplayText";
 
-      InitializeTextBoxes(xOrder);
+
+      InitializeTextBoxes(xOrder, xContactList);
       InitializeDataGridView();
       CustomizeWidow(pIsOrderEmpty);
 
@@ -149,13 +167,16 @@ namespace ConBook {
 
     }
 
-    private void InitializeTextBoxes(cOrder? xOrder) {
+    private void InitializeTextBoxes(cOrder? xOrder, BindingList<cContact> xContactsList) {
       //funkcja czyszcząca lub uzupełniająca pola tekstowa
 
       if (xOrder != null && xOrder.IdxContact != -1) {
+        cContact pContact = xContactsList.FirstOrDefault(c => c.Index == xOrder.IdxContact);
+
         txtOrderNumber.Text = xOrder.Number;
         dtpCreationDate.Value = xOrder.CreationDate;
         mOrderedProductsList = xOrder.OrderedProductsList;
+        cbxClients.SelectedValue = pContact.Index;
         dgvOrderedProducts.DataSource = null;
         dgvOrderedProducts.DataSource = mOrderedProductsList;
 
@@ -256,6 +277,20 @@ namespace ConBook {
       }
 
       return DialogResult.Ignore;
+    }
+
+    private void UpdateTotalSum() {
+      //funkcja aktualizująca łączną cenę zamówienia
+
+      if (mOrderedProductsList.Count > 0) {
+        lbSuma.Visible = true;
+        lbTotalSum.Visible = true;
+
+        double pTotalSum = mOrderedProductsList.Sum(p => p.Price_Total);
+
+        lbTotalSum.Text = "PLN " + Math.Round(pTotalSum, 2).ToString();
+      }
+
     }
 
   }

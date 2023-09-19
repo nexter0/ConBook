@@ -45,6 +45,14 @@ namespace ConBook {
       SaveOrders();
 
     }
+    private void frmOrdersModule_KeyUp(object sender, KeyEventArgs e) {
+
+      if (e.KeyCode == Keys.Escape) {
+
+        this.Close();
+
+      }
+    }
 
     private void dgvOrders_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
 
@@ -105,26 +113,25 @@ namespace ConBook {
     private void SaveOrders() {
       // funkcja do automatycznego zapisu kolekcji produktów
 
-      string pDefaultFilePath = cOrderSSerializer.DEFAULT_SAVE_FILE_PATH;
+      string pDefaultFilePath = cOrdersSerializer.DEFAULT_SAVE_FILE_PATH;
 
       if (!File.Exists(pDefaultFilePath)) {
-        cOrderSSerializer.SaveToNewTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
+        cOrdersSerializer.SaveToNewTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
       } else {
         SaveToFile();
       }
-
 
     }
 
     private void SaveToFile() {
       //funkcja obsługująca zapis do istniejącego pliku
 
-      string pDefaultFilePath = cOrderSSerializer.DEFAULT_SAVE_FILE_PATH;
+      string pDefaultFilePath = cOrdersSerializer.DEFAULT_SAVE_FILE_PATH;
 
       try {
         if (mOrdersListUtils.OrdersList.Count > 0) {
           if (File.Exists(pDefaultFilePath))
-            cOrderSSerializer.SaveToExistingTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
+            cOrdersSerializer.SaveToExistingTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
         }
       } catch (Exception ex) {
         if (ex.InnerException != null) {
@@ -147,11 +154,11 @@ namespace ConBook {
     private void LoadOrders() {
       //funkcja wczytująca kolekcję produktów z pliku
 
-      string pDefaultFilePath = cOrderSSerializer.DEFAULT_SAVE_FILE_PATH;
+      string pDefaultFilePath = cOrdersSerializer.DEFAULT_SAVE_FILE_PATH;
 
       try {
         if (File.Exists(pDefaultFilePath)) {
-          mOrdersListUtils.OrdersList = cOrderSSerializer.GetOrdersList();
+          mOrdersListUtils.OrdersList = cOrdersSerializer.GetOrdersList();
         }
       } catch (Exception ex) {
         MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pDefaultFilePath}", "Błąd wczytywania",
@@ -173,5 +180,6 @@ namespace ConBook {
       pFrmOrderDetails.ShowMe(pSelectedOrder);
 
     }
+
   }
 }

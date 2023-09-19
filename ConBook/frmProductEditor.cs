@@ -26,6 +26,15 @@ namespace ConBook {
 
     }
 
+    private void frmProductEditor_KeyUp(object sender, KeyEventArgs e) {
+
+      if (e.KeyCode == Keys.Escape) {
+        mIsCanceled = true;
+        this.Close();
+      }
+
+    }
+
     internal bool ShowMe(cProduct xProduct, BindingList<cProduct> xProductsList) {
       //funkcja wywołująca formularz 
 
@@ -48,11 +57,11 @@ namespace ConBook {
         MessageBox.Show($"Podczas edycji kontaktu wystąpił błąd:\n{ex.Message}", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
-        if (xProduct.IsEmpty())
-          return false;
+      if (xProduct.IsEmpty())
+        return false;
 
-        return true;
-      
+      return true;
+
     }
 
 

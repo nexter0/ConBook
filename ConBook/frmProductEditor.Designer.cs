@@ -115,9 +115,11 @@
       Controls.Add(txtSymbol);
       Controls.Add(txtName);
       FormBorderStyle = FormBorderStyle.FixedSingle;
+      KeyPreview = true;
       Name = "frmProductEditor";
       StartPosition = FormStartPosition.CenterParent;
       Text = "frmProductEditor";
+      KeyUp += frmProductEditor_KeyUp;
       ResumeLayout(false);
       PerformLayout();
     }

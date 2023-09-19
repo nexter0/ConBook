@@ -7,7 +7,8 @@ namespace ConBook {
     private BindingList<cProduct> mProductsList;                    // lista produktów
     private int mLastProductIndex;                                  // ostatnio wykorzystany indeks produktu
 
-    public BindingList<cProduct> ProductsList { get; set; }
+    #region Properties
+    public BindingList<cProduct> ProductsList { get { return mProductsList; } set { mProductsList = value; } }
     public int LastProductIndex { get { return mLastProductIndex; } set { mLastProductIndex = value; } }
 
     public cProductListUtils() {
@@ -17,6 +18,7 @@ namespace ConBook {
       mLastProductIndex = cIndexTracker.GetIndexValue(cIndexTracker.IndexTypeEnum.Product);
 
     }
+    #endregion
 
     internal void AddProduct() {
       //funkcja dodająca produkt do listy
@@ -39,19 +41,32 @@ namespace ConBook {
 
     internal void DeleteProduct(int xIndex) {
       //funkcja usuwająca produkt z listy
+      //xIndex - indeks produktu w liście produktów
 
-      DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt" +
-          $" {ProductsList[xIndex].Name} ({ProductsList[xIndex].Symbol}) z listy?",
-          "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+      BindingList<cOrder> pOrderList = cOrdersSerializer.GetOrdersList();
+      cOrder pOrder = pOrderList.FirstOrDefault(o => o.OrderedProductsList.Any(p => p.Index == ProductsList[xIndex].Index));
 
-      if (deletionQueryResult == DialogResult.Yes) {
-        ProductsList.RemoveAt(xIndex);
+      if (pOrder != null) {
+        MessageBox.Show($"Produkt \"{ProductsList[xIndex].Name}\" jest związany z zamówieniem \"{pOrder.Number}\".\n\n" +
+          $"Usuń lub zmodyfikuj to zamówienie, aby usunąć produkt.", "Nie można usunąć", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+      else {
+
+        DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt" +
+        $" {ProductsList[xIndex].Name} ({ProductsList[xIndex].Symbol}) z listy?",
+        "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+        if (deletionQueryResult == DialogResult.Yes) {
+          ProductsList.RemoveAt(xIndex);
+        }
+
       }
 
     }
 
     internal void EditProduct(int xIndex) {
-      //funkcja edytująca kontakt
+      //funkcja edytująca produkt
+      //xIndex - indeks produktu w liście produktów
 
       frmProductEditor pProductEditor = new frmProductEditor();
 

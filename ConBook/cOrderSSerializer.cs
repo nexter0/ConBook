@@ -1,19 +1,23 @@
 ﻿using System.ComponentModel;
 
 namespace ConBook {
-  internal class cOrderSSerializer : cSerializer {
+  internal class cOrdersSerializer : cSerializer {
+    //klasa odpowiadająca za zapis i wczytanie listy zamówień
 
+    #region Constants
     public const string DEFAULT_SAVE_FILE_PATH = "orders_list.txt";
 
+    private const string CONTACT_TAG = $"{BEGIN_TAG}CONTACT{END_TAG}";
+    private const string DATE_TAG = $"{BEGIN_TAG}DATE{END_TAG}";
     private const string INDEX_TAG = $"{BEGIN_TAG}IDX{END_TAG}";
     private const string NUMBER_TAG = $"{BEGIN_TAG}NUMBER{END_TAG}";
-    private const string CONTACT_TAG = $"{BEGIN_TAG}CONTACT{END_TAG}";
-    private const string PRODUCTS_TAG = $"{BEGIN_TAG}PRODUCTS{END_TAG}";
     private const string PRODUCT_INDEX_TAG = $"{BEGIN_TAG}PRD_IDX{END_TAG}";
     private const string PRODUCT_AMOUNT_TAG = $"{BEGIN_TAG}PRD_AMNT{END_TAG}";
     private const string PRODUCT_SELLPRICE_TAG = $"{BEGIN_TAG}PRD_PRC{END_TAG}";
+    private const string PRODUCTS_TAG = $"{BEGIN_TAG}PRODUCTS{END_TAG}";
     private const string PRD_INNER_SEPARATOR = ";;";
     private const string PRD_OUTER_SEPARATOR = "||";
+    #endregion Constants
 
     private static string GetFormattedOrderString(cOrder xOrder) {
       //funkcja zwracająca zamówienie w sformatowanej postaci (gotowej do zapisu do pliku)
@@ -25,6 +29,7 @@ namespace ConBook {
         $"{INDEX_TAG}{xOrder.Index}{SEPARATOR}" +
         $"{NUMBER_TAG}{xOrder.Number}{SEPARATOR}" +
         $"{CONTACT_TAG}{xOrder.IdxContact}{SEPARATOR}" +
+        $"{DATE_TAG}{xOrder.CreationDate}{SEPARATOR}" +
         $"{PRODUCTS_TAG}{pFormattedOderedProductsListString}{SEPARATOR}\n" +
         $"{END_MARKER}";
 
@@ -108,6 +113,7 @@ namespace ConBook {
         if (pData.Contains($"{INDEX_TAG}")) { pOrder.Index = int.Parse(RemoveTags(pData)); continue; }
         if (pData.Contains($"{NUMBER_TAG}")) { pOrder.Number = RemoveTags(pData); continue; }
         if (pData.Contains($"{CONTACT_TAG}")) { pOrder.IdxContact = int.Parse(RemoveTags(pData)); continue; }
+        if (pData.Contains($"{DATE_TAG}")) { pOrder.CreationDate = DateTime.Parse(RemoveTags(pData)); continue; }
         if (pData.Contains($"{PRODUCTS_TAG}")) { pOrder.OrderedProductsList = GetOrderedProductsListFromData(pData); continue; }
       }
 

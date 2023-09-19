@@ -28,6 +28,12 @@ namespace ConBook {
 
     }
 
+    private void frmContactEditor_KeyUp(object sender, KeyEventArgs e) {
+      if (e.KeyCode == Keys.Escape) {
+        Cancel();
+      }
+    }
+
     private void Cancel() {
 
       this.mIsCanceled = true;
@@ -51,7 +57,6 @@ namespace ConBook {
           case mValidationResultEnum.PHONE_ERROR: { pMessage += "Niedozwolone znaki w polu Telefon."; break; }
           case mValidationResultEnum.DIGIT_ERROR: { pMessage += "Pola Imię i Nazwisko nie mogą zawierać cyfr."; break; }
           case mValidationResultEnum.MARKERS_ERROR: { pMessage += "Niedozwolona kombinacja znaków ('::', '$<', '>$')."; break; }
-
         }
 
         MessageBox.Show(pMessage, pCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -85,17 +90,13 @@ namespace ConBook {
       //funkcja ustawiająca właściwości okna w zależności od trybu edycji / dodawania
 
       if (!xIsEmptyContact) {
-
         btnSubmit.Text = "Edytuj";
         this.Text = "Edytuj kontakt";
         this.Icon = Properties.Resources.editIcon;
-
       } else {
-
         btnSubmit.Text = "Dodaj";
         this.Text = "Dodaj kontakt";
         this.Icon = Properties.Resources.plusIcon;
-
       }
 
     }
@@ -146,5 +147,6 @@ namespace ConBook {
       return mValidationResultEnum.OK;
 
     }
+
   }
 }

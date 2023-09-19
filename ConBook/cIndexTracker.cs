@@ -2,12 +2,13 @@
 
 namespace ConBook {
   internal static class cIndexTracker {
+    //klasa odpowiadająca za zapis i obsługę pól Index poszczególnych klas
 
     internal enum IndexTypeEnum {
       Contact = 1,
       Product = 2,
       Order = 3
-    }
+    }                                              // numerator typu ideksu
 
     private const string TRACKER_FILE_PATH = "tracker.idx";
 

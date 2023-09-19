@@ -167,6 +167,7 @@
       ShowInTaskbar = false;
       StartPosition = FormStartPosition.CenterParent;
       Text = "ConBook";
+      KeyUp += frmContactEditor_KeyUp;
       ResumeLayout(false);
       PerformLayout();
     }

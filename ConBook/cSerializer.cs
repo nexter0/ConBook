@@ -4,13 +4,15 @@ using System.Xml.Serialization;
 
 namespace ConBook {
   internal class cSerializer {
-    // Klasa odpowiadająca za zapisywanie i wczytywanie listy kontaków
+    //klasa odpowiadająca za zapisywanie i wczytywanie plików z danymi
 
+    #region Constants
     protected const string BEGIN_MARKER = "*<";
     protected const string END_MARKER = ">*";
     protected const string BEGIN_TAG = "$<";
     protected const string END_TAG = ">$";
     protected const string SEPARATOR = "::";
+    #endregion
 
     #region TXT Serializer
 
@@ -36,7 +38,6 @@ namespace ConBook {
         }
 
           xCurrentFilePath ??= xFileName;
-
       }
 
     }
@@ -70,7 +71,6 @@ namespace ConBook {
         if (File.Exists(pTempFileName)) {
           File.Delete(pTempFileName);
         }
-
       }
 
     }
@@ -105,12 +105,9 @@ namespace ConBook {
 
         }
       }
-
       return pFormattedDataList;
 
     }
-
-
     #endregion
 
   }

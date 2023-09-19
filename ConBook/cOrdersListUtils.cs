@@ -2,16 +2,20 @@
 
 namespace ConBook {
   internal class cOrdersListUtils {
+    //klasa odpowiadająca za obsługę listy zamówień
 
-    private BindingList<cOrder> mOrdersList;                      // lista zamówień
     private int mLastOrderIndex;                                  // ostatnio wykorzystany indeks zamówienia
-
+    private BindingList<cOrder> mOrdersList;                      // lista zamówień
+    
+    #region Properties
     public BindingList<cOrder> OrdersList { get { return mOrdersList; } set { mOrdersList = value; } }
     public int LastOrderIndex { get { return mLastOrderIndex; } set { mLastOrderIndex = value; } }
+    #endregion
 
     public cOrdersListUtils() {
       
       OrdersList = new BindingList<cOrder>();
+
       mLastOrderIndex = cIndexTracker.GetIndexValue(cIndexTracker.IndexTypeEnum.Order);
 
     }
@@ -39,6 +43,7 @@ namespace ConBook {
 
     internal void EditOrder(int xIndex) {
       //funkcja edytująca kontakt
+      //xIndex - indeks zamówienia na liście
 
       frmOrderEditor pOrderEditor = new frmOrderEditor();
 
@@ -51,6 +56,7 @@ namespace ConBook {
 
     internal void DeleteOrder(int xIndex) {
       //funkcja usuwająca produkt z listy
+      //xIndex - indeks zamówienia na liście
 
       DialogResult deletionQueryResult = MessageBox.Show($"Usunąć zamówienie numer" +
           $" {OrdersList[xIndex].Number} z listy?",

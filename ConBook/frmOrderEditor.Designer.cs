@@ -42,6 +42,8 @@
       dgvOrderedProducts = new DataGridView();
       btnDeleteProduct = new Button();
       label7 = new Label();
+      lbSuma = new Label();
+      lbTotalSum = new Label();
       ((System.ComponentModel.ISupportInitialize)dgvOrderedProducts).BeginInit();
       SuspendLayout();
       // 
@@ -222,11 +224,34 @@
       label7.TabIndex = 21;
       label7.Text = "/ szt.";
       // 
+      // lbSuma
+      // 
+      lbSuma.AutoSize = true;
+      lbSuma.Location = new Point(12, 329);
+      lbSuma.Name = "lbSuma";
+      lbSuma.Size = new Size(40, 15);
+      lbSuma.TabIndex = 22;
+      lbSuma.Text = "Suma:";
+      lbSuma.Visible = false;
+      // 
+      // lbTotalSum
+      // 
+      lbTotalSum.AutoSize = true;
+      lbTotalSum.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+      lbTotalSum.Location = new Point(47, 329);
+      lbTotalSum.Name = "lbTotalSum";
+      lbTotalSum.Size = new Size(85, 15);
+      lbTotalSum.TabIndex = 23;
+      lbTotalSum.Text = "<lbTotalSum>";
+      lbTotalSum.Visible = false;
+      // 
       // frmOrderEditor
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
       ClientSize = new Size(558, 362);
+      Controls.Add(lbTotalSum);
+      Controls.Add(lbSuma);
       Controls.Add(label7);
       Controls.Add(btnDeleteProduct);
       Controls.Add(dgvOrderedProducts);
@@ -246,9 +271,11 @@
       Controls.Add(txtOrderNumber);
       Controls.Add(dtpCreationDate);
       FormBorderStyle = FormBorderStyle.FixedSingle;
+      KeyPreview = true;
       Name = "frmOrderEditor";
       StartPosition = FormStartPosition.CenterParent;
-      Text = "frmOrderEditor";
+      Text = "Dodaj / Edytuj zamówienie";
+      KeyUp += frmOrderDetails_KeyUp;
       ((System.ComponentModel.ISupportInitialize)dgvOrderedProducts).EndInit();
       ResumeLayout(false);
       PerformLayout();
@@ -274,5 +301,7 @@
     private DataGridView dgvOrderedProducts;
     private Button btnDeleteProduct;
     private Label label7;
+    private Label lbSuma;
+    private Label lbTotalSum;
   }
 }
