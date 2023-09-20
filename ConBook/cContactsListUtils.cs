@@ -2,67 +2,57 @@
 
 namespace ConBook {
   internal class cContactsListUtils {
-    //Klasa odpowiadająca za funkcje typu CRUD konktatków
+    //klasa odpowiadająca za obsługę listy konktatków
 
-    private BindingList<cContact> mContacts;                  // Lista przechowująca kontakty
-    private cContactSerializer mSerializer;                   // Klasa mContactSerializer - do zapisu i odczytu plików
+    private BindingList<cContact> mContactsList;                  // lista przechowująca kontakty
+    private int mLastContactIndex;                                // ostatnio wykorzystany indeks kontaktu
 
-    public BindingList<cContact> Contacts { get { return mContacts; } set { mContacts = value; } }
-    public cContactSerializer Serializer { get { return mSerializer; } }
+    #region Properties
+    public BindingList<cContact> ContactsList { get { return mContactsList; } set { mContactsList = value; } }
+    public int LastContactIndex { get { return mLastContactIndex; } set { mLastContactIndex = value; } }
+    #endregion
 
     public cContactsListUtils() {
 
-      mContacts = new BindingList<cContact>();
-      mSerializer = new cContactSerializer();
+      mContactsList = new BindingList<cContact>();
 
-    }
-    
-    public void DeleteContact(int xIndex) {
-      //funkcja usuwająca kontakt z listy
-
-      DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt" +
-          $" {Contacts[xIndex].Name} {Contacts[xIndex].Surname} z listy?",
-          "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-      if (deletionQueryResult == DialogResult.Yes) {
-
-        Contacts.RemoveAt(xIndex);
-
-      }
+      mLastContactIndex = cIndexTracker.GetIndexValue(cIndexTracker.IndexTypeEnum.Contact);
 
     }
 
     public void AddContact(cContact xContact) {
       //funkcja dodająca kontakt do listy
+      //xContact - kontakt do dodania
 
-      Contacts.Add(xContact);
+      int pNewContactIndex = LastContactIndex + 1;
+      LastContactIndex = pNewContactIndex;
+      cIndexTracker.SetIndexValue(cIndexTracker.IndexTypeEnum.Contact, pNewContactIndex);
 
-    }
-
-    public void AddContact(string xName, string xSurname, string xPhone) {
-      //funkcja dodająca kontakt do listy
-
-      cContact pNewContact = new cContact(xName, xSurname, xPhone);
-
-      Contacts.Add(pNewContact);
+      xContact.Index = pNewContactIndex;
+      ContactsList.Add(xContact);
 
     }
 
-    public void EditContact(cContact xEditedContact, int xIndex) {
-      //funkcja edytująca istniejący kontakt
+    public void DeleteContact(int xIndex) {
+      //funkcja usuwająca kontakt z listy
+      //xIndex - indeks kontaktu na liście
 
-      Contacts[xIndex] = xEditedContact;
+      BindingList<cOrder> pOrderList = cOrdersSerializer.GetOrdersList();
+      cOrder pOrder = pOrderList.FirstOrDefault(o => o.IdxContact == ContactsList[xIndex].Index);
+
+      if (pOrder != null) {
+        MessageBox.Show($"Kontakt \"{ContactsList[xIndex].Name} {ContactsList[xIndex].Surname}\" jest związany z zamówieniem \"{pOrder.Number}\".\n\n" +
+          $"Usuń lub zmodyfikuj to zamówienie, aby usunąć kontakt.", "Nie można usunąć", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+      else {
+        DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt" +
+        $" \"{ContactsList[xIndex].Name} {ContactsList[xIndex].Surname}\" z listy?",
+        "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+        if (deletionQueryResult == DialogResult.Yes)
+          ContactsList.RemoveAt(xIndex);
+      }
 
     }
-
-    public void EditContact(string xNewName, string xNewSurname, string xNewPhone, int xIndex) {
-      // unkcja edytująca istniejący kontakt
-
-      cContact pEditedContact = new cContact(xNewName, xNewSurname, xNewPhone);
-
-      Contacts[xIndex] = pEditedContact;
-
-    }
-
   }
 }

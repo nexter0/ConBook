@@ -1,4 +1,4 @@
-namespace ConBook
+﻿namespace ConBook
 {
     internal static class Program
     {

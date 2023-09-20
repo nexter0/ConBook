@@ -1,9 +1,0 @@
-﻿*) Add an option do enable / disable auto saving (it has to be persistent)
-
-następne zadanie jest takie: 
-- na razie posługujmy się plikiem tekstowym
-- dodaj do programu kilka kontaktów
-- potem rozbuduj kontakt o nowe pola - Opis oraz Notatki
-- dodaj znowu kilka kontaktów
-- a następnie klient, który zamówił u Ciebie program mówi, jednak rezygnujemy z pola Notatki, więc usuń je z programu (oczywiście możesz zakomentować chwilowo kod)
-- otwórz program i sprawdź, czy działa jak należy

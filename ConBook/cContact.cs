@@ -1,22 +1,27 @@
-﻿using System.Net.Sockets;
-
-namespace ConBook {
+﻿namespace ConBook {
   public class cContact : IComparable<cContact> {
 
-    private string mName;
-    private string mSurname;
-    private string mPhone;
-    private string mDescription;
-    private string mNotes;
-    //private string mAddress;
+    private string mDescription;                        // opis kontaktu
+    private int mIndex;                                 // indeks kontaktu
+    private string mName;                               // imię
+    private string mNotes;                              // notatki
+    private string mPhone;                              // nr telefonu
+    private string mSurname;                            // nazwisko
 
+    #region Properties
+    public int Index { get; set; }
     public string Name { get; set; }
     public string Surname { get; set; }
     public string Phone { get; set; }
     public string Description { get; set; }
     public string Notes { get; set; }
-    //public string Address { get; set; }
+    public string DisplayText {
 
+      get { return ToString(); }
+
+    }
+
+    #endregion
 
     public cContact() {
 
@@ -25,8 +30,7 @@ namespace ConBook {
       Phone = string.Empty;
       Description = string.Empty;
       Notes = string.Empty;
-      //Address = string.Empty;
-      
+
     }
 
     public cContact(string xName, string xSurname, string xPhone, string xDescription = "", string xNotes = "") {
@@ -36,10 +40,10 @@ namespace ConBook {
       Phone = xPhone;
       Description = xDescription;
       Notes = xNotes;
-      //Address = xAddress;
 
     }
 
+    #region Comparers
     public class NamesComparer : IComparer<cContact> {
 
       public int Compare(cContact? xContact, cContact? xOther) {
@@ -49,6 +53,26 @@ namespace ConBook {
         return xContact.Name.CompareTo(xOther.Name);
 
       }
+
+    }
+
+    public class IndexComparer : IComparer<cContact> {
+
+      public int Compare(cContact? xContact, cContact? xOther) {
+        //funkcja porównująca kontakty po indeksach
+
+        if (xContact == null || xOther == null) return 1;
+        return xContact.Index.CompareTo(xOther.Index);
+
+      }
+
+    }
+
+    #endregion
+
+    public override string ToString() {
+
+      return $"{Name} {Surname}";
 
     }
 
