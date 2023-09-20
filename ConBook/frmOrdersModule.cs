@@ -125,6 +125,9 @@ namespace ConBook {
       pDgvColumnClient.Width = 153;
       pDgvColumnIndex.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
+      pDgvColumnIndex.SortMode = DataGridViewColumnSortMode.Automatic;
+      pDgvColumnClient.SortMode = DataGridViewColumnSortMode.Automatic;
+
       dgvOrders.Columns["TotalPrice"].DisplayIndex = dgvOrders.ColumnCount - 1;
       dgvOrders.Columns["TotalAmount"].DisplayIndex = dgvOrders.ColumnCount - 2;
     }
@@ -261,6 +264,5 @@ namespace ConBook {
       BindDataGridView();
 
     }
-
   }
 }

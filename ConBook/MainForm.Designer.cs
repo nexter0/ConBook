@@ -33,7 +33,7 @@
       // 
       // btnContactsModule
       // 
-      btnContactsModule.Image = Properties.Resources.contactsModuleIcon;
+      btnContactsModule.Image = Properties.Resources.contactsModuleButtonImg;
       btnContactsModule.Location = new Point(30, 110);
       btnContactsModule.Name = "btnContactsModule";
       btnContactsModule.Size = new Size(130, 120);
@@ -45,7 +45,7 @@
       // 
       // btnProductsModule
       // 
-      btnProductsModule.Image = Properties.Resources.productsModuleIcon;
+      btnProductsModule.Image = Properties.Resources.productsModuleButtonImg;
       btnProductsModule.Location = new Point(179, 110);
       btnProductsModule.Name = "btnProductsModule";
       btnProductsModule.Size = new Size(130, 120);
@@ -77,7 +77,7 @@
       // 
       // btnOrdersModule
       // 
-      btnOrdersModule.Image = Properties.Resources.productsModuleIcon;
+      btnOrdersModule.Image = Properties.Resources.ordersModuleButtonImg;
       btnOrdersModule.Location = new Point(329, 110);
       btnOrdersModule.Name = "btnOrdersModule";
       btnOrdersModule.Size = new Size(130, 120);

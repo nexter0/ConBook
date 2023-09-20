@@ -121,8 +121,14 @@
   <data name="bin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\bin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="contactsModuleIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="contactsModuleButtonImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\contactsModuleIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="details" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\details.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="detailsIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\details.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="editIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\editIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -130,13 +136,16 @@
   <data name="edit_file" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\edit-file.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ordersModuleButtonImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ordersModuleIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\plus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="plusIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\plusIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="productsModuleIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="productsModuleButtonImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\productsModuleIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

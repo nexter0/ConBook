@@ -26,6 +26,7 @@ namespace ConBook {
     /// </summary>
     private void InitializeComponent() {
       DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmOrderDetails));
       panel1 = new Panel();
       lbTotal = new Label();
       label6 = new Label();
@@ -229,8 +230,12 @@ namespace ConBook {
       Controls.Add(label1);
       Controls.Add(panel2);
       Controls.Add(panel1);
+      Icon = (Icon)resources.GetObject("$this.Icon");
       KeyPreview = true;
       Name = "frmOrderDetails";
+      RightToLeftLayout = true;
+      ShowIcon = false;
+      ShowInTaskbar = false;
       StartPosition = FormStartPosition.CenterParent;
       Text = "Szczegóły zamówienia";
       KeyUp += frmOrderDetails_KeyUp;
