@@ -26,6 +26,7 @@ namespace ConBook {
     /// </summary>
     private void InitializeComponent() {
       DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProductsModule));
       dgvProducts = new DataGridView();
       btnEdit = new Button();
       btnDelete = new Button();
@@ -120,6 +121,7 @@ namespace ConBook {
       Controls.Add(btnAdd);
       Controls.Add(dgvProducts);
       FormBorderStyle = FormBorderStyle.FixedSingle;
+      Icon = (Icon)resources.GetObject("$this.Icon");
       KeyPreview = true;
       Name = "frmProductsModule";
       StartPosition = FormStartPosition.CenterParent;

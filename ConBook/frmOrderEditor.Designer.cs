@@ -23,7 +23,8 @@
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
-      DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+      DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmOrderEditor));
       dtpCreationDate = new DateTimePicker();
       txtOrderNumber = new TextBox();
       label1 = new Label();
@@ -189,14 +190,14 @@
       dgvOrderedProducts.AllowUserToResizeColumns = false;
       dgvOrderedProducts.AllowUserToResizeRows = false;
       dgvOrderedProducts.BackgroundColor = Color.WhiteSmoke;
-      dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewCellStyle2.BackColor = SystemColors.Control;
-      dataGridViewCellStyle2.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-      dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-      dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-      dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-      dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-      dgvOrderedProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+      dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle1.BackColor = SystemColors.Control;
+      dataGridViewCellStyle1.Font = new Font("Calibri", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+      dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+      dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+      dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+      dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+      dgvOrderedProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
       dgvOrderedProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       dgvOrderedProducts.Location = new Point(11, 141);
       dgvOrderedProducts.MultiSelect = false;
@@ -275,6 +276,7 @@
       Controls.Add(txtOrderNumber);
       Controls.Add(dtpCreationDate);
       FormBorderStyle = FormBorderStyle.FixedSingle;
+      Icon = (Icon)resources.GetObject("$this.Icon");
       KeyPreview = true;
       Name = "frmOrderEditor";
       StartPosition = FormStartPosition.CenterParent;

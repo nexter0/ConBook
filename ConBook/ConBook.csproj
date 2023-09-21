@@ -7,7 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageIcon>contact-book.png</PackageIcon>
-    <ApplicationIcon>contact-book.ico</ApplicationIcon>
+    <ApplicationIcon>resources\contact-book.ico</ApplicationIcon>
     <Authors>Nikodem Przybyszewski</Authors>
     <StartupObject>ConBook.Program</StartupObject>
   </PropertyGroup>
@@ -19,7 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="contact-book.ico" />
+    <Content Include="resources\contact-book.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="7.0.6" />
   </ItemGroup>
 
   <ItemGroup>

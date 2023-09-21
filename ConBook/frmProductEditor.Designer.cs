@@ -23,6 +23,7 @@
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProductEditor));
       txtName = new TextBox();
       txtSymbol = new TextBox();
       txtPrice = new TextBox();
@@ -115,6 +116,7 @@
       Controls.Add(txtSymbol);
       Controls.Add(txtName);
       FormBorderStyle = FormBorderStyle.FixedSingle;
+      Icon = (Icon)resources.GetObject("$this.Icon");
       KeyPreview = true;
       Name = "frmProductEditor";
       StartPosition = FormStartPosition.CenterParent;

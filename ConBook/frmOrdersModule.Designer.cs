@@ -24,6 +24,7 @@
     /// </summary>
     private void InitializeComponent() {
       DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmOrdersModule));
       dgvOrders = new DataGridView();
       btnEdit = new Button();
       btnDelete = new Button();
@@ -120,6 +121,7 @@
       Controls.Add(btnAdd);
       Controls.Add(dgvOrders);
       FormBorderStyle = FormBorderStyle.FixedSingle;
+      Icon = (Icon)resources.GetObject("$this.Icon");
       KeyPreview = true;
       Name = "frmOrdersModule";
       Text = "ConBook - Zamówienia";
