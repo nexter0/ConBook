@@ -7,7 +7,12 @@ namespace ConBook {
 
     private const string DATABASE_NAME = "conbook";
     public const string CONNECTION_DATA = $"Host=localhost;Port=5432;Username=postgres;Password=postgreSQL;Database={DATABASE_NAME}";
-    
+
+    public const int CONTACT_NAME_MAXLEN = 32;
+    public const int CONTACT_SURNAME_MAXLEN = 64;
+    public const int CONTACT_PHONE_MAXLEN = 20;
+    public const int CONTACT_DESC_MAXLEN = 256;
+    public const int CONTACT_NOTES_MAXLEN = 32;
 
     public Exception? TestConnection() {
 
@@ -67,14 +72,14 @@ namespace ConBook {
           return false;
         }
 
-        string pQuery = @"
+        string pQuery = $@"
             CREATE TABLE contact (
               idx SERIAL NOT NULL PRIMARY KEY,
-              name VARCHAR(32) NOT NULL,
-              surname VARCHAR(64) NOT NULL,
-              phone_number VARCHAR(20) NOT NULL,
-              description VARCHAR(256),
-              notes VARCHAR(256)
+              name VARCHAR({CONTACT_NAME_MAXLEN}) NOT NULL,
+              surname VARCHAR({CONTACT_SURNAME_MAXLEN}) NOT NULL,
+              phone_number VARCHAR({CONTACT_PHONE_MAXLEN} NOT NULL,
+              description VARCHAR({CONTACT_DESC_MAXLEN}),
+              notes VARCHAR({CONTACT_NOTES_MAXLEN})
              );
 
             CREATE TABLE product (
