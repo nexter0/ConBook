@@ -6,7 +6,7 @@ namespace ConBook {
   internal class cDataBaseService {
 
     private const string DATABASE_NAME = "conbook";
-    private const string CONNECTION_DATA = $"Host=localhost;Port=5432;Username=postgres;Password=postgreSQL;Database={DATABASE_NAME}";
+    public const string CONNECTION_DATA = $"Host=localhost;Port=5432;Username=postgres;Password=postgreSQL;Database={DATABASE_NAME}";
     
 
     public Exception? TestConnection() {

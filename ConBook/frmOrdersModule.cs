@@ -17,7 +17,6 @@ namespace ConBook {
 
     private void frmOrdersModule_Load(object sender, EventArgs e) {
 
-      LoadOrders();
 
     }
 
@@ -26,7 +25,6 @@ namespace ConBook {
       mOrdersListUtils.AddOrder();
 
       UpdateAdditionalColumns();
-      SaveOrders();
 
     }
 
@@ -36,7 +34,6 @@ namespace ConBook {
         mOrdersListUtils.EditOrder(dgvOrders.SelectedRows[0].Index);
 
       UpdateAdditionalColumns();
-      SaveOrders();
 
     }
 
@@ -214,7 +211,6 @@ namespace ConBook {
       if (!File.Exists(pDefaultFilePath)) {
         cOrdersSerializer.SaveToNewTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
       } else {
-        SaveToFile();
       }
 
     }

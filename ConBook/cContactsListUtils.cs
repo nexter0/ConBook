@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.Contracts;
 
 namespace ConBook {
   internal class cContactsListUtils {
@@ -24,12 +25,10 @@ namespace ConBook {
       //funkcja dodająca kontakt do listy
       //xContact - kontakt do dodania
 
-      int pNewContactIndex = LastContactIndex + 1;
-      LastContactIndex = pNewContactIndex;
-      cIndexTracker.SetIndexValue(cIndexTracker.IndexTypeEnum.Contact, pNewContactIndex);
+      cContactDAO pContactDAO = new cContactDAO();
 
-      xContact.Index = pNewContactIndex;
-      ContactsList.Add(xContact);
+      if (pContactDAO.InsertContact(xContact) > 0)
+        ContactsList.Add(xContact);
 
     }
 
@@ -37,21 +36,35 @@ namespace ConBook {
       //funkcja usuwająca kontakt z listy
       //xIndex - indeks kontaktu na liście
 
-      BindingList<cOrder> pOrderList = cOrdersSerializer.GetOrdersList();
-      cOrder pOrder = pOrderList.FirstOrDefault(o => o.IdxContact == ContactsList[xIndex].Index);
+      cContactDAO pContactDAO = new cContactDAO();
+      cContact pContact = ContactsList[xIndex];
+      //BindingList<cOrder> pOrderList = cOrdersSerializer.GetOrdersList();
+      //cOrder pOrder = pOrderList.FirstOrDefault(o => o.IdxContact == pContact.Index);
 
-      if (pOrder != null) {
-        MessageBox.Show($"Kontakt \"{ContactsList[xIndex].Name} {ContactsList[xIndex].Surname}\" jest związany z zamówieniem \"{pOrder.Number}\".\n\n" +
-          $"Usuń lub zmodyfikuj to zamówienie, aby usunąć kontakt.", "Nie można usunąć", MessageBoxButtons.OK, MessageBoxIcon.Error);
-      }
-      else {
+
+      //if (pOrder != null) {
+      //  MessageBox.Show($"Kontakt \"{pContact.Name} {pContact.Surname}\" jest związany z zamówieniem \"{pOrder.Number}\".\n\n" +
+      //    $"Usuń lub zmodyfikuj to zamówienie, aby usunąć kontakt.", "Nie można usunąć", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      //}
+      //else {
         DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt" +
-        $" \"{ContactsList[xIndex].Name} {ContactsList[xIndex].Surname}\" z listy?",
+        $" \"{pContact.Name} {pContact.Surname}\" z listy?",
         "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
         if (deletionQueryResult == DialogResult.Yes)
-          ContactsList.RemoveAt(xIndex);
-      }
+          if (pContactDAO.DropContact(pContact.Index) > 0)
+            ContactsList.RemoveAt(xIndex);
+      // }
+
+    }
+
+    public void EditContact(cContact xEditedContact) {
+      //funkcja wywołująca funkcję aktualizującą wpis w bazie danych
+      //xEditedContact - edytowany kontakt
+
+      cContactDAO pContactDAO = new cContactDAO();
+
+      pContactDAO.UpdateContact(xEditedContact);
 
     }
   }

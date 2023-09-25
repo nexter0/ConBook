@@ -117,7 +117,7 @@
       lbDataBaseStatus.Name = "lbDataBaseStatus";
       lbDataBaseStatus.Size = new Size(470, 37);
       lbDataBaseStatus.TabIndex = 6;
-      lbDataBaseStatus.Text = "lbDataBaseStatus";
+      lbDataBaseStatus.Text = "Łączenie...";
       // 
       // MainForm
       // 
@@ -138,6 +138,7 @@
       Name = "MainForm";
       StartPosition = FormStartPosition.CenterScreen;
       Text = "ConBook";
+      Load += MainForm_Load;
       toolStrip1.ResumeLayout(false);
       toolStrip1.PerformLayout();
       ResumeLayout(false);

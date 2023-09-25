@@ -90,8 +90,6 @@ namespace ConBook {
       mContactsListUtils.DeleteContact(dgvContacts.SelectedRows[0].Index);
 
       RefreshDataGridView();
-
-      SaveContacts();
     }
 
     public void AddContact() {
@@ -107,20 +105,20 @@ namespace ConBook {
 
       RefreshDataGridView();
 
-      SaveContacts();
-
     }
 
     public void EditContact() {
       //funkcja obsługująca edycję kontaktu
 
-      cContact pContact = mContactsListUtils.ContactsList[dgvContacts.SelectedRows[0].Index];
+      int pContactIndex = dgvContacts.SelectedRows[0].Index;
+      cContact pContact = mContactsListUtils.ContactsList[pContactIndex];
       frmContactEditor pContactEditor = new frmContactEditor();
 
-      if (pContactEditor.ShowMe(pContact))
+      if (pContactEditor.ShowMe(pContact)) {
+        mContactsListUtils.EditContact(pContact);
         RefreshDataGridView();
+      }
 
-      SaveContacts();
 
     }
 
@@ -160,62 +158,18 @@ namespace ConBook {
 
     }
 
-    private void SaveContacts() {
-      // funkcja do automatycznego zapisu listy
 
-      string pDefaultFilePath = cContactsSerializer.DEFAULT_SAVE_FILE_PATH;
-
-      if (!File.Exists(pDefaultFilePath)) {
-        cContactsSerializer.SaveToNewTxtFile(pDefaultFilePath, mContactsListUtils.ContactsList);
-      } else {
-        SaveToFile();
-      }
-
-
-    }
-
-    private void SaveToFile() {
-      //funkcja obsługująca zapis do istniejącego pliku
-
-      string pDefaultFilePath = cContactsSerializer.DEFAULT_SAVE_FILE_PATH;
-
-      try {
-        if (mContactsListUtils.ContactsList.Count > 0) {
-          if (File.Exists(pDefaultFilePath))
-            cContactsSerializer.SaveToExistingTxtFile(pDefaultFilePath, mContactsListUtils.ContactsList);
-        }
-      } catch (Exception ex) {
-        if (ex.InnerException != null) {
-          Exception pInnerException = ex.InnerException;
-          string pMessage = "Błąd: \n" + pInnerException.Message + "\n"
-              + "InnerException StackTrace: \n" + pInnerException.StackTrace;
-
-          MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        } else {
-          string pMessage = "Błąd: \n" + ex.Message + "\n"
-              + "StackTrace: \n" + ex.StackTrace;
-
-          MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
-      }
-
-    }
 
     private void LoadContacts() {
       //funkcja wczytująca listę produktów
 
       string pDefaultFilePath = cProductsSerializer.DEFAULT_SAVE_FILE_PATH;
 
-      try {
-        if (File.Exists(pDefaultFilePath)) {
-          mContactsListUtils.ContactsList = cContactsSerializer.GetContactsList();
-        }
-      } catch (Exception ex) {
-        MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pDefaultFilePath}", "Błąd wczytywania",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      cContactDAO pContactDAO = new cContactDAO();
+      List<cContact>? pContactsList = pContactDAO.GetContactList();
 
-      }
+      if (pContactsList != null)
+        mContactsListUtils.ContactsList = new BindingList<cContact>(pContactsList);
 
       RefreshDataGridView();
 

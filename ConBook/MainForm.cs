@@ -5,8 +5,6 @@
 
       InitializeComponent();
 
-      ConnectWithDataBase();
-
     }
 
     private void btnContactsModule_Click(object sender, EventArgs e) {
@@ -36,7 +34,19 @@
 
     }
 
-    private void ConnectWithDataBase() {
+    private void MainForm_Load(object sender, EventArgs e) {
+      TestDBConnection();
+    }
+
+    private void tsbCreateDataBase_Click(object sender, EventArgs e) {
+      cDataBaseService pDataBaseSerivce = new cDataBaseService();
+
+      pDataBaseSerivce.CreateDBTables();
+      pDataBaseSerivce.TestConnection();
+
+    }
+
+    private void TestDBConnection() {
 
       cDataBaseService pDataBaseService = new cDataBaseService();
       var pConnectionResult = pDataBaseService.TestConnection();
@@ -49,14 +59,6 @@
         lbDataBaseStatus.Text = $"Błąd bazy danych: {pConnectionResult.Message}";
         lbDataBaseStatus.ForeColor = Color.Red;
       }
-
-    }
-
-    private void tsbCreateDataBase_Click(object sender, EventArgs e) {
-      cDataBaseService pDataBaseSerivce = new cDataBaseService();
-
-      pDataBaseSerivce.CreateDBTables();
-      pDataBaseSerivce.TestConnection();
 
     }
   }

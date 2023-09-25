@@ -50,6 +50,7 @@
       dgvContacts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
       dgvContacts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       dgvContacts.Location = new Point(12, 47);
+      dgvContacts.MultiSelect = false;
       dgvContacts.Name = "dgvContacts";
       dgvContacts.ReadOnly = true;
       dgvContacts.RowHeadersVisible = false;
