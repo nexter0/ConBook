@@ -2,17 +2,17 @@
 using Npgsql;
 
 namespace ConBook {
-  internal class cContactDAO {
+  internal class cContact_DAO {
 
     private const string TABLE_NAME = "contact";
-    private const string COLUMN_INDEX = "idx";
-    private const string COLUMN_NAME = "name";
-    private const string COLUMN_SURNAME = "surname";
-    private const string COLUMN_PHONE = "phone_number";
-    private const string COLUMN_DESCRIPTION = "description";
-    private const string COLUMN_NOTES = "notes";
+    private const string COLUMN_NAME_INDEX = "idx";
+    private const string COLUMN_NAME_NAME = "name";
+    private const string COLUMN_NAME_SURNAME = "surname";
+    private const string COLUMN_NAME_PHONE = "phone_number";
+    private const string COLUMN_NAME_DESCRIPTION = "description";
+    private const string COLUMN_NAME_NOTES = "notes";
 
-    public List<cContact>? GetContactList() {
+    public List<cContact>? GetContactsList() {
       //funkcja pobierająca kontakty z bazy danych i zwracająca ich kolekcję
 
       List<cContact> pContactsList = new List<cContact>();
@@ -22,21 +22,21 @@ namespace ConBook {
         using (NpgsqlConnection pConnection = new NpgsqlConnection(cDataBaseService.CONNECTION_DATA)) {
           pConnection.Open();
 
-          using (NpgsqlCommand pCommand = new NpgsqlCommand($"SELECT * FROM {TABLE_NAME} ORDER BY {COLUMN_INDEX}", pConnection)) {
+          using (NpgsqlCommand pCommand = new NpgsqlCommand($"SELECT * FROM {TABLE_NAME} ORDER BY {COLUMN_NAME_INDEX}", pConnection)) {
 
             using (NpgsqlDataReader pReader = pCommand.ExecuteReader()) {
               if (pReader.HasRows) {
                 while (pReader.Read()) {
                   cContact pContact = new cContact();
 
-                  pContact.Index = pReader.GetInt32(COLUMN_INDEX);
-                  pContact.Name = pReader.GetString(COLUMN_NAME);
-                  pContact.Surname = pReader.GetString(COLUMN_SURNAME);
-                  pContact.Phone = pReader.GetString(COLUMN_PHONE);
-                  if (!pReader.IsDBNull(COLUMN_DESCRIPTION))
-                    pContact.Description = pReader.GetString(COLUMN_DESCRIPTION);
-                  if (!pReader.IsDBNull(COLUMN_NOTES))
-                    pContact.Notes = pReader.GetString(COLUMN_NOTES);
+                  pContact.Index = pReader.GetInt32(COLUMN_NAME_INDEX);
+                  pContact.Name = pReader.GetString(COLUMN_NAME_NAME);
+                  pContact.Surname = pReader.GetString(COLUMN_NAME_SURNAME);
+                  pContact.Phone = pReader.GetString(COLUMN_NAME_PHONE);
+                  if (!pReader.IsDBNull(COLUMN_NAME_DESCRIPTION))
+                    pContact.Description = pReader.GetString(COLUMN_NAME_DESCRIPTION);
+                  if (!pReader.IsDBNull(COLUMN_NAME_NOTES))
+                    pContact.Notes = pReader.GetString(COLUMN_NAME_NOTES);
 
                   pContactsList.Add(pContact);
 
@@ -57,9 +57,9 @@ namespace ConBook {
 
     public int InsertContact(cContact xContact) {
       //funkcja dodająca kontakt do bazy danych
-      //xContact - indeks kontaktu do dodania
+      //xContact - kontakt do dodania
 
-      string pInsertCommand = $"INSERT INTO {TABLE_NAME} ({COLUMN_NAME}, {COLUMN_SURNAME}, {COLUMN_PHONE}, {COLUMN_DESCRIPTION}, {COLUMN_NOTES}) " +
+      string pInsertCommand = $"INSERT INTO {TABLE_NAME} ({COLUMN_NAME_NAME}, {COLUMN_NAME_SURNAME}, {COLUMN_NAME_PHONE}, {COLUMN_NAME_DESCRIPTION}, {COLUMN_NAME_NOTES}) " +
         "VALUES (@paramName, @paramSurname, @paramPhone, @paramDesc, @paramNotes);";
 
       try {
@@ -90,7 +90,7 @@ namespace ConBook {
       //funkcja usuwająca kontakt z bazy danych
       //xContactIndex - indeks kontaktu do usunięcia
 
-      string pDropCommand = $"DELETE FROM {TABLE_NAME} WHERE {COLUMN_INDEX}={xContactIndex}";
+      string pDropCommand = $"DELETE FROM {TABLE_NAME} WHERE {COLUMN_NAME_INDEX}={xContactIndex}";
 
       try {
 
@@ -113,7 +113,8 @@ namespace ConBook {
       //funkcja edytująca kontakt w bazie danych
       //xEditedContact - edytowany kontakt
 
-      string pUpdateCommand = $"UPDATE {TABLE_NAME} SET {COLUMN_NAME} = @paramName, {COLUMN_SURNAME} = @paramSurname, {COLUMN_PHONE} = @paramPhone, {COLUMN_DESCRIPTION} = @paramDesc, {COLUMN_NOTES} = @paramNotes WHERE {COLUMN_INDEX} = {xEditedContact.Index};";
+      string pUpdateCommand = $"UPDATE {TABLE_NAME} SET {COLUMN_NAME_NAME} = @paramName, {COLUMN_NAME_SURNAME} = @paramSurname, {COLUMN_NAME_PHONE} = @paramPhone," +
+        $" {COLUMN_NAME_DESCRIPTION} = @paramDesc, {COLUMN_NAME_NOTES} = @paramNotes WHERE {COLUMN_NAME_INDEX} = {xEditedContact.Index};";
 
       try {
 

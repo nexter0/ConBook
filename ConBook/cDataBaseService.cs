@@ -13,8 +13,10 @@ namespace ConBook {
     public const int CONTACT_PHONE_MAXLEN = 20;
     public const int CONTACT_DESC_MAXLEN = 256;
     public const int CONTACT_NOTES_MAXLEN = 32;
+    public const int PRODUCT_NAME_MAXLEN = 128;
+    public const int PRODUCT_SYMBOL_MAXLEN = 32;
 
-    public Exception? TestConnection() {
+    public Exception? Test_DB_Connection() {
 
       try {
 
@@ -22,7 +24,7 @@ namespace ConBook {
 
         pConnection.Open();
 
-        if (!DBTablesExist(pConnection))
+        if (!Check_DB_TablesExist(pConnection))
           throw new Exception("Brak lub nieprawidłowa struktura bazy danych");
 
         pConnection.Close();
@@ -38,7 +40,7 @@ namespace ConBook {
 
     }
 
-    private bool DBTablesExist(NpgsqlConnection xConnection) {
+    private bool Check_DB_TablesExist(NpgsqlConnection xConnection) {
 
       List<string> pTablesList = new List<string> {"contact", "product", "order", "ordered_product"};
 
@@ -58,7 +60,7 @@ namespace ConBook {
 
     }
 
-    public bool CreateDBTables() {
+    public bool Create_DB_Tables() {
 
       var pConnection = new NpgsqlConnection(CONNECTION_DATA);
 
@@ -66,7 +68,7 @@ namespace ConBook {
 
         pConnection.Open();
 
-        if (DBTablesExist(pConnection)) {
+        if (Check_DB_TablesExist(pConnection)) {
 
           MessageBox.Show("Wszystkie tabele w bazie danych istnieją.", "Baza danych istnieje", MessageBoxButtons.OK, MessageBoxIcon.Information);
           return false;
@@ -84,8 +86,8 @@ namespace ConBook {
 
             CREATE TABLE product (
               idx SERIAL NOT NULL PRIMARY KEY,
-              name VARCHAR(128) NOT NULL,
-              symbol VARCHAR(32) NOT NULL,
+              name VARCHAR({PRODUCT_NAME_MAXLEN}) NOT NULL,
+              symbol VARCHAR({PRODUCT_SYMBOL_MAXLEN}) NOT NULL,
               price MONEY NOT NULL
              );
 

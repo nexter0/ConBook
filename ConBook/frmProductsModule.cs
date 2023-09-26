@@ -1,4 +1,6 @@
-﻿namespace ConBook {
+﻿using System.ComponentModel;
+
+namespace ConBook {
   public partial class frmProductsModule : Form {
 
     private cProductListUtils mProductListUtils;
@@ -18,8 +20,6 @@
 
       mProductListUtils.AddProduct();
 
-      SaveProducts();
-
     }
 
     private void btnEdit_Click(object sender, EventArgs e) {
@@ -27,16 +27,12 @@
       if (mProductListUtils.ProductsList.Count > 0)
         mProductListUtils.EditProduct(dgvProducts.SelectedRows[0].Index);
 
-      SaveProducts();
-
     }
 
     private void btnDelete_Click(object sender, EventArgs e) {
 
       if (mProductListUtils.ProductsList.Count > 0)
         mProductListUtils.DeleteProduct(dgvProducts.SelectedRows[0].Index);
-
-      SaveProducts();
 
     }
 
@@ -47,8 +43,7 @@
     }
 
     private void frmProductsModule_FormClosing(object sender, FormClosingEventArgs e) {
-
-      SaveProducts();
+      ;
 
     }
 
@@ -88,62 +83,16 @@
 
     }
 
-    private void SaveProducts() {
-      // funkcja do automatycznego zapisu kolekcji produktów
-
-      string pDefaultFilePath = cProductsSerializer.DEFAULT_SAVE_FILE_PATH;
-
-      if (!File.Exists(pDefaultFilePath)) {
-        cProductsSerializer.SaveToNewTxtFile(pDefaultFilePath, mProductListUtils.ProductsList);
-      } else {
-        SaveToFile();
-      }
-
-
-    }
-
-    private void SaveToFile() {
-      //funkcja obsługująca zapis do istniejącego pliku
-
-      string pDefaultFilePath = cProductsSerializer.DEFAULT_SAVE_FILE_PATH;
-
-      try {
-        if (mProductListUtils.ProductsList.Count > 0) {
-          if (File.Exists(pDefaultFilePath))
-            cProductsSerializer.SaveToExistingTxtFile(pDefaultFilePath, mProductListUtils.ProductsList);
-        }
-      } catch (Exception ex) {
-        if (ex.InnerException != null) {
-          Exception pInnerException = ex.InnerException;
-          string pMessage = "Błąd: \n" + pInnerException.Message + "\n"
-              + "InnerException StackTrace: \n" + pInnerException.StackTrace;
-
-          MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        } else {
-          string pMessage = "Błąd: \n" + ex.Message + "\n"
-              + "StackTrace: \n" + ex.StackTrace;
-
-          MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
-      }
-
-    }
-
     private void LoadProducts() {
       //funkcja wczytująca kolekcję produktów z pliku
 
-      string pDefaultFilePath = cProductsSerializer.DEFAULT_SAVE_FILE_PATH;
+      cProduct_DAO pProduct_DAO = new cProduct_DAO();
 
-      try {
-        if (File.Exists(pDefaultFilePath)) {
-          mProductListUtils.ProductsList = cProductsSerializer.GetProductsList();
-        }
-      } catch (Exception ex) {
-        MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pDefaultFilePath}", "Błąd wczytywania",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      List<cProduct>? pProductsList = pProduct_DAO.GetProductsList();
 
-      }
+      if (pProductsList != null)
+        mProductListUtils.ProductsList = new BindingList<cProduct>(pProductsList);
+
 
       BindDataGridView();
 
@@ -152,11 +101,21 @@
     private void BindDataGridView() {
       //funkcja bindująca data grid view z kolekcją produktów
 
+      mProductListUtils.UpdateProductsList();
+
       dgvProducts.DataSource = null;
       dgvProducts.DataSource = mProductListUtils.ProductsList;
       ConfigureDataGridView();
 
     }
 
+    private void dgvProducts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
+      if (e.RowIndex >= 0 && e.ColumnIndex == dgvProducts.Columns["Price"].Index) {
+
+        e.Value = ((double)e.Value).ToString("C");
+
+      }
+
+    }
   }
 }

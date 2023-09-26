@@ -41,15 +41,15 @@
     private void tsbCreateDataBase_Click(object sender, EventArgs e) {
       cDataBaseService pDataBaseSerivce = new cDataBaseService();
 
-      pDataBaseSerivce.CreateDBTables();
-      pDataBaseSerivce.TestConnection();
+      pDataBaseSerivce.Create_DB_Tables();
+      pDataBaseSerivce.Test_DB_Connection();
 
     }
 
     private void TestDBConnection() {
 
       cDataBaseService pDataBaseService = new cDataBaseService();
-      var pConnectionResult = pDataBaseService.TestConnection();
+      var pConnectionResult = pDataBaseService.Test_DB_Connection();
 
       if (pConnectionResult == null) {
 

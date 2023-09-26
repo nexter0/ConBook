@@ -32,6 +32,7 @@
       label3 = new Label();
       btnSubmit = new Button();
       btnCancel = new Button();
+      label4 = new Label();
       SuspendLayout();
       // 
       // txtName
@@ -102,11 +103,21 @@
       btnCancel.UseVisualStyleBackColor = true;
       btnCancel.Click += btnCancel_Click;
       // 
+      // label4
+      // 
+      label4.AutoSize = true;
+      label4.Location = new Point(118, 122);
+      label4.Name = "label4";
+      label4.Size = new Size(43, 15);
+      label4.TabIndex = 8;
+      label4.Text = "zł / szt.";
+      // 
       // frmProductEditor
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
       ClientSize = new Size(353, 149);
+      Controls.Add(label4);
       Controls.Add(btnCancel);
       Controls.Add(btnSubmit);
       Controls.Add(label3);
@@ -136,5 +147,6 @@
     private Label label3;
     private Button btnSubmit;
     private Button btnCancel;
+    private Label label4;
   }
 }

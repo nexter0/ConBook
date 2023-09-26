@@ -125,6 +125,8 @@ namespace ConBook {
     public void RefreshDataGridView() {
       //funkcja odświeżająca DataGridView oraz przyciski Edytuj / Usuń
 
+      cContact_DAO pContactDAO = new cContact_DAO();
+      mContactsListUtils.UpdateContactsList();
       dgvContacts.DataSource = mContactsListUtils.ContactsList;
 
 
@@ -161,12 +163,10 @@ namespace ConBook {
 
 
     private void LoadContacts() {
-      //funkcja wczytująca listę produktów
+      //funkcja wczytująca listę kontaktów
 
-      string pDefaultFilePath = cProductsSerializer.DEFAULT_SAVE_FILE_PATH;
-
-      cContactDAO pContactDAO = new cContactDAO();
-      List<cContact>? pContactsList = pContactDAO.GetContactList();
+      cContact_DAO pContactDAO = new cContact_DAO();
+      List<cContact>? pContactsList = pContactDAO.GetContactsList();
 
       if (pContactsList != null)
         mContactsListUtils.ContactsList = new BindingList<cContact>(pContactsList);

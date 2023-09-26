@@ -25,7 +25,7 @@ namespace ConBook {
       //funkcja dodająca kontakt do listy
       //xContact - kontakt do dodania
 
-      cContactDAO pContactDAO = new cContactDAO();
+      cContact_DAO pContactDAO = new cContact_DAO();
 
       if (pContactDAO.InsertContact(xContact) > 0)
         ContactsList.Add(xContact);
@@ -36,7 +36,7 @@ namespace ConBook {
       //funkcja usuwająca kontakt z listy
       //xIndex - indeks kontaktu na liście
 
-      cContactDAO pContactDAO = new cContactDAO();
+      cContact_DAO pContactDAO = new cContact_DAO();
       cContact pContact = ContactsList[xIndex];
       //BindingList<cOrder> pOrderList = cOrdersSerializer.GetOrdersList();
       //cOrder pOrder = pOrderList.FirstOrDefault(o => o.IdxContact == pContact.Index);
@@ -62,10 +62,20 @@ namespace ConBook {
       //funkcja wywołująca funkcję aktualizującą wpis w bazie danych
       //xEditedContact - edytowany kontakt
 
-      cContactDAO pContactDAO = new cContactDAO();
+      cContact_DAO pContactDAO = new cContact_DAO();
 
       pContactDAO.UpdateContact(xEditedContact);
 
     }
+
+    public void UpdateContactsList() {
+      //funkcja odświeżająca listę kontaktów (pobiera ją ponownie z bazy danych)
+
+      cContact_DAO pContactDAO = new cContact_DAO();
+
+      ContactsList = new BindingList<cContact>(pContactDAO.GetContactsList());
+
+    }
+
   }
 }

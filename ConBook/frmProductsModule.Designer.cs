@@ -60,6 +60,7 @@ namespace ConBook {
       dgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
       dgvProducts.Size = new Size(826, 389);
       dgvProducts.TabIndex = 9;
+      dgvProducts.CellFormatting += dgvProducts_CellFormatting;
       // 
       // btnEdit
       // 
