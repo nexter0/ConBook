@@ -76,7 +76,7 @@ namespace ConBook {
 
     private void dgvSelectedProducts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
 
-      if (e.RowIndex >= 0 && e.ColumnIndex == dgvOrderedProducts.Columns["Index"].Index) {
+      if (e.RowIndex >= 0 && e.ColumnIndex == dgvOrderedProducts.Columns["IdxProduct"].Index) {
         int productIndex = (int)e.Value;
 
         cProduct pProduct = mProductsList.FirstOrDefault(p => p.Index == productIndex);
@@ -202,7 +202,7 @@ namespace ConBook {
       }
       double pPrice = double.Parse(mtxtPrice.Text);
 
-      return new cOrderedProduct(pProduct.Index, pAmount, pPrice);
+      return new cOrderedProduct(0, pProduct.Index, pAmount, pPrice);
 
     }
 
@@ -243,25 +243,20 @@ namespace ConBook {
 
       dgvOrderedProducts.DataSource = mOrderedProductsList;
 
-      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Index)].HeaderText = "Nazwa";
-      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Amount)].HeaderText = "Ilość";
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.IdxProduct)].HeaderText = "Nazwa";
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Quantity)].HeaderText = "Ilość";
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Sold)].HeaderText = "Cena sprzedaży";
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Total)].HeaderText = "Wartość";
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Sold)].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Total)].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Index)].Width = 243;
-      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Amount)].Width = 50;
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.IdxProduct)].Width = 243;
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Quantity)].Width = 50;
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Sold)].Width = 120;
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Total)].Width = 120;
 
-    }
-
-
-    private bool CheckIfIndexExists(BindingList<cOrderedProduct> xOrderedProductsList, int xIndex) {
-      //funkcja sprawdzająca czy w liście wybranych produktów istnieje produkt z danym indeksem
-
-      return xOrderedProductsList.Any(pProduct => pProduct.Index == xIndex);
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Index)].Visible = false;
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.IdxOrder)].Visible = false;
 
     }
 

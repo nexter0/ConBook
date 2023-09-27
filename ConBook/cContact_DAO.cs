@@ -45,7 +45,47 @@ namespace ConBook {
             }
           }
         }
-          return pContactsList;
+        return pContactsList;
+
+      } catch (Exception ex) {
+        MessageBox.Show(ex.Message, "Błąd bazy danych", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
+      return null;
+
+    }
+
+    public cContact? GetContactByIndex(int xIndex) {
+      //funkcja pobierająca i zwracająca kontakt o danym indeksie z bazy danych
+
+      cContact pContact = new cContact();
+
+      try {
+
+        using (NpgsqlConnection pConnection = new NpgsqlConnection(cDataBaseService.CONNECTION_DATA)) {
+          pConnection.Open();
+
+          using (NpgsqlCommand pCommand = new NpgsqlCommand($"SELECT * FROM {TABLE_NAME} WHERE {COLUMN_NAME_INDEX} = {xIndex}", pConnection)) {
+
+            using (NpgsqlDataReader pReader = pCommand.ExecuteReader()) {
+              if (pReader.HasRows) {
+                pReader.Read();
+
+                pContact.Index = pReader.GetInt32(COLUMN_NAME_INDEX);
+                pContact.Name = pReader.GetString(COLUMN_NAME_NAME);
+                pContact.Surname = pReader.GetString(COLUMN_NAME_SURNAME);
+                pContact.Phone = pReader.GetString(COLUMN_NAME_PHONE);
+                if (!pReader.IsDBNull(COLUMN_NAME_DESCRIPTION))
+                  pContact.Description = pReader.GetString(COLUMN_NAME_DESCRIPTION);
+                if (!pReader.IsDBNull(COLUMN_NAME_NOTES))
+                  pContact.Notes = pReader.GetString(COLUMN_NAME_NOTES);
+
+              }
+            }
+          }
+        }
+
+        return pContact;
 
       } catch (Exception ex) {
         MessageBox.Show(ex.Message, "Błąd bazy danych", MessageBoxButtons.OK, MessageBoxIcon.Error);

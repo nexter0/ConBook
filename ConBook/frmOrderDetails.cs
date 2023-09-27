@@ -4,8 +4,8 @@ using System.Diagnostics.Contracts;
 namespace ConBook {
   public partial class frmOrderDetails : Form {
 
-    BindingList<cContact> mFullContactsList;
-    BindingList<cProduct> mFullProductsList;
+    BindingList<cContact>? mFullContactsList;
+    BindingList<cProduct>? mFullProductsList;
 
     public frmOrderDetails() {
       InitializeComponent();
@@ -21,8 +21,8 @@ namespace ConBook {
 
     internal bool ShowMe(cOrder xOrder) {
 
-      mFullContactsList = cContactsSerializer.GetContactsList();
-      mFullProductsList = cProductsSerializer.GetProductsList();
+      //mFullContactsList = cContactsSerializer.GetContactsList();
+      //mFullProductsList = cProductsSerializer.GetProductsList();
 
       ResetLabels();
       SetLabels(xOrder);
@@ -37,7 +37,7 @@ namespace ConBook {
 
     private void SetLabels(cOrder xOrder) {
 
-      cContact pContact = mFullContactsList.FirstOrDefault(c => c.Index == xOrder.IdxContact);
+      cContact? pContact = mFullContactsList.FirstOrDefault(c => c.Index == xOrder.IdxContact);
 
       double pTotalPrice = xOrder.OrderedProductsList.Sum(p => p.Price_Total);
 

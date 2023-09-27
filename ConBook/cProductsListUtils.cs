@@ -4,19 +4,17 @@ using System.Diagnostics.Contracts;
 namespace ConBook {
   internal class cProductListUtils {
     //klasa odpowiadająca za obsługę listy produktów
-
-    private BindingList<cProduct> mProductsList;                    // lista produktów
     private int mLastProductIndex;                                  // ostatnio wykorzystany indeks produktu
 
+    private BindingList<cProduct>? mProductsList;                    // lista przechowująca kontakty
+
     #region Properties
-    public BindingList<cProduct> ProductsList { get { return mProductsList; } set { mProductsList = value; } }
+    public BindingList<cProduct>? ProductsList { get { return mProductsList; } set { mProductsList = value; } }
     public int LastProductIndex { get { return mLastProductIndex; } set { mLastProductIndex = value; } }
 
     public cProductListUtils() {
 
       ProductsList = new BindingList<cProduct>();
-
-      mLastProductIndex = cIndexTracker.GetIndexValue(cIndexTracker.IndexTypeEnum.Product);
 
     }
     #endregion
@@ -42,7 +40,7 @@ namespace ConBook {
       //funkcja usuwająca produkt z listy
       //xIndex - indeks produktu w liście produktów
 
-      BindingList<cOrder> pOrderList = cOrdersSerializer.GetOrdersList();
+      //BindingList<cOrder> pOrderList = cOrdersSerializer.GetOrdersList();
       cProduct_DAO pProduct_DAO = new cProduct_DAO();
       cProduct pProduct = ProductsList[xIndex];
       //cOrder pOrder = pOrderList.FirstOrDefault(o => o.OrderedProductsList.Any(p => p.Index == ProductsList[xIndex].Index));

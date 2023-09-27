@@ -58,11 +58,11 @@ namespace ConBook {
     private void dgvOrders_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
 
       if (e.RowIndex >= 0 && e.ColumnIndex == dgvOrders.Columns["IdxContact"].Index) {
-        int contactIndex = (int)e.Value;
+        int pContactIndex = (int)e.Value;
 
-        BindingList<cContact> pContactsList = cContactsSerializer.GetContactsList();
-        cContact pContact = pContactsList.FirstOrDefault(c => c.Index == contactIndex);
+        cContact_DAO pContact_DAO = new cContact_DAO();
 
+        cContact? pContact = pContact_DAO.GetContactByIndex(pContactIndex);
 
         if (pContact != null) {
           e.Value = pContact.Name[0] + ". " + pContact.Surname;

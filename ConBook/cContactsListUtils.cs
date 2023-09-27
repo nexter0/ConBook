@@ -6,18 +6,14 @@ namespace ConBook {
     //klasa odpowiadająca za obsługę listy konktatków
 
     private BindingList<cContact> mContactsList;                  // lista przechowująca kontakty
-    private int mLastContactIndex;                                // ostatnio wykorzystany indeks kontaktu
 
     #region Properties
     public BindingList<cContact> ContactsList { get { return mContactsList; } set { mContactsList = value; } }
-    public int LastContactIndex { get { return mLastContactIndex; } set { mLastContactIndex = value; } }
     #endregion
 
     public cContactsListUtils() {
 
       mContactsList = new BindingList<cContact>();
-
-      mLastContactIndex = cIndexTracker.GetIndexValue(cIndexTracker.IndexTypeEnum.Contact);
 
     }
 
