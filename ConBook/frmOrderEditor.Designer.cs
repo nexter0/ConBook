@@ -225,9 +225,9 @@
       label7.AutoSize = true;
       label7.Location = new Point(224, 120);
       label7.Name = "label7";
-      label7.Size = new Size(32, 15);
+      label7.Size = new Size(43, 15);
       label7.TabIndex = 21;
-      label7.Text = "/ szt.";
+      label7.Text = "zł / szt.";
       // 
       // lbSuma
       // 

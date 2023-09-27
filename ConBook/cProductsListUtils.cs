@@ -58,7 +58,7 @@ namespace ConBook {
       "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
         if (deletionQueryResult == DialogResult.Yes) {
-          if (pProduct_DAO.DropContact(pProduct.Index) > 0)
+          if (pProduct_DAO.DropProduct(pProduct.Index) > 0)
             ProductsList.RemoveAt(xIndex);
         }
 

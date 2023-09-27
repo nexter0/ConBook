@@ -125,7 +125,6 @@
       KeyPreview = true;
       Name = "frmOrdersModule";
       Text = "ConBook - Zamówienia";
-      Load += frmOrdersModule_Load;
       KeyUp += frmOrdersModule_KeyUp;
       ((System.ComponentModel.ISupportInitialize)dgvOrders).EndInit();
       ResumeLayout(false);

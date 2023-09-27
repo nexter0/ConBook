@@ -244,14 +244,14 @@ namespace ConBook {
       dgvOrderedProducts.DataSource = mOrderedProductsList;
 
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Index)].HeaderText = "Nazwa";
-      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Amount)].HeaderText = "Ilość";
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Quantity)].HeaderText = "Ilość";
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Sold)].HeaderText = "Cena sprzedaży";
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Total)].HeaderText = "Wartość";
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Sold)].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Total)].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Index)].Width = 243;
-      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Amount)].Width = 50;
+      dgvOrderedProducts.Columns[nameof(cOrderedProduct.Quantity)].Width = 50;
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Sold)].Width = 120;
       dgvOrderedProducts.Columns[nameof(cOrderedProduct.Price_Total)].Width = 120;
 

@@ -42,7 +42,7 @@ namespace ConBook {
 
     private bool Check_DB_TablesExist(NpgsqlConnection xConnection) {
 
-      List<string> pTablesList = new List<string> {"contact", "product", "order", "ordered_product"};
+      List<string> pTablesList = new List<string> {"contacts", "products", "orders", "ordered_products"};
 
       using (NpgsqlCommand pCmd = new NpgsqlCommand()) {
 
@@ -75,32 +75,32 @@ namespace ConBook {
         }
 
         string pQuery = $@"
-            CREATE TABLE contact (
+            CREATE TABLE contacts (
               idx SERIAL NOT NULL PRIMARY KEY,
               name VARCHAR({CONTACT_NAME_MAXLEN}) NOT NULL,
               surname VARCHAR({CONTACT_SURNAME_MAXLEN}) NOT NULL,
-              phone_number VARCHAR({CONTACT_PHONE_MAXLEN} NOT NULL,
+              phone_number VARCHAR({CONTACT_PHONE_MAXLEN}) NOT NULL,
               description VARCHAR({CONTACT_DESC_MAXLEN}),
               notes VARCHAR({CONTACT_NOTES_MAXLEN})
              );
 
-            CREATE TABLE product (
+            CREATE TABLE products (
               idx SERIAL NOT NULL PRIMARY KEY,
               name VARCHAR({PRODUCT_NAME_MAXLEN}) NOT NULL,
               symbol VARCHAR({PRODUCT_SYMBOL_MAXLEN}) NOT NULL,
               price MONEY NOT NULL
              );
 
-            CREATE TABLE ""order"" (
+            CREATE TABLE orders (
               idx SERIAL NOT NULL PRIMARY KEY,
-              number VARCHAR(16),
-              date_created DATE,
-              contact_idx INTEGER NOT NULL REFERENCES contact(idx)
+              number VARCHAR(16) NOT NULL,
+              date_created DATE NOT NULL,
+              contact_idx INTEGER NOT NULL REFERENCES contacts(idx)
              );
 
-            CREATE TABLE ordered_product (
-              order_idx INTEGER REFERENCES ""order""(idx),
-              product_idx INTEGER REFERENCES product(idx),
+            CREATE TABLE ordered_products (
+              order_idx INTEGER REFERENCES orders(idx),
+              product_idx INTEGER REFERENCES products(idx),
               quantity INT NOT NULL DEFAULT 1,
               price_sold MONEY NOT NULL,
               PRIMARY KEY (order_idx, product_idx)
@@ -125,6 +125,8 @@ namespace ConBook {
       return false;
 
     }
+
+
 
   }
 }

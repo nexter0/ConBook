@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Text.Json.Serialization;
-using System.Windows.Forms;
 
 namespace ConBook {
   public partial class frmOrdersModule : Form {
@@ -12,11 +10,6 @@ namespace ConBook {
       InitializeComponent();
 
       mOrdersListUtils = new cOrdersListUtils();
-
-    }
-
-    private void frmOrdersModule_Load(object sender, EventArgs e) {
-
 
     }
 
@@ -43,7 +36,6 @@ namespace ConBook {
         mOrdersListUtils.DeleteOrder(dgvOrders.SelectedRows[0].Index);
 
       UpdateAdditionalColumns();
-      SaveOrders();
 
     }
     private void frmOrdersModule_KeyUp(object sender, KeyEventArgs e) {
@@ -185,7 +177,7 @@ namespace ConBook {
 
       int pSum = 0;
       foreach (cOrderedProduct pProduct in xOrder.OrderedProductsList) {
-        pSum += pProduct.Amount;
+        pSum += pProduct.Quantity;
       }
 
       return pSum;
@@ -203,59 +195,14 @@ namespace ConBook {
 
     }
 
-    private void SaveOrders() {
-      // funkcja do automatycznego zapisu kolekcji produktów
-
-      string pDefaultFilePath = cOrdersSerializer.DEFAULT_SAVE_FILE_PATH;
-
-      if (!File.Exists(pDefaultFilePath)) {
-        cOrdersSerializer.SaveToNewTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
-      } else {
-      }
-
-    }
-
-    private void SaveToFile() {
-      //funkcja obsługująca zapis do istniejącego pliku
-
-      string pDefaultFilePath = cOrdersSerializer.DEFAULT_SAVE_FILE_PATH;
-
-      try {
-        if (mOrdersListUtils.OrdersList.Count > 0) {
-          if (File.Exists(pDefaultFilePath))
-            cOrdersSerializer.SaveToExistingTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
-        }
-      } catch (Exception ex) {
-        if (ex.InnerException != null) {
-          Exception pInnerException = ex.InnerException;
-          string pMessage = "Błąd: \n" + pInnerException.Message + "\n"
-              + "InnerException StackTrace: \n" + pInnerException.StackTrace;
-
-          MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        } else {
-          string pMessage = "Błąd: \n" + ex.Message + "\n"
-              + "StackTrace: \n" + ex.StackTrace;
-
-          MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-      }
-
-    }
-
     private void LoadOrders() {
       //funkcja wczytująca kolekcję produktów z pliku
 
-      string pDefaultFilePath = cOrdersSerializer.DEFAULT_SAVE_FILE_PATH;
+      cOrder_DAO pOrder_DAO = new cOrder_DAO();
+      List<cOrder>? pOrdersList = pOrder_DAO.GetOrdersList();
 
-      try {
-        if (File.Exists(pDefaultFilePath)) {
-          mOrdersListUtils.OrdersList = cOrdersSerializer.GetOrdersList();
-        }
-      } catch (Exception ex) {
-        MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pDefaultFilePath}", "Błąd wczytywania",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-      }
+      if (pOrdersList != null)
+        mOrdersListUtils.OrdersList = new BindingList<cOrder>(pOrdersList);
 
       BindDataGridView();
 

@@ -12,7 +12,20 @@ namespace ConBook {
     public event PropertyChangedEventHandler PropertyChanged;           // zdarzenie zmiany właściwości Towaru (pozwalające na data binding)
 
     #region Properties
-    public int Index { get; set; }
+
+    public int Index {
+
+      get { return mIndex; }
+
+      set {
+
+        if (mIndex != value) {
+          mIndex = value;
+          OnPropertyChanged(nameof(Index));
+        }
+
+      }
+    }
 
     public string Name {
 
@@ -101,7 +114,9 @@ namespace ConBook {
   internal class cOrderedProduct : INotifyPropertyChanged {
 
     private int mIndex;
-    private int mAmount;
+    private int mIdxProduct;
+    private int mIdxOrder;
+    private int mQuantity;
     private double mPrice_Sold;
     private double mPrice_Total;
 
@@ -121,15 +136,43 @@ namespace ConBook {
       }
     }
 
-    public int Amount {
+    public int IdxProduct {
 
-      get { return mAmount; }
+      get { return mIdxProduct; }
 
       set {
 
-        if (mAmount != value) {
-          mAmount = value;
-          OnPropertyChanged(nameof(Amount));
+        if (mIdxProduct != value) {
+          mIdxProduct = value;
+          OnPropertyChanged(nameof(IdxProduct));
+        }
+
+      }
+    }
+
+    public int IdxOrder {
+
+      get { return mIdxOrder; }
+
+      set {
+
+        if (mIdxOrder != value) {
+          mIdxOrder = value;
+          OnPropertyChanged(nameof(IdxOrder));
+        }
+
+      }
+    }
+
+    public int Quantity {
+
+      get { return mQuantity; }
+
+      set {
+
+        if (mQuantity != value) {
+          mQuantity = value;
+          OnPropertyChanged(nameof(Quantity));
         }
 
         UpdateTotalPrice();
@@ -156,10 +199,10 @@ namespace ConBook {
       get { return mPrice_Total; }
     }
 
-    public cOrderedProduct(int xIndex, int xAmount, double xSellPrice) {
+    public cOrderedProduct(int xIndex, int xQuantity, double xSellPrice) {
 
       Index = xIndex;
-      Amount = xAmount;
+      Quantity = xQuantity;
       Price_Sold = xSellPrice;
       UpdateTotalPrice();
 
@@ -181,8 +224,8 @@ namespace ConBook {
     private void UpdateTotalPrice() {
       //funkcja aktualizująca property TotalPrice
 
-      if (Amount != null && Price_Sold != null)
-        mPrice_Total = Math.Round((double)(Amount * Price_Sold), 2);
+      if (Quantity != null && Price_Sold != null)
+        mPrice_Total = Math.Round((double)(Quantity * Price_Sold), 2);
       else
         mPrice_Total = 0;
     }

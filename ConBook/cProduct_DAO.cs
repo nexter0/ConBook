@@ -5,7 +5,7 @@ using NpgsqlTypes;
 namespace ConBook {
   internal class cProduct_DAO {
 
-    private const string TABLE_NAME = "product";
+    private const string TABLE_NAME = "products";
     private const string COLUMN_NAME_INDEX = "idx";
     private const string COLUMN_NAME_NAME = "name";
     private const string COLUMN_NAME_SYMBOL = "symbol";
@@ -53,7 +53,7 @@ namespace ConBook {
 
     public int InsertProduct (cProduct xProduct) {
       //funkcja dodająca produkt do bazy danych
-      //xContact - indeks kontaktu do dodania
+      //xProduct - indeks produktu do dodania
 
       string pInsertCommand = $"INSERT INTO {TABLE_NAME} ({COLUMN_NAME_NAME}, {COLUMN_NAME_SYMBOL}, {COLUMN_NAME_PRICE}) " +
         "VALUES (@paramName, @paramSymbol, @paramPrice);";
@@ -85,7 +85,7 @@ namespace ConBook {
 
     }
 
-    public int DropContact(int xProductIndex) {
+    public int DropProduct(int xProductIndex) {
       //funkcja usuwająca produkt z bazy danych
       //xProductIndex - indeks produktu do usunięcia
 
@@ -110,7 +110,7 @@ namespace ConBook {
 
     public int UpdateProduct(cProduct xEditedProduct) {
       //funkcja edytująca kontakt w bazie danych
-      //xEditedContact - edytowany kontakt
+      //xEditedContact - edytowany produkt
 
       string pUpdateCommand = $"UPDATE {TABLE_NAME} SET {COLUMN_NAME_NAME} = @paramName, {COLUMN_NAME_SYMBOL} = @paramSymbol, {COLUMN_NAME_PRICE} = @paramPrice WHERE {COLUMN_NAME_INDEX} = {xEditedProduct.Index};";
 
@@ -137,7 +137,6 @@ namespace ConBook {
       }
 
       return -1;
-
 
     }
 

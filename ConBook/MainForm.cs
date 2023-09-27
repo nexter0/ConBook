@@ -55,9 +55,15 @@
 
         lbDataBaseStatus.Text = "Pomyślnie połączono z bazą danych";
         lbDataBaseStatus.ForeColor = Color.Green;
+        btnContactsModule.Enabled = true;
+        btnProductsModule.Enabled = true;
+        btnOrdersModule.Enabled = true;
       } else {
         lbDataBaseStatus.Text = $"Błąd bazy danych: {pConnectionResult.Message}";
         lbDataBaseStatus.ForeColor = Color.Red;
+        btnContactsModule.Enabled = false;
+        btnProductsModule.Enabled = false;
+        btnOrdersModule.Enabled = false;
       }
 
     }

@@ -24,18 +24,27 @@ namespace ConBook {
       //funkcja dodająca zamówienie do listy zamówień
 
       cOrder pOrder = new cOrder();
+
+      cContact_DAO pContact_DAO = new cContact_DAO();
+      cProduct_DAO pProduct_DAO = new cProduct_DAO();
+      cOrder_DAO pOrder_DAO = new cOrder_DAO();
+      cOrderedProduct_DAO pOrderedProduct_DAO = new cOrderedProduct_DAO();
+
       frmOrderEditor pOrderEditor = new frmOrderEditor();
 
-      BindingList<cContact> pContactsList = cContactsSerializer.GetContactsList();
-      BindingList<cProduct> pProductsList = cProductsSerializer.GetProductsList();
+      BindingList<cContact> pContactsList = new BindingList<cContact>(pContact_DAO.GetContactsList());
+      BindingList<cProduct> pProductsList = new BindingList<cProduct>(pProduct_DAO.GetProductsList());
 
       if (pOrderEditor.ShowMe(pOrder, pProductsList, pContactsList)) {
-        int pNewOrderIndex = LastOrderIndex + 1;
-        LastOrderIndex = pNewOrderIndex;
-        cIndexTracker.SetIndexValue(cIndexTracker.IndexTypeEnum.Order, pNewOrderIndex);
 
-        pOrder.Index = pNewOrderIndex;
-        OrdersList.Add(pOrder);
+        if (pOrderedProduct_DAO.InsertOrderedProductsTransaction(pOrder.OrderedProductsList)) {
+          MessageBox.Show("Wystąpił krytyczny błąd podczas tworzenia zamówienia.\nZamówienie nie zostało utworzone.", "Nie można utworzyć zamówienia", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+          
+
+        if (pOrder_DAO.InsertOrder(pOrder) > 0)
+          OrdersList.Add(pOrder);
       }
 
 
@@ -45,12 +54,18 @@ namespace ConBook {
       //funkcja edytująca kontakt
       //xIndex - indeks zamówienia na liście
 
+      cContact_DAO pContact_DAO = new cContact_DAO();
+      cProduct_DAO pProduct_DAO = new cProduct_DAO();
+      cOrder_DAO pOrder_DAO = new cOrder_DAO();
       frmOrderEditor pOrderEditor = new frmOrderEditor();
 
-      BindingList<cContact> pContactsList = cContactsSerializer.GetContactsList();
-      BindingList<cProduct> pProductsList = cProductsSerializer.GetProductsList();
+      BindingList<cContact> pContactsList = new BindingList<cContact>(pContact_DAO.GetContactsList());
+      BindingList<cProduct> pProductsList = new BindingList<cProduct>(pProduct_DAO.GetProductsList());
 
-      pOrderEditor.ShowMe(OrdersList[xIndex], pProductsList, pContactsList);
+      if (pOrderEditor.ShowMe(OrdersList[xIndex], pProductsList, pContactsList))
+        pOrder_DAO.UpdateOrder(OrdersList[xIndex]);
+
+
 
     }
 
@@ -58,12 +73,17 @@ namespace ConBook {
       //funkcja usuwająca produkt z listy
       //xIndex - indeks zamówienia na liście
 
+      cOrder_DAO pOrder_DAO = new cOrder_DAO();
+      cOrder pOrder = OrdersList[xIndex];
+
       DialogResult deletionQueryResult = MessageBox.Show($"Usunąć zamówienie numer" +
           $" {OrdersList[xIndex].Number} z listy?",
           "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
       if (deletionQueryResult == DialogResult.Yes) {
-        OrdersList.RemoveAt(xIndex);
+        if (pOrder_DAO.DropOrder(pOrder.Index) > 0)
+          OrdersList.RemoveAt(xIndex);
+
       }
 
     }

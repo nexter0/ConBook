@@ -40,7 +40,7 @@ namespace ConBook {
       //xOrderedProduct - zamówiony produkt do sformatowania
 
       return $" {PRODUCT_INDEX_TAG}{xOrderedProduct.Index}{PRD_INNER_SEPARATOR}" +
-        $"{PRODUCT_AMOUNT_TAG}{xOrderedProduct.Amount}{PRD_INNER_SEPARATOR}" +
+        $"{PRODUCT_AMOUNT_TAG}{xOrderedProduct.Quantity}{PRD_INNER_SEPARATOR}" +
         $"{PRODUCT_SELLPRICE_TAG}{xOrderedProduct.Price_Sold}{PRD_OUTER_SEPARATOR}";
 
     }
@@ -90,7 +90,7 @@ namespace ConBook {
             continue;
 
           if (pSingleProductData.Contains($"{PRODUCT_INDEX_TAG}")) { pOrderedProduct.Index = int.Parse(RemoveTags(pSingleProductData)); continue; }
-          if (pSingleProductData.Contains($"{PRODUCT_AMOUNT_TAG}")) { pOrderedProduct.Amount = int.Parse(RemoveTags(pSingleProductData)); continue; }
+          if (pSingleProductData.Contains($"{PRODUCT_AMOUNT_TAG}")) { pOrderedProduct.Quantity = int.Parse(RemoveTags(pSingleProductData)); continue; }
           if (pSingleProductData.Contains($"{PRODUCT_SELLPRICE_TAG}")) { pOrderedProduct.Price_Sold = double.Parse(RemoveTags(pSingleProductData)); continue; }
 
         }
