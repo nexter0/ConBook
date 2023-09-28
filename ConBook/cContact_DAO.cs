@@ -4,7 +4,7 @@ using Npgsql;
 namespace ConBook {
   internal class cContact_DAO {
 
-    private const string TABLE_NAME = "contact";
+    private const string TABLE_NAME = "contacts";
     private const string COLUMN_NAME_INDEX = "idx";
     private const string COLUMN_NAME_NAME = "name";
     private const string COLUMN_NAME_SURNAME = "surname";

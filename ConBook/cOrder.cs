@@ -6,11 +6,11 @@ namespace ConBook {
     private DateTime mCreationDate;                                    // data utworzenia zamówienia
     private int mIdxContact;                                           // indeks klienta zlecającego
     private int mIndex;                                                // indeks zamówienia
-    private string? mNumber;                                            // numer zamówienia
+    private string? mNumber;                                           // numer zamówienia
 
-    private BindingList<cOrderedProduct>? mOrderedProductsList;         // zamówione produkty (produkty wybrane w danym zamówieniu)
+    private BindingList<cOrderedProduct>? mOrderedProductsList;        // zamówione produkty (produkty wybrane w danym zamówieniu)
 
-    public event PropertyChangedEventHandler? PropertyChanged;          // zdarzenie zmiany właściwości Zamówienia (pozwalające na data binding)
+    public event PropertyChangedEventHandler? PropertyChanged;         // zdarzenie zmiany właściwości Zamówienia (pozwalające na data binding)
 
     #region Properties
     public int Index {  

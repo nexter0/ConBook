@@ -31,12 +31,16 @@ namespace ConBook {
       BindingList<cContact> pContactsList = new BindingList<cContact>(pContact_DAO.GetContactsList());
       BindingList<cProduct> pProductsList = new BindingList<cProduct>(pProduct_DAO.GetProductsList());
 
-      if (pOrderEditor.ShowMe(pOrder, pProductsList, pContactsList)) {          
+      if (pOrderEditor.ShowMe(pOrder, pProductsList, pContactsList)) {
 
-        if (pOrder_DAO.InsertOrderWithProducts(pOrder) > 0)
+        int pOrderIndex = pOrder_DAO.InsertOrderWithProducts(pOrder);
+        if (pOrderIndex != -1) {
+          pOrder.Index = pOrderIndex;
           OrdersList.Add(pOrder);
+        }          
       }
 
+      UpdateOrdersList();
 
     }
 
@@ -47,15 +51,18 @@ namespace ConBook {
       cContact_DAO pContact_DAO = new cContact_DAO();
       cProduct_DAO pProduct_DAO = new cProduct_DAO();
       cOrder_DAO pOrder_DAO = new cOrder_DAO();
+      cOrderedProduct_DAO pOrderedProduct_DAO = new cOrderedProduct_DAO();
       frmOrderEditor pOrderEditor = new frmOrderEditor();
 
       BindingList<cContact> pContactsList = new BindingList<cContact>(pContact_DAO.GetContactsList());
       BindingList<cProduct> pProductsList = new BindingList<cProduct>(pProduct_DAO.GetProductsList());
 
-      if (pOrderEditor.ShowMe(OrdersList[xIndex], pProductsList, pContactsList))
+      if (pOrderEditor.ShowMe(OrdersList[xIndex], pProductsList, pContactsList)) {
         pOrder_DAO.UpdateOrder(OrdersList[xIndex]);
+        pOrderedProduct_DAO.UpdateOrderedProductsForOrder(OrdersList[xIndex]);
+      }
 
-
+      UpdateOrdersList();
 
     }
 
@@ -75,6 +82,17 @@ namespace ConBook {
           OrdersList.RemoveAt(xIndex);
 
       }
+
+      UpdateOrdersList();
+
+    }
+
+    public void UpdateOrdersList() {
+      //funkcja odświeżająca listę kontaktów (pobiera ją ponownie z bazy danych)
+
+      cOrder_DAO pOrder_DAO = new cOrder_DAO();
+
+      OrdersList = new BindingList<cOrder>(pOrder_DAO.GetOrdersListWithProducts());
 
     }
 

@@ -17,6 +17,7 @@ namespace ConBook {
 
     private void frmOrdersModule_Load(object sender, EventArgs e) {
 
+      LoadOrders();
 
     }
 
@@ -24,6 +25,7 @@ namespace ConBook {
 
       mOrdersListUtils.AddOrder();
 
+      BindDataGridView();
       UpdateAdditionalColumns();
 
     }
@@ -33,6 +35,7 @@ namespace ConBook {
       if (mOrdersListUtils.OrdersList.Count > 0)
         mOrdersListUtils.EditOrder(dgvOrders.SelectedRows[0].Index);
 
+      BindDataGridView();
       UpdateAdditionalColumns();
 
     }
@@ -42,10 +45,10 @@ namespace ConBook {
       if (mOrdersListUtils.OrdersList.Count > 0)
         mOrdersListUtils.DeleteOrder(dgvOrders.SelectedRows[0].Index);
 
-      UpdateAdditionalColumns();
-      SaveOrders();
+      BindDataGridView();
 
     }
+
     private void frmOrdersModule_KeyUp(object sender, KeyEventArgs e) {
 
       if (e.KeyCode == Keys.Escape) {
@@ -174,6 +177,9 @@ namespace ConBook {
     private void UpdateAdditionalColumns() {
       //funkcja aktualizująca dodatkowo dodane kolumny
 
+      if (mOrdersListUtils.OrdersList.Count < 1)
+        return;
+
       foreach (DataGridViewRow pRow in dgvOrders.Rows) {
         FormatAdditionalCells(pRow.Cells["TotalPrice"]);
         FormatAdditionalCells(pRow.Cells["TotalAmount"]);
@@ -185,7 +191,7 @@ namespace ConBook {
 
       int pSum = 0;
       foreach (cOrderedProduct pProduct in xOrder.OrderedProductsList) {
-        pSum += pProduct.Amount;
+        pSum += pProduct.Quantity;
       }
 
       return pSum;
@@ -195,67 +201,24 @@ namespace ConBook {
     private double GetTotalProductsPrice(cOrder xOrder) {
 
       double pSum = 0;
-      foreach (cOrderedProduct pProduct in xOrder.OrderedProductsList) {
-        pSum += pProduct.Price_Total;
+
+      if (xOrder != null && xOrder.OrderedProductsList != null) {
+        foreach (cOrderedProduct pProduct in xOrder.OrderedProductsList) {
+          pSum += pProduct.Price_Total;
+        }
       }
 
       return pSum;
 
     }
 
-    private void SaveOrders() {
-      // funkcja do automatycznego zapisu kolekcji produktów
-
-      string pDefaultFilePath = cOrdersSerializer.DEFAULT_SAVE_FILE_PATH;
-
-      if (!File.Exists(pDefaultFilePath)) {
-        cOrdersSerializer.SaveToNewTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
-      } else {
-      }
-
-    }
-
-    private void SaveToFile() {
-      //funkcja obsługująca zapis do istniejącego pliku
-
-      string pDefaultFilePath = cOrdersSerializer.DEFAULT_SAVE_FILE_PATH;
-
-      try {
-        if (mOrdersListUtils.OrdersList.Count > 0) {
-          if (File.Exists(pDefaultFilePath))
-            cOrdersSerializer.SaveToExistingTxtFile(pDefaultFilePath, mOrdersListUtils.OrdersList);
-        }
-      } catch (Exception ex) {
-        if (ex.InnerException != null) {
-          Exception pInnerException = ex.InnerException;
-          string pMessage = "Błąd: \n" + pInnerException.Message + "\n"
-              + "InnerException StackTrace: \n" + pInnerException.StackTrace;
-
-          MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        } else {
-          string pMessage = "Błąd: \n" + ex.Message + "\n"
-              + "StackTrace: \n" + ex.StackTrace;
-
-          MessageBox.Show(pMessage, "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-      }
-
-    }
-
     private void LoadOrders() {
-      //funkcja wczytująca kolekcję produktów z pliku
+      //funkcja wczytująca kolekcję zamówień z bazy danych
 
-      string pDefaultFilePath = cOrdersSerializer.DEFAULT_SAVE_FILE_PATH;
+      cOrder_DAO pOrder_DAO = new cOrder_DAO();
+      List<cOrder> pOrderList = pOrder_DAO.GetOrdersListWithProducts();
 
-      try {
-        if (File.Exists(pDefaultFilePath)) {
-          mOrdersListUtils.OrdersList = cOrdersSerializer.GetOrdersList();
-        }
-      } catch (Exception ex) {
-        MessageBox.Show($"Podczas wczytywania wystąpił błąd:\n{ex.Message}\n\nWczytywany plik: {pDefaultFilePath}", "Błąd wczytywania",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-      }
+      mOrdersListUtils.OrdersList = new BindingList<cOrder>(pOrderList);
 
       BindDataGridView();
 

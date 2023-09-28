@@ -5,7 +5,7 @@ using NpgsqlTypes;
 namespace ConBook {
   internal class cProduct_DAO {
 
-    private const string TABLE_NAME = "product";
+    private const string TABLE_NAME = "products";
     private const string COLUMN_NAME_INDEX = "idx";
     private const string COLUMN_NAME_NAME = "name";
     private const string COLUMN_NAME_SYMBOL = "symbol";

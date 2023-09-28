@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.ComponentModel;
+using System.Data;
 using Npgsql;
 
 namespace ConBook {
@@ -10,7 +11,7 @@ namespace ConBook {
     private const string COLUMN_NAME_DATE = "date_created";
     private const string COLUMN_NAME_CONTACT = "contact_idx";
 
-    public List<cOrder>? GetOrdersList() {
+    private List<cOrder>? GetOrdersList() {
       //funkcja pobierająca kontakty z bazy danych i zwracająca ich kolekcję
 
       List<cOrder> pOrdersList = new List<cOrder>();
@@ -29,7 +30,7 @@ namespace ConBook {
 
                   pOrder.Index = pReader.GetInt32(COLUMN_NAME_INDEX);
                   pOrder.Number = pReader.GetString(COLUMN_NAME_NUMBER);
-                  pOrder.CreationDate = DateTime.Parse(pReader.GetString(COLUMN_NAME_DATE));
+                  pOrder.CreationDate = pReader.GetDateTime(COLUMN_NAME_DATE);
                   pOrder.IdxContact = pReader.GetInt32(COLUMN_NAME_CONTACT);
 
                   pOrdersList.Add(pOrder);
@@ -39,7 +40,7 @@ namespace ConBook {
             }
           }
         }
-          return pOrdersList;
+        return pOrdersList;
 
       } catch (Exception ex) {
         MessageBox.Show(ex.Message, "Błąd bazy danych", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -47,6 +48,25 @@ namespace ConBook {
 
       return null;
 
+    }
+
+    public List<cOrder>? GetOrdersListWithProducts() {
+      //funkcja pobierająca kontakty z bazy danych i zwracająca ich kolekcję
+
+      List<cOrder> pOrdersList = GetOrdersList();
+      cOrderedProduct_DAO pOrderedProduct_DAO = new cOrderedProduct_DAO();
+
+      using (NpgsqlConnection pConnection = new NpgsqlConnection(cDataBaseService.CONNECTION_DATA)) {
+        pConnection.Open();
+
+        foreach (cOrder pOrder in pOrdersList) {
+          List<cOrderedProduct> pOrderedProducts = pOrderedProduct_DAO.GetOrderedProductsListForOrder(pOrder.Index, pConnection);
+          BindingList<cOrderedProduct> pOrderedProducts_B_List = new BindingList<cOrderedProduct>(pOrderedProducts);
+          pOrder.OrderedProductsList = pOrderedProducts_B_List;
+        }
+      }
+
+      return pOrdersList;
     }
 
     public int InsertOrder(cOrder xOrder) {
@@ -147,14 +167,14 @@ namespace ConBook {
 
             try {
               pIdxOrder = InsertOrder(xOrder);
-              
+
               if (xOrder.OrderedProductsList != null) {
                 foreach (cOrderedProduct pOrderedProduct in xOrder.OrderedProductsList) {
                   pOrderedProduct.IdxOrder = pIdxOrder;
                   pOrderedProduct_DAO.InsertOrderedProduct(pOrderedProduct);
                 }
               }
-             
+
             } catch (Exception ex) {
               pTransaction.Rollback();
 

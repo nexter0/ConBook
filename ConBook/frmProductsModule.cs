@@ -42,15 +42,19 @@ namespace ConBook {
 
     }
 
-    private void frmProductsModule_FormClosing(object sender, FormClosingEventArgs e) {
-      ;
-
-    }
-
     private void frmProductsModule_KeyUp(object sender, KeyEventArgs e) {
 
       if (e.KeyCode == Keys.Escape) {
         this.Close();
+      }
+
+    }
+
+    private void dgvProducts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
+      if (e.RowIndex >= 0 && e.ColumnIndex == dgvProducts.Columns["Price"].Index) {
+
+        e.Value = ((double)e.Value).ToString("C");
+
       }
 
     }
@@ -84,7 +88,7 @@ namespace ConBook {
     }
 
     private void LoadProducts() {
-      //funkcja wczytująca kolekcję produktów z pliku
+      //funkcja wczytująca kolekcję produktów z bazy danych
 
       cProduct_DAO pProduct_DAO = new cProduct_DAO();
 
@@ -106,15 +110,6 @@ namespace ConBook {
       dgvProducts.DataSource = null;
       dgvProducts.DataSource = mProductListUtils.ProductsList;
       ConfigureDataGridView();
-
-    }
-
-    private void dgvProducts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
-      if (e.RowIndex >= 0 && e.ColumnIndex == dgvProducts.Columns["Price"].Index) {
-
-        e.Value = ((double)e.Value).ToString("C");
-
-      }
 
     }
   }

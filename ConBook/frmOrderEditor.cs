@@ -195,14 +195,14 @@ namespace ConBook {
 
       cProduct pProduct = cbxProducts.SelectedItem as cProduct;
 
-      int pAmount = int.Parse(mtxtAmount.Text);
+      int pQuantity = int.Parse(mtxtAmount.Text);
       if (mtxtPrice.Text.Contains('.')) {
         string pPriceFormatted = mtxtPrice.Text.Replace('.', ',');
         mtxtPrice.Text = pPriceFormatted;
       }
       double pPrice = double.Parse(mtxtPrice.Text);
 
-      return new cOrderedProduct(0, pProduct.Index, pAmount, pPrice);
+      return new cOrderedProduct(0, pProduct.Index, pQuantity, pPrice);
 
     }
 
