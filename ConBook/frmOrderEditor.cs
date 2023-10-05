@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics.Eventing.Reader;
 using System.Text.RegularExpressions;
 
@@ -8,18 +9,28 @@ namespace ConBook {
     BindingList<cOrderedProduct> mOrderedProductsList;                  // lista wybranych przez użytkownika produktów
     BindingList<cProduct>? mProductsList;                               // pełna lista produktów
 
-    private enum EmptyTextBoxValidatonResult { OK, NUMBER_EMPTY, AMOUNT_EMPTY, PRICE_EMPTY };
+    private enum EmptyTextBoxValidatonResult { OK, NUMBER_EMPTY,        // numerator błędów walidacji pól tekstowych
+      AMOUNT_EMPTY, PRICE_EMPTY };
 
-    bool mIsCanceled;
-    bool mIsApplied;
+    bool mIsCanceled;                                                   // zmienna, czy formularz anulowany
+    bool mIsApplied;                                                    // zmienna, czy formularz akceptowany
+    int mEditedOrderIndex;                                              // indeks zamówienia do którego dodawany jest produkt
+
+    public bool IsCanceled { get { return mIsCanceled; } set { mIsCanceled = value; } }
+
+    public bool IsApplied { get { return mIsApplied; } set { mIsApplied = value; } }
+
+    public int EditedOrderIndex { get { return mEditedOrderIndex; } set { mEditedOrderIndex = value; } }
+
 
     public frmOrderEditor() {
 
       InitializeComponent();
 
       mOrderedProductsList = new BindingList<cOrderedProduct>();
-      mIsCanceled = false;
-      mIsApplied = false;
+      IsCanceled = false;
+      IsApplied = false;
+      EditedOrderIndex = 0;
 
     }
 
@@ -28,11 +39,11 @@ namespace ConBook {
       DialogResult cntValidationResult = ValidateOrder();
 
       if (cntValidationResult == DialogResult.Yes) {
-        mIsCanceled = true;
+        IsCanceled = true;
         this.Close();
       } else if (cntValidationResult == DialogResult.Ignore) {
         this.Close();
-        mIsApplied = true;
+        IsApplied = true;
       }
 
     }
@@ -40,7 +51,7 @@ namespace ConBook {
     private void frmOrderDetails_KeyUp(object sender, KeyEventArgs e) {
 
       if (e.KeyCode == Keys.Escape) {
-        mIsCanceled = true;
+        IsCanceled = true;
         this.Close();
       }
 
@@ -48,7 +59,7 @@ namespace ConBook {
 
     private void btnCancel_Click(object sender, EventArgs e) {
 
-      mIsCanceled = true;
+      IsCanceled = true;
       this.Close();
 
     }
@@ -119,6 +130,9 @@ namespace ConBook {
       List<int> pSelectedProductsIndexes = new List<int>();
       bool pIsOrderEmpty = xOrder.IdxContact == -1;
 
+      if (xOrder.Index > 0)
+        EditedOrderIndex = xOrder.Index;
+
       mProductsList = xProductsList;
 
       cbxProducts.DataSource = xProductsList;
@@ -127,14 +141,13 @@ namespace ConBook {
       cbxClients.ValueMember = "Index";
       cbxClients.DisplayMember = "DisplayText";
 
-
       InitializeTextBoxes(xOrder, xContactList);
       InitializeDataGridView();
       CustomizeWidow(pIsOrderEmpty);
 
       this.ShowDialog();
 
-      if (mIsCanceled || !mIsApplied)
+      if (IsCanceled || !IsApplied)
         return false;
 
       cContact pContact = cbxClients.SelectedItem as cContact;
@@ -202,7 +215,7 @@ namespace ConBook {
       }
       double pPrice = double.Parse(mtxtPrice.Text);
 
-      return new cOrderedProduct(0, pProduct.Index, pQuantity, pPrice);
+      return new cOrderedProduct(EditedOrderIndex, pProduct.Index, pQuantity, pPrice);
 
     }
 
@@ -217,6 +230,7 @@ namespace ConBook {
       cOrderedProduct pOrderedProduct = GetOrderedProduct();
 
       mOrderedProductsList.Add(pOrderedProduct);
+      UpdateTotalSum();
 
     }
 
@@ -224,15 +238,15 @@ namespace ConBook {
       //funkcja usuwająca produkt z listy wybranych produktów
 
       int pListIndex = dgvOrderedProducts.SelectedRows[0].Index;
-      int pProductIndex = mOrderedProductsList[pListIndex].Index - 1;
 
       DialogResult deletionQueryResult = MessageBox.Show($"Usunąć produkt" +
-          $" {mProductsList[pProductIndex].Name} z listy?",
+          $" {mProductsList[pListIndex].Name} z listy?",
           "Usuń produkt z listy wybranych", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
       if (deletionQueryResult == DialogResult.Yes) {
 
         mOrderedProductsList.RemoveAt(pListIndex);
+        UpdateTotalSum();
 
       }
 
@@ -283,10 +297,9 @@ namespace ConBook {
 
         double pTotalSum = mOrderedProductsList.Sum(p => p.Price_Total);
 
-        lbTotalSum.Text = "PLN " + Math.Round(pTotalSum, 2).ToString();
+        lbTotalSum.Text = Math.Round(pTotalSum, 2).ToString("C");
       }
 
     }
-
   }
 }

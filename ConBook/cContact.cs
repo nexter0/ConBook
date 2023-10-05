@@ -3,7 +3,7 @@
 namespace ConBook {
   public class cContact : IComparable<cContact>, INotifyPropertyChanged {
 
-    private string mDescription;                      // opis kontaktu
+    private string mDescription;                        // opis kontaktu
     private int mIndex;                                 // indeks kontaktu
     private string mName;                               // imię
     private string mNotes;                              // notatki

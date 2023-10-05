@@ -122,6 +122,7 @@ namespace ConBook {
 
     public event PropertyChangedEventHandler? PropertyChanged;          // zdarzenie zmiany właściwości Zamówienia (pozwalające na data binding)
 
+    #region Properties 
     public int Index {
 
       get { return mIndex; }
@@ -199,6 +200,8 @@ namespace ConBook {
       get { return mPrice_Total; }
     }
 
+    #endregion
+
     public cOrderedProduct(int xIdxOrder, int xIdxProduct, int xQuantity, double xSellPrice) {
 
       Index = 0;
@@ -220,6 +223,19 @@ namespace ConBook {
       //funkcja wywołująca zdarzenie zmiany właściwości towaru
 
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+    }
+
+    public override bool Equals(object? obj) {
+
+      try {
+
+        if (obj != null)
+          return this.Index == ((cOrderedProduct)obj).Index;
+
+        return false;
+
+      } catch { return false; }
 
     }
 

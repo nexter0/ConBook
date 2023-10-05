@@ -228,13 +228,19 @@ namespace ConBook {
 
       //sprawdź, czy nowa lista zawiera produkty, których nie ma na starej
       foreach (cOrderedProduct pOrderedProduct in xOrderedProductsCollection_New) {
-        if (pOrderedProductsCollection_Old.Contains(pOrderedProduct)) { continue; }
+        bool pIsProductOnOldList = pOrderedProductsCollection_Old.Contains(pOrderedProduct);
+
+        if (pIsProductOnOldList) { continue; }
+
         InsertOrderedProduct(pOrderedProduct);
       }
 
       //sprawdź, czy stara lista zawiera produkty, którch nie ma na nowej
       foreach (cOrderedProduct pOrderedProduct in pOrderedProductsCollection_Old) {
-        if (xOrderedProductsCollection_New.Contains(pOrderedProduct)) { continue; }
+        bool pIsProductOnNewList = xOrderedProductsCollection_New.Contains(pOrderedProduct);
+
+        if (pIsProductOnNewList) { continue; }
+
         DropOrderedProduct(pOrderedProduct.Index);
       }
 
