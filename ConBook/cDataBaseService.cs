@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Data.Common;
+using System.Diagnostics.Contracts;
+using System.Security.Cryptography.Xml;
+using System.Windows.Forms;
 using Npgsql;
 
 namespace ConBook {
@@ -43,18 +46,33 @@ namespace ConBook {
     private bool Check_DB_TablesExist(NpgsqlConnection xConnection) {
 
       List<string> pTablesList = new List<string> {"contacts", "products", "orders", "ordered_products"};
+      List<string> pExistingTablesList = new List<string>();
+
 
       using (NpgsqlCommand pCmd = new NpgsqlCommand()) {
 
         pCmd.Connection = xConnection;
 
-        foreach (string pTable in pTablesList) {
-          pCmd.CommandText = $"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = '{pTable}') AS table_exists;";
+        string pQuery = @"SELECT table_name 
+                            FROM information_schema.tables 
+                            WHERE table_type = 'BASE TABLE' 
+                            AND table_schema NOT IN ('pg_catalog', 'information_schema')";
 
-          bool pTableExists = (bool)pCmd.ExecuteScalar();
-          if (!pTableExists)
+        using (var pCommand = new NpgsqlCommand(pQuery, xConnection)) {
+
+          using (var pReader = pCommand.ExecuteReader()) {
+            while (pReader.Read()) {
+              pExistingTablesList.Add(pReader.GetString(0));
+            }
+          }
+
+        }
+
+        foreach (string pTable in pTablesList) {
+          if (!pExistingTablesList.Contains(pTable))
             return false;
         }
+
       }
       return true;
 
@@ -126,5 +144,44 @@ namespace ConBook {
 
     }
 
+    public void CreateMissingTables() {
+
+      List<string> pTablesList = new List<string> { "contacts", "products", "orders", "ordered_products" };
+      List<string> pTableNames = new List<string>();
+
+      using (NpgsqlConnection pConnection = new NpgsqlConnection(cDataBaseService.CONNECTION_DATA)) {
+        pConnection.Open();
+
+        using (NpgsqlCommand pCmd = new NpgsqlCommand()) {
+
+          string pQuery = @"SELECT table_name 
+                            FROM information_schema.tables 
+                            WHERE table_type = 'BASE TABLE' 
+                            AND table_schema NOT IN ('pg_catalog', 'information_schema')";
+
+          using (var pCommand = new NpgsqlCommand(pQuery, pConnection)) {
+
+            using (var pReader = pCommand.ExecuteReader()) {
+              while (pReader.Read()) {
+                pTableNames.Add(pReader.GetString(0));
+              }
+            }
+
+          }
+
+          foreach (string pTable in pTablesList)
+            if (!pTableNames.Contains(pTable)) {
+              if (pTable == "orders") {
+
+              }
+            }
+          
+        }
+
+        }
+
+
+      }
+    }
   }
 }

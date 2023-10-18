@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Data;
+using System.Windows.Forms;
 using Npgsql;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace ConBook {
   internal class cOrder_DAO {
@@ -189,6 +191,31 @@ namespace ConBook {
       }
 
       return pIdxOrder;
+    }
+
+    public int CountOrdersForConctact(cContact xContact) {
+      //funkcja zwracająca liczbę zamówień dla danego kontaktu
+
+      string pQuery = $"SELECT COUNT(*) FROM orders WHERE {COLUMN_NAME_CONTACT} = @paramContactIndex";
+
+      try {
+
+        using (NpgsqlConnection pConnection = new NpgsqlConnection(cDataBaseService.CONNECTION_DATA)) {
+          pConnection.Open();
+
+          using NpgsqlCommand pCommand = new NpgsqlCommand(pQuery, pConnection);
+
+          pCommand.Parameters.AddWithValue("@paramContactIndex", xContact.Index);
+
+          return Convert.ToInt32(pCommand.ExecuteScalar());
+
+        }
+      } catch (Exception ex) {
+        MessageBox.Show(ex.Message, "Błąd bazy danych", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
+      return -1;
+
     }
 
   }

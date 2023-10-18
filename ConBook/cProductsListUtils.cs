@@ -42,16 +42,17 @@ namespace ConBook {
 
       //BindingList<cOrder> pOrderList = cOrdersSerializer.GetOrdersList();
       cProduct_DAO pProduct_DAO = new cProduct_DAO();
+      cOrderedProduct_DAO pOrderedProduct_DAO = new cOrderedProduct_DAO();
       cProduct pProduct = ProductsList[xIndex];
-      //cOrder pOrder = pOrderList.FirstOrDefault(o => o.OrderedProductsList.Any(p => p.Index == ProductsList[xIndex].Index));
 
-      //if (pOrder != null) {
-      //  MessageBox.Show($"Produkt \"{ProductsList[xIndex].Name}\" jest związany z zamówieniem \"{pOrder.Number}\".\n\n" +
-      //    $"Usuń lub zmodyfikuj to zamówienie, aby usunąć produkt.", "Nie można usunąć", MessageBoxButtons.OK, MessageBoxIcon.Error);
-      //}
-      //else {
+      int pOrdersNumber = pOrderedProduct_DAO.CountOrdersForProduct(pProduct);
 
-      DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt" +
+      if (pOrdersNumber > 0) {
+        MessageBox.Show($"Produkt \"{pProduct.Name}\" jest związany z zamówieniem.\n\n" +
+          $"Usuń lub zmodyfikuj to zamówienie, aby usunąć kontakt.", "Nie można usunąć", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      } else {
+
+        DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt" +
       $" {ProductsList[xIndex].Name} ({ProductsList[xIndex].Symbol}) z listy?",
       "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -60,7 +61,7 @@ namespace ConBook {
             ProductsList.RemoveAt(xIndex);
         }
 
-      //}
+      }
 
     }
 

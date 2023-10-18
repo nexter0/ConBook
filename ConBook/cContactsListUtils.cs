@@ -33,16 +33,16 @@ namespace ConBook {
       //xIndex - indeks kontaktu na liście
 
       cContact_DAO pContactDAO = new cContact_DAO();
+      cOrder_DAO pOrderDAO = new cOrder_DAO();
       cContact pContact = ContactsList[xIndex];
-      //BindingList<cOrder> pOrderList = cOrdersSerializer.GetOrdersList();
-      //cOrder pOrder = pOrderList.FirstOrDefault(o => o.IdxContact == pContact.Index);
+
+      int pOrdersNumber = pOrderDAO.CountOrdersForConctact(pContact);
 
 
-      //if (pOrder != null) {
-      //  MessageBox.Show($"Kontakt \"{pContact.Name} {pContact.Surname}\" jest związany z zamówieniem \"{pOrder.Number}\".\n\n" +
-      //    $"Usuń lub zmodyfikuj to zamówienie, aby usunąć kontakt.", "Nie można usunąć", MessageBoxButtons.OK, MessageBoxIcon.Error);
-      //}
-      //else {
+      if (pOrdersNumber > 0) {
+        MessageBox.Show($"Kontakt \"{pContact.Name} {pContact.Surname}\" jest związany z zamówieniem.\n\n" +
+          $"Usuń lub zmodyfikuj to zamówienie, aby usunąć kontakt.", "Nie można usunąć", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      } else {
         DialogResult deletionQueryResult = MessageBox.Show($"Usunąć kontakt" +
         $" \"{pContact.Name} {pContact.Surname}\" z listy?",
         "Usuń kontakt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -50,7 +50,7 @@ namespace ConBook {
         if (deletionQueryResult == DialogResult.Yes)
           if (pContactDAO.DropContact(pContact.Index) > 0)
             ContactsList.RemoveAt(xIndex);
-      // }
+      }
 
     }
 
